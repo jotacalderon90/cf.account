@@ -1,20 +1,18 @@
 <!--use:views/main-->
 
 <!--define:main-->
-	<div class="modal fade" id="account_modal_login">
+		
+	<div class="modal fade" id="account_modal_new">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<span class="modal-title">Ingreso de sesión</span>
+					<span class="modal-title">Crear Cuenta</span>
 				</div>
 				<div class="modal-body text-justify">
-					<form action="/api/login" method="POST">
-						<input class="form-control" placeholder="Email" name="email" type="text" autofocus=""/>
-						
+					<form action="/api/account" method="POST">
+						<input class="form-control" placeholder="Email" name="email" type="text" />
 						<br>
-						
 						<input class="form-control" placeholder="Password" name="password" type="password" value=""/>
-						
 						<br>
 						
 						<!--if:doc.config.recaptcha && doc.config.recaptcha.enabled-->
@@ -23,7 +21,7 @@
 						</div>
 						<!--/if-->
 						
-						<button type="submit" class="btn btn-lg btn-success btn-block" >Ingresar</button>
+						<button type="submit" class="btn btn-lg btn-primary btn-block" >Crear Cuenta</button>
 						
 						<!--
 						<a href="/" data-ng-href="{{ctrl.account.googleauth}}" class="btn btn-lg btn-primary btn-block" data-ng-show="ctrl.account.googleauth!=''">
@@ -33,8 +31,9 @@
 						-->
 						
 						<hr>
-						<a href="/new" class="pull-left">Crear cuenta</a>
-						<a href="/forget" class="pull-right">¿Olvidaste tu password?</a>
+						<div class="text-right">
+							<a href="/login">Ingresar con tu cuenta</a>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -48,7 +47,7 @@
 		}
 		
 		app.modules.account.prototype.start = function(){
-			$('#account_modal_login').modal('show');
+			$('#account_modal_new').modal('show');
 			$('.loader').fadeOut();
 		}
 		

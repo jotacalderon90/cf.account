@@ -6,13 +6,13 @@ const self = function(){
 	
 }
 
-self.prototype.forError = function(res,status,title,msg){
-	res.status(status).render("views/messageFromServer", {title: title, msg: msg, class: "danger"});	
+self.prototype.renderMessage = function(res,status,title,msg){
+	res.status(status).render("views/messageFromServer", {title: title, msg: msg, class: "danger",status: status});	
 }
 
 /*Respuesta para 404*/
 self.prototype.notFound = function(req,res){
-	this.forError(res,404, 'Error 404', 'La URL ' +  req.originalUrl + ' no pudo ser procesada');
+	this.renderMessage(res,404, 'Error 404', 'La URL ' +  req.originalUrl + ' no pudo ser procesada');
 }
 
 /*Respuesta satisfactoria para APIS*/
@@ -34,7 +34,7 @@ self.prototype.sendFile = function(res,file){
 	if(fs.existsSync(file)){
 		res.sendFile(file);
 	}else{
-		this.forError(res,500,'File not Found', 'El archivo solicitado internamente no existe');
+		this.renderMessage(res,500,'File not Found', 'El archivo solicitado internamente no existe');
 	}
 }
 
@@ -43,7 +43,7 @@ self.prototype.render = function(res,view,data){
 	if(fs.existsSync(process.cwd() + config.properties.views + view + '.html')){
 		res.status(200).render(view, data);
 	}else{
-		this.forError(res,500,'Page not Found', 'La página no existe');
+		this.renderMessage(res,500,'Page not Found', 'La página no existe');
 	}
 }
 
@@ -55,7 +55,7 @@ self.prototype.renderHtml = function(data,req,res){
 
 /*Renderizar pagina de error*/
 self.prototype.renderError = function(res,error){
-	this.forError(res,500,'Server Error', error.toString());
+	this.renderMessage(res,500,'Server Error', error.toString());
 }
 
 /*Respuesta 401*/
@@ -64,50 +64,7 @@ self.prototype.unauthorize = function(req,res){
 		res.sendStatus(401);
 	}else{
 		req.session.redirectTo = req.url;
-		this.forError(res,401,'Acceso restringido','No tiene permisos para ejecutar esta acción');
-	}
-}
-
-
-
-
-
-
-
-self.prototype.onError = async function(req,res,e){
-	if(req.url.indexOf("/api/")>-1){
-		this.onErrorAPI(req,res,e);
-	}else {
-		this.onErrorRENDER(req,res,e);
-	}
-}
-
-self.prototype.toRenderError = function(req,e){
-	return {onOpen: {app: "promise", action: "messageFromServer", data: {title: e.title|| "Error en el Servidor", msg: e.msg || e.toString(), class: "danger"}}};
-}
-
-self.prototype.toRenderSuccess = async function(req,t,e,c){
-	return {onOpen: {app: "promise", action: "messageFromServer", data: {title: t, msg: e.toString(), class: c || "success"}}};
-}
-
-self.prototype.renderMessage = async function(req,res,t,e,c){
-	res.render("index",{...this.toRenderSuccess(req,t,e,c)});
-}
-
-self.prototype.onErrorAPI = function(req,res,e){
-	if(e==401){
-		res.sendStatus(401);
-	}else{
-		res.status(500).send({error: e.toString()});
-	}
-}
-
-self.prototype.onErrorRENDER = function(req,res,e){
-	if(e==401){
-		req.session.redirectTo = req.url;
-		res.status(401).render("message", this.toRenderError(req,e));
-	}else{
-		res.status(500).render("message", this.toRenderError(req,e));
+		this.renderMessage(res,401,'Acceso restringido','No tiene permisos para ejecutar esta acción');
 	}
 }
 

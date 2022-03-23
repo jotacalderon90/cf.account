@@ -52,6 +52,7 @@ module.exports = function(express){
 							api[APIName][action](req,res,next);
 						}else{
 							req.user = await accesscontrol.getUser(req);
+							console.log(req.user,roles);
 							if(req.user==null || !accesscontrol.hasRole(req,roles)){
 								response.unauthorize(req,res);
 							}else{

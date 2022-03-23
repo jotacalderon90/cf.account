@@ -37,7 +37,11 @@
 						<span class="modal-title text-{{data:(doc.class)}}">{{data:(doc.title)}}</span>
 					</div>
 					<div class="modal-body text-center"> 
-						<p class="">{{data:(doc.msg)}}</p>
+						<p class="">{{data:doc.msg}}.</p>
+						
+						<!--if:data:doc.status==401-->
+							<a href="/login">Ir al login</a>
+						<!--/if-->
 					</div>
 				</div>
 			</div>

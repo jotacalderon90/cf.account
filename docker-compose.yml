@@ -9,8 +9,8 @@ services:
     image: account:0.0.1
     container_name: account
     volumes:
-      - .:/srv/app
-      - /srv/app/node_modules
+      - .:/srv/cf.account
+      - /srv/cf.account/node_modules
     ports:
       - "2203:80"
     environment:

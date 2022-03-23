@@ -1,0 +1,39 @@
+<!--use:views/main-->
+
+<!--define:main-->
+
+	<div class="modal fade" id="account_modal_info">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="modal-title">Perfil de <small>{{data:doc.user.email}}</small></span>
+				</div>
+				<div class="modal-body text-justify">
+					<form action="/api/account" method="POST">
+						<label>Contraseña</label>
+						<input class="form-control" placeholder="Password" name="password" type="password" value="{{data:doc.user.password}}" />
+						<br>
+						<label>Nickname</label>
+						<input class="form-control" placeholder="Nickname" name="nickname" type="text" value="{{data:doc.user.nickname}}" />
+						<br>
+						<button type="submit" class="btn btn-lg btn-success btn-block" >Guardar</button>
+						<a class="btn btn-lg btn-warning btn-block" href="/api/logout" >Cerrar sesión</a>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		
+		app.modules.account = function(){	
+			
+		}
+		
+		app.modules.account.prototype.start = function(){
+			$('#account_modal_info').modal('show');
+			$('.loader').fadeOut();
+		}
+		
+	</script>
+<!--/define:main-->

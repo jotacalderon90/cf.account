@@ -1,6 +1,7 @@
 "use strict";
 
 const jwt = require("jwt-simple");
+const mongodb = require("./mongodb");
 
 const self = function(){
 
@@ -35,7 +36,7 @@ self.prototype.getToken = function(req){
 		let cookies = req.headers.cookie.split(";");
 		for(let i=0;i<cookies.length;i++){
 			if(cookies[i].indexOf("Authorization=")>-1 && cookies[i].indexOf("=null")==-1){
-				token = jwt.decode(cookies[i].split("=")[1].split(";")[0]);	
+				token = this.decode(cookies[i].split("=")[1].split(";")[0]);	
 			}
 		}
 	}
@@ -51,6 +52,7 @@ self.prototype.getUser = async function(req){
 			return null;
 		}
 	}catch(e){
+		console.log(e);
 		return null;
 	}
 }

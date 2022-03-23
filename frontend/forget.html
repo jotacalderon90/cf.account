@@ -1,0 +1,47 @@
+<!--use:views/main-->
+
+<!--define:main-->		
+		
+	<div class="modal fade" id="account_modal_forget">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="modal-title">Olvidaste tu password</span>
+				</div>
+				<div class="modal-body text-justify">
+					<form action="/account/forget" method="POST">
+						<input class="form-control" placeholder="Email" name="email" type="text" />
+						<br>
+						
+						<!--if:doc.config.recaptcha && doc.config.recaptcha.enabled-->
+						<div class="form-group">
+							<div class="g-recaptcha" data-sitekey="{{data:doc.config.recaptcha.public}}"></div>
+						</div>
+						<!--/if-->
+						
+						<br>
+						<button type="submit" class="btn btn-lg btn-success btn-block" >Recupera tu password</button>
+						
+						<hr>
+						<div class="text-right">
+							<a href="/login">Ingresar con tu cuenta</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		
+		app.modules.account = function(){	
+			
+		}
+		
+		app.modules.account.prototype.start = function(){
+			$('#account_modal_forget').modal('show');
+			$('.loader').fadeOut();
+		}
+		
+	</script>
+<!--/define:main-->
