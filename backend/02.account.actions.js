@@ -88,11 +88,19 @@ module.exports = {
 			}
 			cookie(res,jwt.encode(rows[0]));
 			//push.notificateToAdmin("user login",req.body.email);
+			
+			if(req.headers.referer.indexOf('redirectoTo=')>-1){
+				res.redirect(301, helper.strRight(req.headers.referer,'redirectoTo='));
+			}else{
+				res.redirect("/");
+			}
+			/*
 			if(req.session.redirectTo){
 				res.redirect(req.session.redirectTo);
 			}else{
 				res.redirect("/");
 			}
+			*/
 		}catch(e){
 			onError(res,e);
 		}

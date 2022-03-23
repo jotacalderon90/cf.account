@@ -7,7 +7,7 @@ const self = function(){
 }
 
 self.prototype.renderMessage = function(res,status,title,msg){
-	res.status(status).render("views/messageFromServer", {title: title, msg: msg, class: "danger",status: status});	
+	res.status(status).render("views/messageFromServer", {title: title, msg: msg, class: "danger",status: status, redirectTo: res.redirectTo});	
 }
 
 /*Respuesta para 404*/
@@ -63,7 +63,8 @@ self.prototype.unauthorize = function(req,res){
 	if(req.url.indexOf("/api/")>-1){
 		res.sendStatus(401);
 	}else{
-		req.session.redirectTo = req.url;
+		//req.session.redirectTo = req.url;//funciona cuando tengo todo integrado en una app, pero ahora que se redirijira a otra? abajo
+		res.redirectTo = config.properties.host + req.url;
 		this.renderMessage(res,401,'Acceso restringido','No tiene permisos para ejecutar esta acción');
 	}
 }

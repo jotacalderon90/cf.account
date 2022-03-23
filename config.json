@@ -1,10 +1,17 @@
 {
 	"properties": {
 		"host": "http://192.168.100.6:2203",
+		"archivospublicos": "http://192.168.100.6:2201",
+		"account": "http://192.168.100.6:2202",
 		"admin": "demo@demo.cl",
 		"secret": "trascender-con-sso",
 		"cors": true,
-		"archivospublicos": "http://192.168.100.6:2201"
+		"meta": {
+			"keywords": "informática,software,programación,pwa,algoritmo",
+			"description": "plataforma del informático",
+			"author": "@jotace",
+			"title": "Account"
+		}
 	},
 	"push": {
 		"public": "BPJMYTEo6qN-3DtHnP5CN5h5XhYmuDCCMiI_eSklDnwIChhyOO3T2WP01O1kVVum_eUK3vXgw31vc2JV7Tikm-k",

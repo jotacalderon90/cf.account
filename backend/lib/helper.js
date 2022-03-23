@@ -116,6 +116,10 @@ self.prototype.randomArray = function(array){
 	return new_array;
 }
 
+self.prototype.strRight = function(content,from){
+	return content.substring(content.indexOf(from) + from.length);
+}
+
 
 
 
