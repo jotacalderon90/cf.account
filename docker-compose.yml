@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+
+  account:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: account:0.0.1
+    container_name: account
+    volumes:
+      - .:/srv/app
+      - /srv/app/node_modules
+    ports:
+      - "2203:80"
+    environment:
+      MONGO_URL: "mongodb://host.docker.internal:27017"
+      MONGO_DBNAME: "miprimeradb"

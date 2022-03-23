@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+	<head>
+	
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		
+		<meta name="keywords" content="{{data:(doc.keywords || doc.config.properties.meta.keywords)}}" />
+		<meta name="description" content="{{data:(doc.description || doc.config.properties.meta.description)}}" />
+		<meta name="Author" content="{{data:(doc.author || doc.config.properties.meta.author)}}" />		
+		<meta property="og:title" content="{{data:(doc.title || doc.config.properties.meta.title)}}" />
+		<meta property="og:image" content="{{data:(doc.img)?doc.config.properties.host + doc.img.replace('/media/','/'):doc.config.properties.archivospublicos + '/media/img/logo.png'}}" />
+
+		<title>{{data:(doc.title || doc.config.properties.meta.title)}}</title>
+		
+		<base href="/" />
+		
+		<link rel="shortcut icon" href="{{data:doc.config.properties.archivospublicos}}/media/img/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="{{data:doc.config.properties.archivospublicos}}/media/img/favicon.ico" type="image/x-icon">
+		
+		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/bower_components/font-awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/bower_components/jquery-ui/themes/base/jquery-ui.min.css" />
+		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/assets/main.css" media="all"/>
+		
+		<!--define:css-->
+		
+	</head>
+	<body>
+		
+		<div class="loader">
+			<i class="fa fa-spin fa-spinner"></i>
+		</div>
+		
+		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/jquery-ui/jquery-ui.min.js"></script>
+		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="{{data:doc.config.properties.archivospublicos}}/lib/matrix.js"></script>
+			
+		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/angular/angular.min.js"></script>
+		<script src="{{data:doc.config.properties.archivospublicos}}/lib/moment.js"></script>
+		<script src="{{data:doc.config.properties.archivospublicos}}/lib/moment-with-locales.js"></script>
+		<script src="{{data:doc.config.properties.archivospublicos}}/lib/helper.js"></script>
+		<script src="{{data:doc.config.properties.archivospublicos}}/lib/trascender.js"></script>
+		
+		<!--define:script-->
+		
+		<script>
+			document.host = '{{data:doc.config.properties.host}}';	
+			moment.locale("es");
+			const app = angular.module('myApp', []);
+			app.modules = {};
+		</script>
+			
+		<div id="app" data-ng-app="myApp" data-ng-controller="myCtrl as ctrl">
+			<!--define:main-->
+		</div>
+		
+		<script>
+			app.controller("myCtrl", function($scope){
+				this.refresh = function(){
+					try{
+						$scope.$digest(function(){});
+					}catch(e){
+						console.log(e);
+					}
+				}
+				for(module in app.modules){
+					this[module] = new app.modules[module](this);
+					if(this[module].start){
+						this[module].start();
+					}
+				}
+			});
+		</script>
+		
+	</body>
+</html>
