@@ -116,10 +116,15 @@ self.prototype.randomArray = function(array){
 	return new_array;
 }
 
+/*Funcion que retorna string a la derecha de*/
 self.prototype.strRight = function(content,from){
 	return content.substring(content.indexOf(from) + from.length);
 }
 
+/*Format number*/
+self.prototype.formatNumber = function(number){
+	return new Intl.NumberFormat('en-US').format(number);
+}
 
 
 

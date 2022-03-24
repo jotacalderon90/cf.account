@@ -3,6 +3,7 @@
 const fs = require("fs");
 
 const logger = require('./log')('lib.render');
+const helper = require('./helper');
 
 const self = function(){
 	
