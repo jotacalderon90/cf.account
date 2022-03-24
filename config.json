@@ -1,8 +1,7 @@
 {
 	"properties": {
-		"host": "http://192.168.100.6:2203",
+		"host": "http://192.168.100.6:2202",
 		"archivospublicos": "http://192.168.100.6:2201",
-		"account": "http://192.168.100.6:2202",
 		"admin": "demo@demo.cl",
 		"secret": "trascender-con-sso",
 		"cors": true,
