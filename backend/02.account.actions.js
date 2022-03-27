@@ -73,6 +73,17 @@ module.exports = {
 		}
 	},
 	
+	//@route('/api/account')
+	//@method(['get'])
+	//@roles(['root','admin','user'])
+	read: async function(req,res){
+		try{
+			res.send(req.user);
+		}catch(e){
+			res.json({error: e.toString()});
+		}
+	},
+	
 	//@route('/api/login')
 	//@method(['post'])
 	login: async function(req,res){
