@@ -14,6 +14,9 @@ self.prototype.response = function(res,url,resolve,reject){
 	res.on('end', () => {
 		try{
 			if(res.statusCode==200){
+				if(rawData==''){
+					resolve(null);
+				}
 				resolve(JSON.parse(rawData));
 			}else{
 				throw('status ' + res.statusCode + ', ' + rawData);
@@ -38,6 +41,10 @@ self.prototype.submit = function(URL,OPTIONS,BODY){
 	return new Promise((resolve,reject)=>{
 		const data = JSON.stringify(BODY);
 		const lib = (URL.indexOf('https')>-1)?https:http;
+		
+		OPTIONS.headers['Content-Type'] ='application/json';
+		OPTIONS.headers['Content-Length'] = data.length;
+		
 		const req = lib.request(URL, OPTIONS, (res) => this.response(res,URL,resolve,reject));
 		req.on('error', (e) => {
 			reject({url: URL, description: e});

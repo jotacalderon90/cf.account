@@ -75,7 +75,6 @@ module.exports = {
 	
 	//@route('/api/account')
 	//@method(['get'])
-	//@roles(['root','admin','user'])
 	read: async function(req,res){
 		try{
 			res.send(req.user);

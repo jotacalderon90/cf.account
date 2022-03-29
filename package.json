@@ -5,7 +5,7 @@
 	"private": true,
 	"scripts": {
 		"start": "node app",
-		"dev": "npx nodemon --legacy-watch app  --ignore frontent"
+		"dev": "npx nodemon --legacy-watch app  --ignore frontend"
 	},
 	"dependencies": {
 		"body-parser": "^1.18.3",
