@@ -64,9 +64,12 @@ module.exports = {
 				memo.subject = "Activación de cuenta"
 				memo.nickname = doc.nickname;
 				memo.hash = config.properties.host + "/account/activate/" + new Buffer(doc.password).toString("base64");
+				
 				memo.type = 'template';
 				memo.template = 'accountActivate.html';
-				request.post(config.properties.mailing + '/api/mailing',{headers: req.headers},memo);
+				memo.send = true;
+				
+				request.post(config.properties.mailing + '/api/mailing',{headers: {}},memo);
 			}
 			response.renderMessage(res,200,'Usuario registrado',((config.smtp && config.smtp.enabled)?'Se ha enviado un correo para validar su registro':'Se ha completado su registro correctamente'),'success');
 		}catch(e){
