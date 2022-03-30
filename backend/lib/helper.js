@@ -6,7 +6,6 @@ const http 	 = require("http");
 const https  = require("https");
 
 const logger = require('./log')('lib.helper');
-const jwt = require('./jwt');
 const mongodb  = require("./mongodb");
 
 const self = function(){

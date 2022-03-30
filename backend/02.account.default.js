@@ -1,12 +1,12 @@
 "use strict";
 
-const logger = require('./lib/log')('router.02.account.crud');
+const logger = require('./lib/log')('router.account.default');
 const response = require('./lib/response');
 const helper = require('./lib/helper');
 const mongodb = require('./lib/mongodb');
 //const push = require('./lib/push');
-const mailing = require('./lib/mailing');
-const jwt = require('./lib/jwt');
+const accesscontrol = require('./lib/accesscontrol');
+const request = require('./lib/request');
 
 const onError = function(res,e){
 	logger.info('ERROR:' + e.toString());
@@ -64,8 +64,9 @@ module.exports = {
 				memo.subject = "Activación de cuenta"
 				memo.nickname = doc.nickname;
 				memo.hash = config.properties.host + "/account/activate/" + new Buffer(doc.password).toString("base64");
-				memo.html = render.process("memo.activate.html", memo);
-				await mailing.send(memo);
+				memo.type = 'template';
+				memo.template = 'accountActivate.html';
+				request.post(config.properties.mailing + '/api/mailing',{headers: req.headers},memo);
 			}
 			response.renderMessage(res,200,'Usuario registrado',((config.smtp && config.smtp.enabled)?'Se ha enviado un correo para validar su registro':'Se ha completado su registro correctamente'),'success');
 		}catch(e){
@@ -96,7 +97,7 @@ module.exports = {
 			if(helper.toHash(req.body.password+req.body.email,rows[0].hash) != rows[0].password){
 				throw("Los datos ingresados no corresponden");
 			}
-			cookie(res,jwt.encode(rows[0]));
+			cookie(res,accesscontrol.encode(rows[0]));
 			//push.notificateToAdmin("user login",req.body.email);
 			
 			if(req.headers.referer.indexOf('redirectoTo=')>-1){

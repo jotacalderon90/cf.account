@@ -31,6 +31,7 @@ self.prototype.decode = function(token){
 	}
 }
 
+
 self.prototype.getToken = function(req){
 	let token = null;
 	if(req.headers && req.headers.cookie){
