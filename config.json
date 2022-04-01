@@ -1,11 +1,12 @@
 {
 	"properties": {
-		"host": "http://192.168.42.3:2202",
-		"archivospublicos": "http://192.168.42.3:2201",
-		"mailing": "http://192.168.42.3:2206",
+		"host": "http://localhost:2202",
+		"archivospublicos": "http://localhost:2201",
+		"mailing": "http://localhost:2206",
 		"admin": "demo@demo.cl",
 		"secret": "trascender-con-sso",
 		"cors": true,
+		"cookie_domain": ".localhost",
 		"meta": {
 			"keywords": "informática,software,programación,pwa,algoritmo",
 			"description": "plataforma del informático",

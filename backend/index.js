@@ -5,6 +5,7 @@ const path = require("path");
 
 const logger = require('./lib/log')('backend');
 const accesscontrol = require('./lib/accesscontrol');
+const request = require('./lib/request');
 const response = require('./lib/response');
 
 //funcion generica que extrae un string dentro de un string
@@ -47,20 +48,31 @@ module.exports = function(express){
 				SERVICECount++;
 				logger.info('loading service ' + APIName + ' ' + uri + ' [' + method + ':' + action + ']');
 				express[method[y]](uri, async function(req,res,next){
-					if(api[APIName][action]){
-						if(!roles){
-							api[APIName][action](req,res,next);
-						}else{
-							req.user = await accesscontrol.getUser(req);
-							if(req.user==null || !accesscontrol.hasRole(req,roles)){
-								response.unauthorize(req,res);
-							}else{
+					try{						
+						if(api[APIName][action]){
+							if(!roles){
 								api[APIName][action](req,res,next);
+							}else{
+								
+								if(config.properties.account){
+									req.user = await request.get(config.properties.account + '/api/account',{headers: {cookie: req.headers.cookie}});
+								}else{
+									req.user = await accesscontrol.getUser(req);
+								}
+								
+								if(req.user==null || !accesscontrol.hasRole(req,roles)){
+									response.unauthorize(req,res);
+								}else{
+									api[APIName][action](req,res,next);
+								}
 							}
+						}else{
+							logger.info("404 " + req.originalUrl + ' function not found ' + APIName + ' - ' + action);
+							response.notFound(req,res);
 						}
-					}else{
-						logger.info("404 " + req.originalUrl + ' function not found ' + APIName + ' - ' + action);
-						response.notFound(req,res);
+					}catch(e){
+						logger.info(e);
+						response.renderMessage(res,500,'Error en servidor',e.toString());
 					}
 				});
 			}

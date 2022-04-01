@@ -2,7 +2,6 @@
 
 const jwt = require("jwt-simple");
 const mongodb = require("./mongodb");
-const request = require("./request");
 
 const self = function(){
 
@@ -31,7 +30,6 @@ self.prototype.decode = function(token){
 	}
 }
 
-
 self.prototype.getToken = function(req){
 	let token = null;
 	if(req.headers && req.headers.cookie){
@@ -47,15 +45,11 @@ self.prototype.getToken = function(req){
 
 self.prototype.getUser = async function(req){
 	try{
-		if(config.properties.account){
-			return await request.get(config.properties.account + '/api/account',{headers: req.headers});
-		}else{			
-			const token = this.getToken(req);
-			if(token.sub){
-				return await mongodb.findOne("user",token.sub);
-			}else{
-				return null;
-			}	
+		const token = this.getToken(req);
+		if(token!=null && token.sub){
+			return await mongodb.findOne("user",token.sub);
+		}else{
+			return null;
 		}
 	}catch(e){
 		console.log(e);
