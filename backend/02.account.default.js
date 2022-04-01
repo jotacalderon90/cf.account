@@ -81,7 +81,7 @@ module.exports = {
 	//@method(['get'])
 	read: async function(req,res){
 		try{
-			res.send(req.user);
+			res.send(await accesscontrol.getUser(req));
 		}catch(e){
 			res.json({error: e.toString()});
 		}
