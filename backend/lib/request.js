@@ -3,6 +3,8 @@
 const http	= require("http");
 const https	= require("https");
 
+const logger = require('./log')('lib.request');
+
 const self = function(){
 	
 }
@@ -42,6 +44,7 @@ self.prototype.submit = function(URL,OPTIONS,BODY){
 		const data = JSON.stringify(BODY);
 		const lib = (URL.indexOf('https')>-1)?https:http;
 		
+		OPTIONS.headers = OPTIONS.headers || {};
 		OPTIONS.headers['Content-Type'] ='application/json';
 		OPTIONS.headers['Content-Length'] = data.length;
 		

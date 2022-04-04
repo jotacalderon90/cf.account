@@ -71,9 +71,9 @@ module.exports = {
 					memo.template = 'accountActivate.html';
 					memo.send = true;
 					
-					request.post(config.properties.mailing + '/api/mailing',{headers: {}},memo);
+					request.post(config.properties.mailing + '/api/mailing',{},memo);
 				}
-				response.renderMessage(res,200,'Usuario registrado',((config.smtp && config.smtp.enabled)?'Se ha enviado un correo para validar su registro':'Se ha completado su registro correctamente'),'success');
+				response.renderMessage(res,200,'Usuario registrado','Se ha enviado un correo para validar su registro','success');
 			}else if(req.body.button && req.body.button == 'UPDATE'){
 				this.update(req,res);
 			}else if(req.body.button && req.body.button == 'DELETE'){

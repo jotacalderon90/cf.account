@@ -38,6 +38,11 @@ self.prototype.submit = function(URL,OPTIONS,BODY){
 	return new Promise((resolve,reject)=>{
 		const data = JSON.stringify(BODY);
 		const lib = (URL.indexOf('https')>-1)?https:http;
+		
+		OPTIONS.headers = OPTIONS.headers || {};
+		OPTIONS.headers['Content-Type'] ='application/json';
+		OPTIONS.headers['Content-Length'] = data.length;
+		
 		const req = lib.request(URL, OPTIONS, (res) => this.response(res,resolve));
 		req.on('error', (e) => this.onError(e,resolve));
 		req.write(data);

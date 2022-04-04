@@ -137,7 +137,7 @@ module.exports = {
 				memo.template = 'accountRecovery.html';
 				memo.send = true;
 				
-				request.post(config.properties.mailing + '/api/mailing',{headers: {}},memo);
+				request.post(config.properties.mailing + '/api/mailing',{},memo);
 			}
 			//push.notificateToAdmin("user forget",req.body.email);
 			response.renderMessage(res,200,'Recuperación de cuenta','Se ha enviado un correo para poder reestablecer su contraseña','success');
