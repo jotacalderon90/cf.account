@@ -1,32 +1,43 @@
 "use strict";
 
-const logger = require('./lib/log')('router.01.account.views');
-const response = require('./lib/response');
-
 module.exports = {
 	
 	//@route('/')
 	//@method(['get'])
 	//@roles(['root','admin','user'])
-	renderInfo: function(req,res){
-		response.render(res,'info',{user: req.user});
+	renderDocument: function(req,res){
+		res.render('document',{user: req.user});
+	},
+	
+	//@route('/form')
+	//@method(['get'])
+	renderForm: function(req,res){
+		res.render('form');
 	},
 	
 	//@route('/login')
 	//@method(['get'])
 	renderLogin: function(req,res){
-		response.render(res,'login');
-	},
-	
-	//@route('/new')
-	//@method(['get'])
-	renderNew: function(req,res){
-		response.render(res,'new');
+		res.render('login');
 	},
 	
 	//@route('/forget')
 	//@method(['get'])
 	renderForget: function(req,res){
-		response.render(res,'forget');
+		res.render('forget');
+	},
+	
+	//@route('/recovery')
+	//@method(['get'])
+	renderRecovery: function(req,res){
+		res.render('recovery');
+	},
+	
+	//@route('/admin/admin')
+	//@method(['get'])
+	//@roles(['root','admin'])
+	renderAdmin: function(req,res){
+		res.render('admin');
 	}
+	
 }

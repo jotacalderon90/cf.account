@@ -1,0 +1,167 @@
+<!--use:views/main-->
+
+<!--define:css-->
+	<style type="text/css">
+		@media (max-width: 768px) {
+			#users #users_modal_list .modal-body{
+				padding: 0px;
+			}
+			#users #users_modal_list .list-group-item{
+				margin-bottom: 0px;
+			}
+		}
+	</style>
+<!--/define:css-->
+
+<!--define:main-->
+
+	<div class="modal fade" id="account_modal_admin">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="btn-group menu-inside btn-head left">
+						<button type="button" class="dropdown-toggle btn-head" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fa fa-bars"></i>
+						</button>
+						<ul class="dropdown-menu">
+							<li data-ng-repeat="tag in ctrl.object.tags" data-ng-click="ctrl.object.refresh(tag)" data-ng-show="tag!='root'">
+								{{tag}}
+							</li>
+						</ul>
+					</div>
+					<h4 class="modal-title">Administración de account</h4>
+					<div class="btn-group menu-inside btn-head right">
+						<button type="button" class="btn-head" data-ng-click="ctrl.object.refresh()">
+							<i class="fa fa-refresh"></i>
+						</button>
+					</div>
+				</div>
+				<div class="modal-body text-left">
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>
+										Email
+									</th>
+									<th>
+										Roles
+									</th>
+								</tr>
+							</thead>
+							<tr data-ng-repeat="row in ctrl.object.coll">
+								<td>
+									{{row.email}}
+								</td>
+								<td>
+									{{row.roles}}
+									<a href="/" data-ng-href="/admin/edit/{{row._id}}" class="pull-right">
+										<i class="fa fa-eye"></i>
+									</a>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<p class="text-right" data-ng-click="ctrl.object.getCollection()">{{ctrl.object.coll.length}}/{{ctrl.object.cant}}</p>
+				</div>
+				<div class="modal-footer-bg"></div>
+				<div class="modal-footer">
+					<a href="/admin/new" class="btn btn-primary" title="Crear">
+						<i class="fa fa-plus"></i>
+					</a>
+					<a href="/" class="btn btn-info" title="Home">
+						<i class="fa fa-home"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		
+		app.modules.object = function(parent){
+			this.parent = parent;
+			this.name = 'account';
+			this.query = {};
+			this.options = {projection: {email: 1, roles: 1}, sort: {created: -1}};
+			this.services = document.helper.createServices('/api/' + this.name);
+			
+			this.scroller = '#account_modal_admin .modal-content';
+			$(this.scroller).scroll(()=>{
+				const p = $(this.scroller)[0].scrollHeight - $(document).height();
+				if(($(this.scroller).scrollTop()*100)/p>=99){
+					if(this.obtained < this.cant && !this.obtaining){
+						this.getCollection();
+					}
+				}
+			});	
+		}
+		
+		app.modules.object.prototype.getTags = async function(){
+			try{
+				this.tags = await this.services.tag();
+			}catch(e){
+				alert(e);
+				console.log(e);
+			}
+			this.refresh();
+		}
+		
+		app.modules.object.prototype.refresh = function(roles){
+			if(roles){
+				this.query.roles = roles;
+			}else{
+				delete this.query.roles;
+			}
+			this.cant = 0;
+			this.obtained = 0;
+			this.coll = [];
+			this.getTotal();
+		}
+		
+		app.modules.object.prototype.getTotal = async function(){
+			$('.loader').fadeIn();
+			try{
+				this.cant = await this.services.total(this.paramsToGetTotal());
+				this.getCollection();
+			}catch(e){
+				alert(e);
+				console.log(e);
+			}
+		}
+		
+		app.modules.object.prototype.paramsToGetTotal = function(){
+			return {query: JSON.stringify(this.query)};
+		}
+		
+		app.modules.object.prototype.getCollection = async function(){
+			$('.loader').fadeIn();
+			try{
+				this.obtaining = true;
+				this.coll = this.coll.concat(await this.services.collection(this.paramsToGetCollection()));
+				this.obtained = this.coll.length;
+				this.obtaining = false;
+				this.parent.refresh();
+			}catch(e){
+				alert(e);
+				console.log(e);
+			}
+			$('.loader').fadeOut();
+		}
+		
+		app.modules.object.prototype.paramsToGetCollection = function(){
+			return {query: JSON.stringify(this.query), options: JSON.stringify(this.getOptions())};
+		}
+		
+		app.modules.object.prototype.getOptions = function(){
+			return {...this.options, skip: this.obtained, limit: 50};
+		}
+		
+		app.modules.object.prototype.start = function(){
+			$('#' + this.name + '_modal_admin').modal('show');
+			this.getTags();
+		}
+		
+	</script>
+	
+<!--/define:main-->
