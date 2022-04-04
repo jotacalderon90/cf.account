@@ -6,6 +6,7 @@ const helper = require('./lib/helper');
 const mongodb = require('./lib/mongodb');
 //const push = require('./lib/push');
 const accesscontrol = require('./lib/accesscontrol');
+const request = require('.lib/requestAsync');
 const googleapis = require('./lib/googleapis');
 
 const onError = function(res,e){

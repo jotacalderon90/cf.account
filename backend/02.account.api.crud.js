@@ -6,7 +6,7 @@ const helper = require('./lib/helper');
 const mongodb = require('./lib/mongodb');
 //const push = require('./lib/push');
 const accesscontrol = require('./lib/accesscontrol');
-const request = require('./lib/request');
+const request = require('./lib/requestAsync');
 
 const onError = function(res,e){
 	logger.info('ERROR:' + e.toString());
