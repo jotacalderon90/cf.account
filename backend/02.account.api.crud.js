@@ -63,8 +63,8 @@ module.exports = {
 				if(config.properties.mailing){
 					const memo = {};
 					memo.to = doc.email;
+					memo.bcc = config.properties.admin;
 					memo.subject = "Activación de cuenta"
-					memo.nickname = doc.nickname;
 					memo.hash = config.properties.host + "/api/account/activate/" + new Buffer(doc.password).toString("base64");
 					
 					memo.type = 'template';

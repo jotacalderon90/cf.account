@@ -173,7 +173,7 @@ module.exports = {
 	
 	//@route('/api/account/google_auth')
 	//@method(['get'])
-	getURL: async function(req,res){
+	loginGoogleGetURL: async function(req,res){
 		try{
 			res.json({data: googleapis.getURL()});
 		}catch(e){
@@ -183,7 +183,7 @@ module.exports = {
 	
 	//@route('/user/auth/google/callback')
 	//@method(['get'])
-	google_login: async function(req,res){
+	loginGoogleExecute: async function(req,res){
 		try{
 			//esta url me gustaria cambiar pero debo meterme en google :S
 			const user = await googleapis.getUserInfo(req.query.code);
