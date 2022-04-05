@@ -78,8 +78,6 @@ module.exports = {
 				this.update(req,res);
 			}else if(req.body.button && req.body.button == 'DELETE'){
 				this.delete(req,res);
-			}else{				
-				
 			}
 		}catch(e){
 			onError(res,e);

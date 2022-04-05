@@ -1,19 +1,12 @@
 <!--use:views/main-->
 
 <!--define:css-->
-	<style type="text/css">
-		@media (max-width: 768px) {
-			#users #users_modal_list .modal-body{
-				padding: 0px;
-			}
-			#users #users_modal_list .list-group-item{
-				margin-bottom: 0px;
-			}
-		}
-	</style>
+
 <!--/define:css-->
 
 <!--define:main-->
+
+	<!--include:views/promise/prompt-->
 
 	<div class="modal fade" id="account_modal_admin">
 		<div class="modal-dialog modal-lg">
@@ -37,6 +30,38 @@
 					</div>
 				</div>
 				<div class="modal-body text-left">
+					
+					<div data-ng-repeat="row in ctrl.object.coll">
+						<a class="btn btn-default btn-block" role="button" data-toggle="collapse" href="/" data-ng-href="#users_user_action{{$index}}" aria-expanded="false" aria-controls="users_user_action{{$index}}">
+							{{row.email}}
+						</a>
+						<div class="collapse" id="users_user_action{{$index}}">
+							<div class="well">
+								<button class="btn btn-default btn-block" data-ng-click="ctrl.object.changeRoles(row)" title="actualizar roles">
+									<span>Actualizar roles</span>
+									<i class="fa fa-info-circle pull-right"></i>
+								</button>
+								<button class="btn btn-block" data-ng-class="(row.activate)?'btn-primary':'btn-warning'" data-ng-click="ctrl.object.activate(row)" title="{{((row.activate)?'Deshabilitar':'Habilitar')}}">
+									<span>{{((row.activate)?'Deshabilitar':'Habilitar')}}</span>
+									<i class="fa pull-right" data-ng-class="(row.activate)?'fa-link':'fa-unlink'"></i>
+								</button>
+								<button class="btn btn-info btn-block" data-ng-click="ctrl.object.changePassword(row)" title="actualizar contraseña">
+									<span>Cambiar contraseña</span>
+									<i class="fa pull-right">电</i>
+								</button>
+								<button class="btn btn-default btn-block" data-ng-click="ctrl.object.enableRecovery(row)" title="enviar correo para recuperar contraseña">
+									<span>Enviar correo para actualizar contraseña</span>
+									<i class="fa fa-envelope pull-right"></i>
+								</button>
+								<button class="btn btn-danger btn-block" data-ng-click="ctrl.object.delete(row._id)" title="eliminar usuario">
+									<span>Eliminar usuario</span>
+									<i class="fa fa-trash pull-right"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					
+					<!--
 					<div class="table-responsive">
 						<table class="table">
 							<thead>
@@ -62,13 +87,15 @@
 							</tr>
 						</table>
 					</div>
+					-->
+					
 					<p class="text-right" data-ng-click="ctrl.object.getCollection()">{{ctrl.object.coll.length}}/{{ctrl.object.cant}}</p>
 				</div>
 				<div class="modal-footer-bg"></div>
 				<div class="modal-footer">
-					<a href="/admin/new" class="btn btn-primary" title="Crear">
+					<!--<a href="/admin/new" class="btn btn-primary" title="Crear">
 						<i class="fa fa-plus"></i>
-					</a>
+					</a>-->
 					<a href="/" class="btn btn-info" title="Home">
 						<i class="fa fa-home"></i>
 					</a>
@@ -83,8 +110,8 @@
 			this.parent = parent;
 			this.name = 'account';
 			this.query = {};
-			this.options = {projection: {email: 1, roles: 1}, sort: {created: -1}};
-			this.services = document.helper.createServices('/api/' + this.name);
+			this.options = {projection: {email: 1, roles: 1, activate: 1}, sort: {created: -1}};
+			this.services = document.helper.createServices('/api/admin/' + this.name);
 			
 			this.scroller = '#account_modal_admin .modal-content';
 			$(this.scroller).scroll(()=>{
@@ -155,6 +182,98 @@
 		
 		app.modules.object.prototype.getOptions = function(){
 			return {...this.options, skip: this.obtained, limit: 50};
+		}
+		
+		app.modules.object.prototype.changeRoles = async function(row){
+			try{
+			console.log(this.parent);
+				$('#account_modal_admin').modal("hide");
+				const newroles = await this.parent.prompt.execute('Actualizar roles', 'text', 'Ingrese roles separados por coma',row.roles.join(','));
+				if(newroles.trim()==''){
+					$('#account_modal_admin').modal("show");
+					return;
+				}
+				$(".loader").fadeIn();
+				await this.services.update({id: row._id},{type: 'roles',roles: newroles.split(',')});
+				alert("Documento actualizado correctamente");
+				this.refresh();
+			}catch(e){
+				alert(e.error || e);
+				console.log(e);
+			}
+			$(".loader").fadeOut();
+			$('#account_modal_admin').modal("show");
+		}
+		
+		app.modules.object.prototype.activate = async function(row){
+			try{
+				const q = (row.activate)?"Deshabilitar":"Habilitar";
+				if(!confirm('Confirma ' + q)){
+					return;
+				}
+				$(".loader").fadeIn();
+				await this.services.update({id: row._id},{type: 'activate'});
+				alert("Documento actualizado correctamente");
+				this.refresh();
+			}catch(e){
+				alert(e.error || e);
+				console.log(e);
+			}
+			$(".loader").fadeOut();
+		}
+		
+		app.modules.object.prototype.changePassword = async function(row){
+			try{
+				if(!confirm('Confirma querer cambiar contraseña')){
+					return;
+				}
+				$('#account_modal_admin').modal("hide");
+				const newpassword = await this.parent.prompt.execute('Cambiar contraseña', 'password', 'Ingrese nueva contraseña...','');
+				if(newpassword.trim()==''){
+					$('#account_modal_admin').modal("show");
+					return;
+				}
+				$(".loader").fadeIn();
+				await this.services.update({id: row._id},{type: 'password',password: newpassword});
+				alert("Documento actualizado correctamente");
+				this.refresh();
+			}catch(e){
+				alert(e.error || e);
+				console.log(e);
+			}
+			$(".loader").fadeOut();
+			$('#account_modal_admin').modal("show");
+		}
+
+		app.modules.object.prototype.enableRecovery = async function(row){
+			try{
+				if(!confirm('Confirma enviar correo de recuperación')){
+					return;
+				}
+				$(".loader").fadeIn();
+				await this.services.update({id: row._id},{type: 'notify'});
+				alert("Notificacion enviada correctamente");
+			}catch(e){
+				alert(e.error || e);
+				console.log(e);
+			}
+			$(".loader").fadeOut();
+		}
+
+		app.modules.object.prototype.delete = async function(id){
+			try{			
+				if(!confirm("Confirme eliminación del documento")){
+					return;
+				}
+				$(".loader").fadeIn();
+				await this.services.delete({id: id || this.doc._id});
+				alert("Documento eliminado correctamente");
+				this.refresh();
+			}catch(e){
+				alert(e.error || e);
+				console.log(e);
+			}
+			$(".loader").fadeOut();
 		}
 		
 		app.modules.object.prototype.start = function(){
