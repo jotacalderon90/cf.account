@@ -72,7 +72,7 @@ module.exports = {
 			cookie(res,"null");
 			res.redirect("/login");
 		}catch(e){
-			helper.onError(req,res,e);
+			onError(res,e);
 		}
 	},
 	
@@ -110,7 +110,7 @@ module.exports = {
 			//push.notificateToAdmin("user desactivate",row[0].email);
 			response.renderMessage(res,200,'Usuario desactivado','Se ha completado su desactivación satisfactoriamente','success');
 		}catch(e){
-			helper.onError(req,res,e);
+			onError(res,e);
 		}
 	},
 	
@@ -142,7 +142,7 @@ module.exports = {
 			//push.notificateToAdmin("user forget",req.body.email);
 			response.renderMessage(res,200,'Recuperación de cuenta','Se ha enviado un correo para poder reestablecer su contraseña','success');
 		}catch(e){
-			onError(req,res,e);
+			onError(res,e);
 		}
 	},
 	
@@ -168,7 +168,7 @@ module.exports = {
 				break;
 			}
 		}catch(e){
-			onError(req,res,e);
+			onError(res,e);
 		}
 	},
 	
