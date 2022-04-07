@@ -5,25 +5,25 @@
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		
-		<title>{{data:(doc.title || doc.config.properties.meta.title)}}</title>
+		<title>{{data:doc.title}}</title>
 		
 		<base href="/" />
 		
-		<link rel="shortcut icon" href="{{data:doc.config.properties.archivospublicos}}/media/img/favicon.ico" type="image/x-icon">
-		<link rel="icon" href="{{data:doc.config.properties.archivospublicos}}/media/img/favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/media/img/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/media/img/favicon.ico" type="image/x-icon">
 		
-		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/bower_components/bootstrap/dist/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/bower_components/font-awesome/css/font-awesome.min.css" />
-		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/bower_components/jquery-ui/themes/base/jquery-ui.min.css" />
-		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/assets/main.css" media="all"/>
+		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/font-awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery-ui/themes/base/jquery-ui.min.css" />
+		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/main.css" media="all"/>
 		
 	</head>
 	<body>
 		
-		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/jquery/dist/jquery.min.js"></script>
-		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/jquery-ui/jquery-ui.min.js"></script>
-		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-		<script src="{{data:doc.config.properties.archivospublicos}}/lib/matrix.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery-ui/jquery-ui.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/matrix.js"></script>
 		
 		<div class="modal fade" id="modal">
 			<div class="modal-dialog modal-sm">
@@ -34,13 +34,13 @@
 								<i class="fa fa-home"></i>
 							</button>
 						</a>
-						<span class="modal-title text-{{data:(doc.class)}}">{{data:(doc.title)}}</span>
+						<span class="modal-title text-{{data:(doc.class)}}">{{data:doc.title}}</span>
 					</div>
 					<div class="modal-body text-center"> 
 						<p class="">{{data:doc.msg}}.</p>
 						
 						<!--if:data:doc.status==401-->
-							<a href="{{data:doc.config.properties.account}}/login?redirectoTo={{data:doc.redirectTo}}">Ir al login</a>
+							<a href="{{data:process.env.HOST_ACCOUNT}}/login?redirectoTo={{data:doc.redirectTo}}">Ir al login</a>
 						<!--/if-->
 					</div>
 				</div>

@@ -2,7 +2,7 @@
 
 <!--define:css-->
 
-	<!--if:doc.config.recaptcha && doc.config.recaptcha.enabled-->
+	<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<!--/if-->
 		
@@ -23,9 +23,9 @@
 						<input class="form-control" placeholder="Password" name="password" type="password" value=""/>
 						<br>
 						
-						<!--if:doc.config.recaptcha && doc.config.recaptcha.enabled-->
+						<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
 						<div class="form-group">
-							<div class="g-recaptcha" data-sitekey="{{data:doc.config.recaptcha.public}}"></div>
+							<div class="g-recaptcha" data-sitekey="{{data:process.env.RECAPTCHA_PUBLIC}}"></div>
 						</div>
 						<!--/if-->
 						

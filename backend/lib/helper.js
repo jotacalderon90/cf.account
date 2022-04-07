@@ -9,9 +9,9 @@ const logger = require('./log')('lib.helper');
 const mongodb  = require("./mongodb");
 
 const self = function(){
-	if(config.recaptcha && config.recaptcha.enabled===true){
+	if(process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''){
 		this.captcha = require("express-recaptcha");
-		this.captcha.init(config.recaptcha.public,config.recaptcha.private);
+		this.captcha.init(process.env.RECAPTCHA_PUBLIC,process.env.RECAPTCHA_PRIVATE);
 		this.captcha.render();
 	}else{
 		this.captcha = undefined;

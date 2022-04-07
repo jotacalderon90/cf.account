@@ -76,7 +76,7 @@ module.exports = {
 			doc.password = helper.toHash(req.body.password + req.body.email,doc.hash);
 			doc.nickname = req.body.email;
 			doc.notification = true;
-			doc.thumb = config.properties.archivospublicos + "/media/img/user.png";
+			doc.thumb = process.env.HOST_ARCHIVOSPUBLICOS + "/media/img/user.png";
 			doc.roles = ["user"];
 			doc.created = new Date();
 			doc.activate = true;
@@ -110,18 +110,18 @@ module.exports = {
 					await mongodb.updateOne('user',req.params.id,{$set: {password: helper.toHash(req.body.password + row.email,row.hash)}});
 				break;
 				case 'notify':
-					if(config.properties.mailing){
+					if(process.env.HOST_MAILING){
 						const memo = {};
 						memo.to = row.email;
-						memo.bcc = config.properties.admin;
+						memo.bcc = process.env.ADMIN;
 						memo.subject = "Reestablecer contraseña"
-						memo.hash = config.properties.host + "/api/account/recovery?hash=" + new Buffer(row.password).toString("base64");
+						memo.hash = process.env.HOST + "/api/account/recovery?hash=" + new Buffer(row.password).toString("base64");
 						
 						memo.type = 'template';
 						memo.template = 'accountRecovery.html';
 						memo.send = true;
 						
-						request.post(config.properties.mailing + '/api/mailing',{},memo);
+						request.post(process.env.HOST_MAILING + '/api/mailing',{},memo);
 					}
 				break;
 			}

@@ -2,8 +2,10 @@ const {google} = require('googleapis');
 
 const self = function(){
 	
-	if(config.google && config.google.auth && config.google.auth.clientId && config.google.auth.clientId!=""){
-		this.googleConfig = config.google.auth;
+	if(process.env.GOOGLE_CLIENTID && process.env.GOOGLE_CLIENTID!=""){
+		this.googleConfig = {
+			clientId: process.env.GOOGLE_CLIENTID
+		};
 		this.enabled = true;
 	}else{
 		return;

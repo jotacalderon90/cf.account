@@ -16,8 +16,8 @@ const removeLogged = async function(req){
 }
 
 const cookie = function(res,cookie){
-	if(config.properties.cookie_domain){
-		res.cookie("Authorization", cookie, { domain: config.properties.cookie_domain, path: "/", secure: true });
+	if(process.env.COOKIE_DOMAIN){
+		res.cookie("Authorization", cookie, { domain: process.env.COOKIE_DOMAIN, path: "/", secure: true });
 	}else{
 		res.cookie("Authorization",cookie);
 	}
@@ -56,16 +56,16 @@ module.exports = {
 			doc.thumb = "/assets/media/img/user.png";
 			doc.roles = ["user"];
 			doc.created = new Date();
-			doc.activate = (config.smtp.enabled)?false:true;
+			doc.activate = false;
 			await mongodb.insertOne("user",doc);
 			push.notificateToAdmin("new user",req.body.email);
 			let msg = 'Se ha completado su registro correctamente';
-			if(config.smtp.enabled===true){
+			if(process.env.HOST_MAILING){
 				let memo = {};
 				memo.to = doc.email;
 				memo.subject = "Activación de cuenta"
 				memo.nickname = doc.nickname;
-				memo.hash = config.properties.host + "/account/activate/" + new Buffer(doc.password).toString("base64");
+				memo.hash = process.env.HOST + "/account/activate/" + new Buffer(doc.password).toString("base64");
 				memo.html = render.process("account/memo.activate.html", memo);
 				await mailing.send(memo);
 				msg = 'Se ha enviado un correo para validar su registro';
@@ -206,9 +206,9 @@ module.exports = {
 			}
 			const memo = {};
 			memo.to = req.body.email;
-			memo.bcc = config.properties.admin;
+			memo.bcc = process.env.ADMIN;
 			memo.subject = "Reestablecer contraseña";
-			memo.hash = config.properties.host + "/account/recovery?hash=" + new Buffer(user[0].password).toString("base64");
+			memo.hash = process.env.HOST + "/account/recovery?hash=" + new Buffer(user[0].password).toString("base64");
 			memo.html = render.process("account/memo.recovery.html", memo);
 			await mailing.send(memo);
 			push.notificateToAdmin("user forget",req.body.email);

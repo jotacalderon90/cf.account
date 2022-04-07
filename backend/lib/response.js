@@ -40,7 +40,7 @@ self.prototype.sendFile = function(res,file){
 
 /*Renderizar pagina*/
 self.prototype.render = function(res,view,data){
-	if(fs.existsSync(process.cwd() + config.properties.views + view + '.html')){
+	if(fs.existsSync(process.cwd() + '/frontend/' + view + '.html')){
 		res.status(200).render(view, data);
 	}else{
 		this.renderMessage(res,500,'Page not Found', 'La página no existe');
@@ -50,7 +50,7 @@ self.prototype.render = function(res,view,data){
 /*Renderizar documento html*/
 self.prototype.renderHtml = function(data,req,res){
 	res.set('Content-Type', 'text/html');
-	res.send(Buffer.from('<!doctype html><html lang="es"><head><meta charset="utf-8"/><meta name="keywords" content="' + ((data[0].tag)?data[0].tag.join(','):'') + '" /><meta name="description" content="' + data[0].resume + '" /><meta name="Author" content="' + config.properties.host + '" /><title>' + data[0].title + '</title></head><body>' + data[0].content + '</body></html>'));
+	res.send(Buffer.from('<!doctype html><html lang="es"><head><meta charset="utf-8"/><meta name="keywords" content="' + ((data[0].tag)?data[0].tag.join(','):'') + '" /><meta name="description" content="' + data[0].resume + '" /><meta name="Author" content="' + process.env.HOST + '" /><title>' + data[0].title + '</title></head><body>' + data[0].content + '</body></html>'));
 }
 
 /*Renderizar pagina de error*/
@@ -64,7 +64,7 @@ self.prototype.unauthorize = function(req,res){
 		res.sendStatus(401);
 	}else{
 		//req.session.redirectTo = req.url;//funciona cuando tengo todo integrado en una app, pero ahora que se redirijira a otra? abajo
-		res.redirectTo = config.properties.host + req.url;
+		res.redirectTo = process.env.HOST + req.url;
 		this.renderMessage(res,401,'Acceso restringido','No tiene permisos para ejecutar esta acción');
 	}
 }

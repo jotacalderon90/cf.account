@@ -11,7 +11,7 @@ const self = function(){
 
 self.prototype.process = function(templatename, doc){
 	//implementar sistema de cache
-	return this.processTemplate(fs.readFileSync(process.cwd() + config.properties.views + templatename,'utf8'),doc);
+	return this.processTemplate(fs.readFileSync(process.cwd() + '/frontend/' + templatename,'utf8'),doc);
 }
 
 self.prototype.processTemplate = function(template,doc){
@@ -75,7 +75,7 @@ self.prototype.extractIn = function(content,from,to){
 
 self.prototype.getMasterContent = function(masterName){
 	try{
-		return fs.readFileSync(process.cwd() + config.properties.views + masterName + ".html",'utf8');
+		return fs.readFileSync(process.cwd() + '/frontend/' + masterName + ".html",'utf8');
 	}catch(e){
 		this.error = e;
 		return undefined;
@@ -126,7 +126,7 @@ self.prototype.processInclude = function(process_template){
 	var includeName = this.extractIn(process_template,tag,"-->");
 	var includeTemplate = "";
 	try{
-		includeTemplate = fs.readFileSync(process.cwd() + config.properties.views  + includeName + ".html",'utf8');
+		includeTemplate = fs.readFileSync(process.cwd() + '/frontend/'  + includeName + ".html",'utf8');
 	}catch(e){
 		includeTemplate = "template not found " + includeName;
 	}		

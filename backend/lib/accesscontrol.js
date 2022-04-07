@@ -15,12 +15,12 @@ self.prototype.encode = function(user){
 		//roles: user.roles,
 		iat: iat,
 		exp: exp
-	},config.properties.secret);
+	},process.env.SESSION_SECRET);
 }
 
 self.prototype.decode = function(token){
 	try{
-		const payload = jwt.decode(token,config.properties.secret);
+		const payload = jwt.decode(token,process.env.SESSION_SECRET);
 		if(new Date(payload.exp) <= new Date()){
 			throw("expired");
 		}

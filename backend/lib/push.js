@@ -9,10 +9,10 @@ const self = function(){
 	
 	let publicKey,privateKey;
 	
-	if(config.push){
+	if(process.env.PUSH_PUBLIC && process.env.PUSH_PUBLIC!=''){
 		
-		publicKey = config.push.public;
-		privateKey = config.push.private;
+		publicKey = process.env.PUSH_PUBLIC;
+		privateKey = process.env.PUSH_PRIVATE;
 	
 	}else{
 		
@@ -20,15 +20,16 @@ const self = function(){
 		publicKey = vapidKeys.publicKey;
 		privateKey = vapidKeys.privateKey;
 		
-		const c = JSON.parse(fs.readFileSync(process.cwd() + '/config.json','utf8'));
+		logger.info('PUSH PUBLIC KEY' + publicKey);
+		logger.info('PUSH PRIVATE KEY' + privateKey);
 		
-		c.push = {public: publicKey, private: privateKey};
-		
-		fs.writeFileSync(process.cwd() + '/config.json',JSON.stringify(c,undefined,"\t"));
+		//const c = JSON.parse(fs.readFileSync(process.cwd() + '/config.json','utf8'));
+		//c.push = {public: publicKey, private: privateKey};
+		//fs.writeFileSync(process.cwd() + '/config.json',JSON.stringify(c,undefined,"\t"));
 	
 	}
 	
-	webpush.setVapidDetails('mailto:' + config.properties.admin, publicKey, privateKey);
+	webpush.setVapidDetails('mailto:' + process.env.ADMIN, publicKey, privateKey);
 	
 	this.publicKey = publicKey;
 }

@@ -15,8 +15,8 @@ const onError = function(res,e){
 }
 
 const cookie = function(res,cookie){
-	if(config.properties.cookie_domain){
-		res.cookie("Authorization", cookie, { domain: config.properties.cookie_domain, path: "/", secure: true });
+	if(process.env.COOKIE_DOMAIN){
+		res.cookie("Authorization", cookie, { domain: process.env.COOKIE_DOMAIN, path: "/", secure: true });
 	}else{
 		res.cookie("Authorization",cookie);
 	}
@@ -54,24 +54,24 @@ module.exports = {
 				doc.password = helper.toHash(req.body.password + req.body.email,doc.hash);
 				doc.nickname = req.body.email;
 				doc.notification = true;
-				doc.thumb = config.properties.archivospublicos + "/media/img/user.png";
+				doc.thumb = process.env.HOST_ARCHIVOSPUBLICOS + "/media/img/user.png";
 				doc.roles = ["user"];
 				doc.created = new Date();
-				doc.activate = (config.smtp && config.smtp.enabled)?false:true;
+				doc.activate = false;
 				await mongodb.insertOne("user",doc);
 				//push.notificateToAdmin("new user",req.body.email);
-				if(config.properties.mailing){
+				if(process.env.HOST_MAILING){
 					const memo = {};
 					memo.to = doc.email;
-					memo.bcc = config.properties.admin;
+					memo.bcc = process.env.ADMIN;
 					memo.subject = "Activación de cuenta"
-					memo.hash = config.properties.host + "/api/account/activate/" + new Buffer(doc.password).toString("base64");
+					memo.hash = process.env.HOST + "/api/account/activate/" + new Buffer(doc.password).toString("base64");
 					
 					memo.type = 'template';
 					memo.template = 'accountActivate.html';
 					memo.send = true;
 					
-					request.post(config.properties.mailing + '/api/mailing',{},memo);
+					request.post(process.env.HOST_MAILING + '/api/mailing',{},memo);
 				}
 				response.renderMessage(res,200,'Usuario registrado','Se ha enviado un correo para validar su registro','success');
 			}else if(req.body.button && req.body.button == 'UPDATE'){

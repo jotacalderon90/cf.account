@@ -7,13 +7,13 @@ module.exports = {
 	//@route('/favicon.ico')
 	//@method(['get'])
 	favicon: function(req,res){
-		res.redirect(config.properties.archivospublicos + '/media/img/favicon.ico');
+		res.redirect(process.env.HOST_ARCHIVOSPUBLICOS + '/media/img/favicon.ico');
 	},
 	
 	//@route('/robots.txt')
 	//@method(['get'])
 	robots: function(req,res){
-		res.redirect(config.properties.archivospublicos + '/media/doc/robots.txt');
+		res.redirect(process.env.HOST_ARCHIVOSPUBLICOS + '/media/doc/robots.txt');
 	}
 	
 };

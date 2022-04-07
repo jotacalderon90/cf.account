@@ -16,8 +16,8 @@ const onError = function(res,e){
 }
 
 const cookie = function(res,cookie){
-	if(config.properties.cookie_domain){
-		res.cookie("Authorization", cookie, { domain: config.properties.cookie_domain, path: "/", secure: true });
+	if(process.env.COOKIE_DOMAIN){
+		res.cookie("Authorization", cookie, { domain: process.env.COOKIE_DOMAIN, path: "/", secure: true });
 	}else{
 		res.cookie("Authorization",cookie);
 	}
@@ -126,18 +126,18 @@ module.exports = {
 				throw("Error al obtener usuario");
 			}
 			
-			if(config.properties.mailing){
+			if(process.env.HOST_MAILING){
 				const memo = {};
 				memo.to = req.body.email;
-				memo.bcc = config.properties.admin;
+				memo.bcc = process.env.ADMIN;
 				memo.subject = "Reestablecer contraseña"
-				memo.hash = config.properties.host + "/api/account/recovery?hash=" + new Buffer(user[0].password).toString("base64");
+				memo.hash = process.env.HOST + "/api/account/recovery?hash=" + new Buffer(user[0].password).toString("base64");
 				
 				memo.type = 'template';
 				memo.template = 'accountRecovery.html';
 				memo.send = true;
 				
-				request.post(config.properties.mailing + '/api/mailing',{},memo);
+				request.post(process.env.HOST_MAILING + '/api/mailing',{},memo);
 			}
 			//push.notificateToAdmin("user forget",req.body.email);
 			response.renderMessage(res,200,'Recuperación de cuenta','Se ha enviado un correo para poder reestablecer su contraseña','success');

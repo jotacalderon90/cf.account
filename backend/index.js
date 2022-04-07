@@ -54,11 +54,11 @@ module.exports = function(express){
 								api[APIName][action](req,res,next);
 							}else{
 								
-								if(config.properties.account){
-									req.user = await request.get(config.properties.account + '/api/account',{headers: {cookie: req.headers.cookie}});
-								}else{
+								//if(config.properties.account){
+								//	req.user = await request.get(config.properties.account + '/api/account',{headers: {cookie: req.headers.cookie || null}});
+								//}else{
 									req.user = await accesscontrol.getUser(req);
-								}
+								//}
 								
 								if(req.user==null || !accesscontrol.hasRole(req,roles)){
 									response.unauthorize(req,res);

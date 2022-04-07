@@ -2,7 +2,7 @@
 
 <!--define:css-->
 
-	<!--if:doc.config.recaptcha && doc.config.recaptcha.enabled-->
+	<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<!--/if-->
 		
@@ -27,8 +27,8 @@
 						<br>
 						<input name="hash" type="hidden" value="{{data:doc.hash}}" />
 						
-						<!--if:doc.config.recaptcha && doc.config.recaptcha.enabled-->
-						<div class="g-recaptcha" data-sitekey="{{data:doc.config.recaptcha.public}}"></div>
+						<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
+						<div class="g-recaptcha" data-sitekey="{{data:process.env.RECAPTCHA_PUBLIC}}"></div>
 						<br>
 						<!--/if-->
 						

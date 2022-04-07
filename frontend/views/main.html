@@ -5,23 +5,23 @@
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		
-		<meta name="keywords" content="{{data:(doc.keywords || doc.config.properties.meta.keywords)}}" />
-		<meta name="description" content="{{data:(doc.description || doc.config.properties.meta.description)}}" />
-		<meta name="Author" content="{{data:(doc.author || doc.config.properties.meta.author)}}" />		
-		<meta property="og:title" content="{{data:(doc.title || doc.config.properties.meta.title)}}" />
-		<meta property="og:image" content="{{data:(doc.img)?doc.config.properties.host + doc.img.replace('/media/','/'):doc.config.properties.archivospublicos + '/media/img/logo.png'}}" />
+		<meta name="keywords" content="{{data:(doc.keywords || 'informática,software,programación,pwa,algoritmo')}}" />
+		<meta name="description" content="{{data:(doc.description || 'plataforma del informático')}}" />
+		<meta name="Author" content="{{data:(doc.author || '@jotace')}}" />		
+		<meta property="og:title" content="{{data:(doc.title || 'Account')}}" />
+		<meta property="og:image" content="{{data:(doc.img)?process.env.HOST + doc.img.replace('/media/','/'):process.env.HOST_ARCHIVOSPUBLICOS + '/media/img/logo.png'}}" />
 
-		<title>{{data:(doc.title || doc.config.properties.meta.title)}}</title>
+		<title>{{data:(doc.title || 'Account')}}</title>
 		
 		<base href="/" />
 		
-		<link rel="shortcut icon" href="{{data:doc.config.properties.archivospublicos}}/media/img/favicon.ico" type="image/x-icon">
-		<link rel="icon" href="{{data:doc.config.properties.archivospublicos}}/media/img/favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/media/img/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/media/img/favicon.ico" type="image/x-icon">
 		
-		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/bower_components/bootstrap/dist/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/bower_components/font-awesome/css/font-awesome.min.css" />
-		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/bower_components/jquery-ui/themes/base/jquery-ui.min.css" />
-		<link rel="stylesheet" href="{{data:doc.config.properties.archivospublicos}}/assets/main.css" media="all"/>
+		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/font-awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery-ui/themes/base/jquery-ui.min.css" />
+		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/main.css" media="all"/>
 		
 		<!--define:css-->
 		
@@ -32,21 +32,21 @@
 			<i class="fa fa-spin fa-spinner"></i>
 		</div>
 		
-		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/jquery/dist/jquery.min.js"></script>
-		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/jquery-ui/jquery-ui.min.js"></script>
-		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-		<script src="{{data:doc.config.properties.archivospublicos}}/lib/matrix.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery-ui/jquery-ui.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/matrix.js"></script>
 			
-		<script src="{{data:doc.config.properties.archivospublicos}}/bower_components/angular/angular.min.js"></script>
-		<script src="{{data:doc.config.properties.archivospublicos}}/lib/moment.js"></script>
-		<script src="{{data:doc.config.properties.archivospublicos}}/lib/moment-with-locales.js"></script>
-		<script src="{{data:doc.config.properties.archivospublicos}}/lib/helper.js"></script>
-		<script src="{{data:doc.config.properties.archivospublicos}}/lib/trascender.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/angular/angular.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/moment.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/moment-with-locales.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/helper.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/trascender.js"></script>
 		
 		<!--define:script-->
 		
 		<script>
-			document.host = '{{data:doc.config.properties.host}}';	
+			document.host = '{{data:process.env.HOST}}';	
 			moment.locale("es");
 			const app = angular.module('myApp', []);
 			app.modules = {};

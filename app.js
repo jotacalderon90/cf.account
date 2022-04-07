@@ -3,10 +3,7 @@
 	logger.info('ini code');
 	
 	try{
-
-		logger.info('load config');
-		global.config = require('./backend/lib/config');
-
+		
 		logger.info('connect to database');
 		const mongodb = require('./backend/lib/mongodb');
 		await mongodb.connect();
@@ -41,10 +38,10 @@
 		logger.info('import express-session');
 		const session = require('express-session');
 		express.use(session({
-			secret: global.config.properties.secret,
+			secret: process.env.SESSION_SECRET,
 			resave: false,
 			saveUninitialized: false,
-			cookie: global.config.properties.cookie_domain || undefined
+			cookie: process.env.COOKIE_DOMAIN || undefined
 		}));
 
 		logger.info('import express-fileupload');
@@ -64,7 +61,7 @@
 		express.engine("html", (filePath,data,callback)=>{
 			return callback(null, render.processTemplate(fs.readFileSync(filePath,"utf8").toString(),data));
 		});
-		express.set("views", __dirname + global.config.properties.views);
+		express.set("views", __dirname + '/frontend/');
 		express.set("view engine", "html");
 		
 		logger.info('import response');
