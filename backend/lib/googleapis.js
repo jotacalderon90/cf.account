@@ -3,9 +3,6 @@ const {google} = require('googleapis');
 const self = function(){
 	
 	if(process.env.GOOGLE_CLIENTID && process.env.GOOGLE_CLIENTID!=""){
-		this.googleConfig = {
-			clientId: process.env.GOOGLE_CLIENTID
-		};
 		this.enabled = true;
 	}else{
 		return;
@@ -14,9 +11,9 @@ const self = function(){
 	// Create the google auth object which gives us access to talk to google's apis.
 	this.createConnection = function(){
 		return new google.auth.OAuth2(
-			this.googleConfig.clientId,
-			this.googleConfig.clientSecret,
-			this.googleConfig.redirect
+			process.env.GOOGLE_CLIENTID,
+			process.env.GOOGLE_SECRET,
+			process.env.GOOGLE_REDIRECT
 		);
 	}
 
