@@ -63,7 +63,6 @@ module.exports = {
 				if(process.env.HOST_MAILING){
 					const memo = {};
 					memo.to = doc.email;
-					memo.bcc = process.env.ADMIN;
 					memo.subject = "Activación de cuenta"
 					memo.hash = process.env.HOST + "/api/account/activate/" + new Buffer(doc.password).toString("base64");
 					

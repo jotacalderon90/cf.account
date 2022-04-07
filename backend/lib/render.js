@@ -16,7 +16,7 @@ self.prototype.process = function(templatename, doc){
 
 self.prototype.processTemplate = function(template,doc){
 	try{
-		Object.assign(doc, {config: config});
+		//Object.assign(doc, {config: config});
 		var process_template = template;
 		var next = true;
 		if(template.indexOf("<!--use:")>-1){

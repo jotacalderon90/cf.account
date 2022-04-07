@@ -113,7 +113,6 @@ module.exports = {
 					if(process.env.HOST_MAILING){
 						const memo = {};
 						memo.to = row.email;
-						memo.bcc = process.env.ADMIN;
 						memo.subject = "Reestablecer contraseña"
 						memo.hash = process.env.HOST + "/api/account/recovery?hash=" + new Buffer(row.password).toString("base64");
 						
