@@ -122,7 +122,7 @@ self.prototype.strRight = function(content,from){
 
 /*Format number*/
 self.prototype.formatNumber = function(number){
-	return new Intl.NumberFormat('en-US').format(number);
+	return new Intl.NumberFormat('es-ES').format(number);
 }
 
 
