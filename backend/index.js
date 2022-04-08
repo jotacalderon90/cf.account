@@ -5,7 +5,6 @@ const path = require("path");
 
 const logger = require('./lib/log')('backend');
 const accesscontrol = require('./lib/accesscontrol');
-const request = require('./lib/request');
 const response = require('./lib/response');
 
 //funcion generica que extrae un string dentro de un string
@@ -53,13 +52,7 @@ module.exports = function(express){
 							if(!roles){
 								api[APIName][action](req,res,next);
 							}else{
-								
-								//if(config.properties.account){
-								//	req.user = await request.get(config.properties.account + '/api/account',{headers: {cookie: req.headers.cookie || null}});
-								//}else{
-									req.user = await accesscontrol.getUser(req);
-								//}
-								
+								req.user = await accesscontrol.getUser(req);
 								if(req.user==null || !accesscontrol.hasRole(req,roles)){
 									response.unauthorize(req,res);
 								}else{

@@ -12,12 +12,6 @@
 		logger.info('import fs');
 		const fs = require('fs');
 		
-		logger.info('check first run');
-		if(!fs.existsSync('log.csv')){
-			logger.info('execute first run');
-			await require('./backend/lib/first_run');
-		}
-
 		logger.info('import express');
 		const ex = require('express');
 		const express = ex();

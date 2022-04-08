@@ -1,4 +1,4 @@
 node_modules/*
 frontend/bower_components/*
 package-lock.json
-log.csv
+frontend/img/*
