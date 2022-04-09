@@ -3,6 +3,7 @@
 const jwt = require("jwt-simple");
 const mongodb = require("./mongodb");
 const request = require('./request');
+const logger = require('./log')('lib.accesscontrol');
 
 const self = function(){
 
@@ -47,7 +48,11 @@ self.prototype.getToken = function(req){
 self.prototype.getUser = async function(req){
 	try{
 		if(process.env.HOST != process.env.HOST_ACCOUNT){
-			return await request.get(process.env.HOST_ACCOUNT + '/api/account',{headers: {cookie: req.headers.cookie || null}});
+			const user = await request.get(process.env.HOST_ACCOUNT + '/api/account',{headers: {cookie: req.headers.cookie || null}});
+			if(user.error){
+				throw(user.error);
+			}
+			return user.data;
 		}else{
 			const token = this.getToken(req);
 			if(token!=null && token.sub){
@@ -57,7 +62,7 @@ self.prototype.getUser = async function(req){
 			}
 		}
 	}catch(e){
-		console.log(e);
+		logger(e);
 		return null;
 	}
 }
