@@ -62,7 +62,7 @@ self.prototype.getUser = async function(req){
 			}
 		}
 	}catch(e){
-		logger(e);
+		logger.info(e);
 		return null;
 	}
 }
