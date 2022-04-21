@@ -1,14 +1,14 @@
 FROM node:16.13.1 as build-stage
 
-CMD mkdir /srv/cf.account
+CMD mkdir /srv/otedesus.cf.account
 
-COPY ["package.json","/srv/cf.account/"]
+COPY ["package.json","/srv/otedesus.cf.account/"]
 
-WORKDIR /srv/cf.account
+WORKDIR /srv/otedesus.cf.account
 
 RUN npm install --only=production
 
-COPY [".", "/srv/cf.account/"]
+COPY [".", "/srv/otedesus.cf.account/"]
 
 EXPOSE 80
 
