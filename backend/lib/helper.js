@@ -125,6 +125,23 @@ self.prototype.formatNumber = function(number){
 	return new Intl.NumberFormat('es-ES').format(number);
 }
 
+/*Clean string to urls*/
+self.prototype.cleaner = function(cadena){
+	const specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,.`";
+	for (var i = 0; i < specialChars.length; i++) {
+		cadena= cadena.replace(new RegExp("\\" + specialChars[i], 'gi'), '');
+	}
+	cadena = cadena.toLowerCase();
+	cadena = cadena.replace(/ /g,"-");
+	cadena = cadena.replace(/á/gi,"a");
+	cadena = cadena.replace(/é/gi,"e");
+	cadena = cadena.replace(/í/gi,"i");
+	cadena = cadena.replace(/ó/gi,"o");
+	cadena = cadena.replace(/ú/gi,"u");
+	cadena = cadena.replace(/ñ/gi,"n");
+	return cadena;
+}
+
 
 
 
