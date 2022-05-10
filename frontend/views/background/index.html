@@ -1,0 +1,15 @@
+<script>
+	
+	app.modules.background = function(parent){
+		this.service = document.helper.createService('GET','{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/api/background/collection');
+	}
+
+	app.modules.background.prototype.start = async function(){
+		const coll = (await this.service()).map((r)=>{return {image: r};});
+		jQuery(function($) {
+			$.supersized({    
+				slides: coll
+			});
+		});
+	}
+</script>
