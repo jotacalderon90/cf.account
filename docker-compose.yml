@@ -1,0 +1,31 @@
+version: "3.9"
+
+x-common-variables: &common-variables
+  HOST_ARCHIVOSPUBLICOS: "https://archivospublicos.jotace.cl"
+  HOST_ACCOUNT: "http://172.19.48.1:2202"
+  SESSION_SECRET: "trascender-con-sso"
+  COOKIE_DOMAINs: ".jotace.cl"
+  MONGO_URL: "mongodb://172.20.0.1:27017"
+  MONGO_DBNAME: "jotace"
+
+services:
+ 
+  account:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: account:0.0.1
+    container_name: account
+    volumes:
+      - .:/srv/cf.account/
+      - /srv/cf.account/node_modules
+    environment:
+       <<: *common-variables
+       HOST: "http://172.19.48.1:2202"
+    ports:
+      - "2202:80"
+      
+#networks:
+#  default:
+#    external:
+#      name: jotace
