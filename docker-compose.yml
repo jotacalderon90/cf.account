@@ -5,7 +5,7 @@ x-common-variables: &common-variables
   HOST_ACCOUNT: "http://172.19.48.1:2202"
   SESSION_SECRET: "trascender-con-sso"
   COOKIE_DOMAINs: ".jotace.cl"
-  MONGO_URL: "mongodb://172.20.0.1:27017"
+  MONGO_URL: "mongodb://host.docker.internal:27017"
   MONGO_DBNAME: "jotace"
 
 services:
@@ -13,7 +13,7 @@ services:
   account:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     image: account:0.0.1
     container_name: account
     volumes:
