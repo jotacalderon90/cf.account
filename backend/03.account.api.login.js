@@ -45,7 +45,10 @@ module.exports = {
 				throw("Los datos ingresados no corresponden");
 			}
 			cookie(res,accesscontrol.encode(rows[0]));
-			//push.notificateToAdmin("user login",req.body.email);
+			
+			if(process.env.HOST_PUSH){
+				request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Login', message: req.body.email});
+			}
 			
 			if(req.headers.referer.indexOf('redirectoTo=')>-1){
 				res.redirect(301, helper.strRight(req.headers.referer,'redirectoTo='));
@@ -88,7 +91,11 @@ module.exports = {
 			}
 			row[0].activate = true;
 			await mongodb.updateOne("user",row[0]._id,row[0]);
-			//push.notificateToAdmin("user activate",row[0].email);
+			
+			if(process.env.HOST_PUSH){
+				request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Activate', message: row[0].email});
+			}
+			
 			response.renderMessage(res,200,'Usuario activado','Se ha completado su registro satisfactoriamente','success');
 		}catch(e){
 			onError(res,e);
@@ -107,7 +114,11 @@ module.exports = {
 			}
 			row[0].activate = false;
 			await mongodb.updateOne("user",row[0]._id,row[0]);
-			//push.notificateToAdmin("user desactivate",row[0].email);
+			
+			if(process.env.HOST_PUSH){
+				request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Desactivate', message: row[0].email});
+			}
+			
 			response.renderMessage(res,200,'Usuario desactivado','Se ha completado su desactivación satisfactoriamente','success');
 		}catch(e){
 			onError(res,e);
@@ -138,7 +149,11 @@ module.exports = {
 				
 				request.post(process.env.HOST_MAILING + '/api/mailing',{},memo);
 			}
-			//push.notificateToAdmin("user forget",req.body.email);
+			
+			if(process.env.HOST_PUSH){
+				request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Forget', message: req.body.email});
+			}
+			
 			response.renderMessage(res,200,'Recuperación de cuenta','Se ha enviado un correo para poder reestablecer su contraseña','success');
 		}catch(e){
 			onError(res,e);
@@ -162,7 +177,11 @@ module.exports = {
 					}
 					const updated = {$set: {password: helper.toHash(req.body.password + user[0].email,user[0].hash)}};
 					await mongodb.updateOne("user",user[0]._id,updated);
-					//push.notificateToAdmin("user recovery",user[0].email);
+							
+					if(process.env.HOST_PUSH){
+						request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Recovery', message: user[0].email});
+					}
+					
 					response.renderMessage(res,200,'Actualización de contraseña','Se ha actualizado su contraseña correctamente','success');
 				break;
 			}
@@ -217,7 +236,11 @@ module.exports = {
 			cookie(res,accesscontrol.encode(row));
 			
 			const redirectTo = helper.getCookie(req,'redirectTo');
-			//push.notificateToAdmin("user login by google",row.email);
+			
+			if(process.env.HOST_PUSH){
+				request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Login Google', message: row.email});
+			}
+					
 			if((redirectTo != null && redirectTo != '') || (req.session.redirectTo && req.session.redirectTo!='')){
 				res.redirect(301, redirectTo || req.session.redirectTo);
 			}else{

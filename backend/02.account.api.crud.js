@@ -4,7 +4,6 @@ const logger = require('./lib/log')('router.account.api.crud');
 const response = require('./lib/response');
 const helper = require('./lib/helper');
 const mongodb = require('./lib/mongodb');
-//const push = require('./lib/push');
 const accesscontrol = require('./lib/accesscontrol');
 const request = require('./lib/requestAsync');
 
@@ -59,7 +58,11 @@ module.exports = {
 				doc.created = new Date();
 				doc.activate = false;
 				await mongodb.insertOne("user",doc);
-				//push.notificateToAdmin("new user",req.body.email);
+				
+				if(process.env.HOST_PUSH){
+					request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'New Account', message: req.body.email});
+				}
+				
 				if(process.env.HOST_MAILING){
 					const memo = {};
 					memo.to = doc.email;
