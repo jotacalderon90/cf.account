@@ -171,7 +171,7 @@ module.exports = {
 		}
 	},
 	
-	//@route('/api/account/google_auth')
+	//@route('/api/account/googleoauth')
 	//@method(['get'])
 	loginGoogleGetURL: async function(req,res){
 		try{
@@ -181,11 +181,10 @@ module.exports = {
 		}
 	},
 	
-	//@route('/user/auth/google/callback')
+	//@route('/api/account/googleoauth/callback')
 	//@method(['get'])
 	loginGoogleExecute: async function(req,res){
 		try{
-			//esta url me gustaria cambiar pero debo meterme en google :S
 			const user = await googleapis.getUserInfo(req.query.code);
 			if(user.error){
 				throw(user.error);
@@ -217,8 +216,8 @@ module.exports = {
 			}
 			cookie(res,accesscontrol.encode(row));
 			//push.notificateToAdmin("user login by google",row.email);
-			if(req.session.redirectTo){
-				res.redirect(req.session.redirectTo);
+			if(req.headers.referer.indexOf('redirectoTo=')>-1){
+				res.redirect(301, helper.strRight(req.headers.referer,'redirectoTo='));
 			}else{
 				res.redirect("/");
 			}
