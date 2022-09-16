@@ -60,7 +60,7 @@ module.exports = {
 				await mongodb.insertOne("user",doc);
 				
 				if(process.env.HOST_PUSH){
-					request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'New Account', message: req.body.email});
+					request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'New Account', body: req.body.email});
 				}
 				
 				if(process.env.HOST_MAILING){
