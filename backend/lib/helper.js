@@ -142,7 +142,18 @@ self.prototype.cleaner = function(cadena){
 	return cadena;
 }
 
-
+/*Get Cookie*/
+self.prototype.getCookie = function(req,cookiename){
+	if(req.headers && req.headers.cookie){
+		let cookies = req.headers.cookie.split(";");
+		for(let i=0;i<cookies.length;i++){
+			if(cookies[i].indexOf(cookiename)>-1){
+				return cookies[i].split("=")[1];	
+			}
+		}
+	}
+	return null;
+}
 
 
 

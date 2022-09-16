@@ -215,9 +215,11 @@ module.exports = {
 				await mongodb.updateOne("user",row._id,updated);
 			}
 			cookie(res,accesscontrol.encode(row));
+			
+			const redirectTo = helper.getCookie(req,'redirectTo');
 			//push.notificateToAdmin("user login by google",row.email);
-			if(req.session.redirectTo && req.session.redirectTo!=''){
-				res.redirect(301, req.session.redirectTo);
+			if((redirectTo != null && redirectTo != '') || (req.session.redirectTo && req.session.redirectTo!='')){
+				res.redirect(301, redirectTo || req.session.redirectTo);
 			}else{
 				res.redirect("/");
 			}

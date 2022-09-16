@@ -64,6 +64,7 @@ self.prototype.unauthorize = function(req,res){
 		res.sendStatus(401);
 	}else{
 		req.session.redirectTo = process.env.HOST + req.url;//paragoogleoauth??
+		res.cookie("redirectTo",process.env.HOST + req.url);
 		res.redirectTo = process.env.HOST + req.url;
 		this.renderMessage(res,401,'Acceso restringido','No tiene permisos para ejecutar esta acción');
 	}
