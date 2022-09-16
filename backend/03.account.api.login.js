@@ -216,8 +216,8 @@ module.exports = {
 			}
 			cookie(res,accesscontrol.encode(row));
 			//push.notificateToAdmin("user login by google",row.email);
-			if(req.headers.referer.indexOf('redirectoTo=')>-1){
-				res.redirect(301, helper.strRight(req.headers.referer,'redirectoTo='));
+			if(req.session.redirectTo && req.session.redirectTo!=''){
+				res.redirect(301, req.session.redirectTo);
 			}else{
 				res.redirect("/");
 			}
