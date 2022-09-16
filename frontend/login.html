@@ -33,12 +33,12 @@
 						
 						<button type="submit" class="btn btn-lg btn-success btn-block" >Ingresar</button>
 						
-						<!--
-						<a href="/" data-ng-href="{{ctrl.account.googleauth}}" class="btn btn-lg btn-primary btn-block" data-ng-show="ctrl.account.googleauth!=''">
+						<!--if:doc.google_auth && doc.google_auth!=''-->
+						<a href="{{data:doc.google_auth}}" class="btn btn-lg btn-primary btn-block">
 							<img src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png" height="20" alt="login con google" title="login con google"/>
 							Ingresar con Google
 						</a>
-						-->
+						<!--/if-->
 						
 						<hr>
 						<a href="/form" class="pull-left">Crear cuenta</a>
