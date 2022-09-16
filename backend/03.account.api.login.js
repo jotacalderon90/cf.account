@@ -181,11 +181,10 @@ module.exports = {
 		}
 	},
 	
-	//@route('/user/auth/google/callback')
+	//@route('/api/account/googleoauth/callback')
 	//@method(['get'])
 	loginGoogleExecute: async function(req,res){
 		try{
-			//user/auth/google/callback se debe cambiar desde google
 			const user = await googleapis.getUserInfo(req.query.code);
 			if(user.error){
 				throw(user.error);
