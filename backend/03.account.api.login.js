@@ -4,7 +4,6 @@ const logger = require('./lib/log')('router.account.api.login');
 const response = require('./lib/response');
 const helper = require('./lib/helper');
 const mongodb = require('./lib/mongodb');
-//const push = require('./lib/push');
 const accesscontrol = require('./lib/accesscontrol');
 const request = require('./lib/requestAsync');
 const googleapis = require('./lib/googleapis');
@@ -47,7 +46,9 @@ module.exports = {
 			cookie(res,accesscontrol.encode(rows[0]));
 			
 			if(process.env.HOST_PUSH){
-				request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Login', body: req.body.email});
+				const headers = {};
+				headers['x-api-key'] = process.env.X_API_KEY;
+				request.post(process.env.HOST_PUSH + '/api/push/admin',headers,{title: 'Login', body: req.body.email});
 			}
 			
 			if(req.headers.referer.indexOf('redirectoTo=')>-1){
@@ -91,11 +92,6 @@ module.exports = {
 			}
 			row[0].activate = true;
 			await mongodb.updateOne("user",row[0]._id,row[0]);
-			
-			if(process.env.HOST_PUSH){
-				request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Activate', body: row[0].email});
-			}
-			
 			response.renderMessage(res,200,'Usuario activado','Se ha completado su registro satisfactoriamente','success');
 		}catch(e){
 			onError(res,e);
@@ -114,11 +110,6 @@ module.exports = {
 			}
 			row[0].activate = false;
 			await mongodb.updateOne("user",row[0]._id,row[0]);
-			
-			if(process.env.HOST_PUSH){
-				request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Desactivate', body: row[0].email});
-			}
-			
 			response.renderMessage(res,200,'Usuario desactivado','Se ha completado su desactivación satisfactoriamente','success');
 		}catch(e){
 			onError(res,e);
@@ -150,10 +141,6 @@ module.exports = {
 				request.post(process.env.HOST_MAILING + '/api/mailing',{},memo);
 			}
 			
-			if(process.env.HOST_PUSH){
-				request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Forget', body: req.body.email});
-			}
-			
 			response.renderMessage(res,200,'Recuperación de cuenta','Se ha enviado un correo para poder reestablecer su contraseña','success');
 		}catch(e){
 			onError(res,e);
@@ -177,10 +164,6 @@ module.exports = {
 					}
 					const updated = {$set: {password: helper.toHash(req.body.password + user[0].email,user[0].hash)}};
 					await mongodb.updateOne("user",user[0]._id,updated);
-							
-					if(process.env.HOST_PUSH){
-						request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Recovery', body: user[0].email});
-					}
 					
 					response.renderMessage(res,200,'Actualización de contraseña','Se ha actualizado su contraseña correctamente','success');
 				break;
@@ -238,7 +221,9 @@ module.exports = {
 			const redirectTo = helper.getCookie(req,'redirectTo');
 			
 			if(process.env.HOST_PUSH){
-				request.post(process.env.HOST_PUSH + '/api/push/admin',{},{title: 'Login Google', body: row.email});
+				const headers = {};
+				headers['x-api-key'] = process.env.X_API_KEY;
+				request.post(process.env.HOST_PUSH + '/api/push/admin',headers,{title: 'Login Google', body: row.email});
 			}
 					
 			if((redirectTo != null && redirectTo != '') || (req.session.redirectTo && req.session.redirectTo!='')){
