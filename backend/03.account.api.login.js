@@ -48,7 +48,7 @@ module.exports = {
 			if(process.env.HOST_PUSH){
 				const headers = {};
 				headers['x-api-key'] = process.env.X_API_KEY;
-				request.post(process.env.HOST_PUSH + '/api/push/admin',headers,{title: 'Login', body: req.body.email});
+				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login', body: req.body.email});
 			}
 			
 			if(req.headers.referer.indexOf('redirectoTo=')>-1){
@@ -223,7 +223,7 @@ module.exports = {
 			if(process.env.HOST_PUSH){
 				const headers = {};
 				headers['x-api-key'] = process.env.X_API_KEY;
-				request.post(process.env.HOST_PUSH + '/api/push/admin',headers,{title: 'Login Google', body: row.email});
+				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login Google', body: row.email});
 			}
 					
 			if((redirectTo != null && redirectTo != '') || (req.session.redirectTo && req.session.redirectTo!='')){
