@@ -19,9 +19,15 @@
 						<button type="submit" class="btn btn-lg btn-success btn-block" name="button" value="UPDATE">Guardar</button>
 						<a class="btn btn-lg btn-warning btn-block" href="/api/account/logout" >Cerrar sesión</a>
 						<!--<button type="submit" class="btn btn-lg btn-danger btn-block" name="button" value="DELETE">Eliminar cuenta</button>-->
-						<!--if:doc.user.roles.indexOf('root')>-1-->
-							<a class="btn btn-lg btn-info btn-block" href="/admin/admin">Administración</a>
+						
+						<!--if:doc.user.roles.indexOf('root')>-1 || doc.user.roles.indexOf('gamer')>-1-->
+							<a class="btn btn-lg btn-info btn-block" href="https://game.jotace.cl">Ir al Juego</a>
 						<!--/if-->
+						
+						<!--if:doc.user.roles.indexOf('root')>-1-->
+							<a class="btn btn-lg btn-info btn-block" href="/admin/admin">Ir a la Administración</a>
+						<!--/if-->
+					
 					</form>
 				</div>
 			</div>
