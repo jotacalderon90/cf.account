@@ -81,6 +81,11 @@
 		const http = require('http');
 		const server = http.Server(express);
 
+		if(process.env.SOCKET && process.env.SOCKET.toString().trim()=='1'){		
+			logger.info('load socket');
+			(require('./backend/lib/socket')).load(server);	
+		}
+		
 		logger.info('start server');
 		server.listen(80, function(){
 			logger.info("server started in 80 port");
