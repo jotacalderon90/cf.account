@@ -154,7 +154,7 @@ module.exports = {
 			
 			switch(req.method.toLowerCase()){
 				case "get":
-					res.render('views/admin/recovery', {hash: req.query.hash});
+					res.render('admin/recovery', {hash: req.query.hash});
 				break;
 				case "post":
 					await helper.recaptcha(req);

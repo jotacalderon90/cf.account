@@ -1,4 +1,4 @@
-<!--use:views/main-->
+<!--use:main-->
 
 <!--define:css-->
 
@@ -9,18 +9,20 @@
 <!--/define:css-->
 
 <!--define:main-->
-		
-	<div class="modal fade" id="account_modal_new">
+	<div class="modal fade" id="account_modal_login">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<span class="modal-title">Crear Cuenta</span>
+					<span class="modal-title">Ingreso de sesión</span>
 				</div>
 				<div class="modal-body text-justify">
-					<form action="/api/account" method="POST">
-						<input class="form-control" placeholder="Email" name="email" type="text" />
+					<form action="/api/account/login" method="POST">
+						<input class="form-control" placeholder="Email" name="email" type="text" autofocus=""/>
+						
 						<br>
+						
 						<input class="form-control" placeholder="Password" name="password" type="password" value=""/>
+						
 						<br>
 						
 						<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
@@ -29,19 +31,18 @@
 						</div>
 						<!--/if-->
 						
-						<button type="submit" class="btn btn-lg btn-primary btn-block" >Crear Cuenta</button>
+						<button type="submit" class="btn btn-lg btn-success btn-block" >Ingresar</button>
 						
-						<!--
-						<a href="/" data-ng-href="{{ctrl.account.googleauth}}" class="btn btn-lg btn-primary btn-block" data-ng-show="ctrl.account.googleauth!=''">
+						<!--if:doc.google_auth && doc.google_auth!=''-->
+						<a href="{{data:doc.google_auth}}" class="btn btn-lg btn-primary btn-block">
 							<img src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png" height="20" alt="login con google" title="login con google"/>
 							Ingresar con Google
 						</a>
-						-->
+						<!--/if-->
 						
 						<hr>
-						<div class="text-right">
-							<a href="/login">Ingresar con tu cuenta</a>
-						</div>
+						<a href="/form" class="pull-left">Crear cuenta</a>
+						<a href="/forget" class="pull-right">¿Olvidaste tu password?</a>
 					</form>
 				</div>
 			</div>
@@ -55,7 +56,7 @@
 		}
 		
 		app.modules.account.prototype.start = function(){
-			$('#account_modal_new').modal('show');
+			$('#account_modal_login').modal('show');
 			$('.loader').fadeOut();
 		}
 		

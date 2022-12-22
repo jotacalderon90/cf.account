@@ -7,7 +7,7 @@ const self = function(){
 }
 
 self.prototype.renderMessage = function(res,status,title,msg){
-	res.status(status).render("views/messageFromServer", {title: title, msg: msg, class: "danger",status: status, redirectTo: res.redirectTo});	
+	res.status(status).render("messageFromServer", {title: title, msg: msg, class: "danger",status: status, redirectTo: res.redirectTo});	
 }
 
 /*Respuesta para 404*/
