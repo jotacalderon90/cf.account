@@ -1,7 +1,5 @@
 "use strict";
 
-const logger = require('./lib/log')('router.default');
-
 module.exports = {
 	
 	//@route('/favicon.ico')

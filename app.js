@@ -81,9 +81,9 @@
 		const http = require('http');
 		const server = http.Server(express);
 
-		if(process.env.SOCKET && process.env.SOCKET.toString().trim()=='1'){		
-			logger.info('load socket');
-			(require('./backend/lib/socket')).load(server);	
+		if(process.env.SOCKET && process.env.SOCKET.toString().trim()!=''){		
+			logger.info('load socket ' + process.env.SOCKET);
+			(require('./backend/lib/' + process.env.SOCKET)).load(server);	
 		}
 		
 		logger.info('start server');

@@ -169,4 +169,20 @@ self.prototype.updateMany = function(collection,query,options){
 	});
 }
 
+self.prototype.dropCollection = function(collection){
+	return new Promise((resolve,reject)=>{
+		if(this.client /*&& this.client.isConnected()*/){
+			this.db.collection(collection).drop(function(error, data) {
+				if (error){ 
+					return reject(error);
+				}else{
+					resolve(data);
+				}
+			});
+		}else{
+			return reject("SE CERRO LA CONEXION A LA BD :o :o:");
+		}
+	});
+}
+
 module.exports = new self();

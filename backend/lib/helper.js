@@ -155,6 +155,18 @@ self.prototype.getCookie = function(req,cookiename){
 	return null;
 }
 
+self.prototype.distinct = function(array){
+	let a = [];
+	for(let i=0;i<array.length;i++){
+		if(a.indexOf(array[i])==-1){
+			a.push(array[i]);
+		}
+	}
+	return a;
+}
+
+
+
 
 
 
