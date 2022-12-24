@@ -9,7 +9,7 @@ const self = function(){
 	
 }
 
-self.prototype.response = function(res,url,resolve,reject){
+self.prototype.response = function(res,url,options,resolve,reject){
 	let rawData = '';
 	res.setEncoding('utf8');
 	res.on('data', (chunk) => { rawData += chunk; });
@@ -24,7 +24,7 @@ self.prototype.response = function(res,url,resolve,reject){
 				throw('status ' + res.statusCode + ', ' + rawData);
 			}
 		}catch(e){
-			reject({url: url, description: e});
+			reject({url: url, options: options, error: e});
 		}
 	});
 }
@@ -32,9 +32,9 @@ self.prototype.response = function(res,url,resolve,reject){
 self.prototype.get = function(URL,OPTIONS){
 	return new Promise((resolve,reject)=>{
 		const lib = (URL.indexOf('https')>-1)?https:http;
-		lib.get(URL, ( OPTIONS || {} ), (res) => this.response(res,URL,resolve,reject))
+		lib.get(URL, ( OPTIONS || {} ), (res) => this.response(res,URL,OPTIONS,resolve,reject))
 		.on('error', (e) => {
-			reject({URL: URL, description: e});
+			reject({url: URL, options: OPTIONS, error: e});
 		});
 	});
 }
@@ -48,7 +48,7 @@ self.prototype.submit = function(URL,OPTIONS,BODY){
 		OPTIONS.headers['Content-Type'] ='application/json';
 		OPTIONS.headers['Content-Length'] = data.length;
 		
-		const req = lib.request(URL, OPTIONS, (res) => this.response(res,URL,resolve,reject));
+		const req = lib.request(URL, OPTIONS, (res) => this.response(res,URL,OPTIONS,resolve,reject));
 		req.on('error', (e) => {
 			reject({url: URL, description: e});
 		});
