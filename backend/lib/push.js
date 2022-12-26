@@ -1,37 +1,25 @@
 "use strict";
 
-const fs = require("fs");
 const webpush = require('web-push');
 const mongodb = require('./mongodb');
 const logger = require('./log')('lib.push');
 
 const self = function(){
 	
-	let publicKey,privateKey;
+	this.vapidKeys = { publicKey: process.env.PUSH_PUBLIC, privateKey: process.env.PUSH_PRIVATE };
 	
-	if(process.env.PUSH_PUBLIC && process.env.PUSH_PUBLIC!=''){
-		
-		publicKey = process.env.PUSH_PUBLIC;
-		privateKey = process.env.PUSH_PRIVATE;
-	
-	}else{
-		
-		const vapidKeys = webpush.generateVAPIDKeys();
-		publicKey = vapidKeys.publicKey;
-		privateKey = vapidKeys.privateKey;
-		
-		logger.info('PUSH PUBLIC KEY' + publicKey);
-		logger.info('PUSH PRIVATE KEY' + privateKey);
-		
-		//const c = JSON.parse(fs.readFileSync(process.cwd() + '/config.json','utf8'));
-		//c.push = {public: publicKey, private: privateKey};
-		//fs.writeFileSync(process.cwd() + '/config.json',JSON.stringify(c,undefined,"\t"));
-	
+	if(process.env.PUSH_PUBLIC != '' && process.env.PUSH_PRIVATE != ''){
+		this.configure();
 	}
 	
-	webpush.setVapidDetails('mailto:' + process.env.ADMIN, publicKey, privateKey);
-	
-	this.publicKey = publicKey;
+}
+
+self.prototype.generate = function(){
+	this.vapidKeys = webpush.generateVAPIDKeys();
+}
+
+self.prototype.configure = function(){
+	webpush.setVapidDetails('mailto:' + process.env.ADMIN, this.vapidKeys.publicKey, this.vapidKeys.privateKey);
 }
 
 self.prototype.send = async function(push,data){
@@ -44,14 +32,9 @@ self.prototype.send = async function(push,data){
 
 self.prototype.notificateToAdmin = async function(title,body,uri){
 	try{
-		const rows = await mongodb.find("user",{roles: {$in: ["root","admin"]}, push: {$exists: true}});
+		const rows = await mongodb.find("push",{roles: {$in: ["root","admin"]}});
 		for(let i=0;i<rows.length;i++){
-			for(let x=0;x<rows[i].push.length;x++){
-				const push = await mongodb.findOne("push",rows[i].push[x]);
-				if(push!=null){
-					this.send(push,{title: title, body: body, uri: uri});
-				}
-			}
+			this.send(rows[i],{title: title, body: body, uri: uri});
 		}
 	}catch(e){
 		logger.info(e);
