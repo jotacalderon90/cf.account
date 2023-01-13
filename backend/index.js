@@ -6,6 +6,7 @@ const path = require("path");
 const logger = require('./lib/log')('backend');
 const accesscontrol = require('./lib/accesscontrol');
 const response = require('./lib/response');
+const logAnalytics = require('./lib/logAnalytics');
 
 //funcion generica que extrae un string dentro de un string
 const extract = function(content,from,to){
@@ -47,6 +48,7 @@ module.exports = function(express){
 				SERVICECount++;
 				logger.info('loading service ' + APIName + ' ' + uri + ' [' + method + ':' + action + ']');
 				express[method[y]](uri, async function(req,res,next){
+					logAnalytics.createLog(req);
 					try{						
 						if(api[APIName][action]){
 							if(!roles){
