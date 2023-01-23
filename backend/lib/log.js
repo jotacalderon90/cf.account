@@ -11,7 +11,7 @@ self.prototype.info = async function(data){
 }
 
 self.prototype.request = async function(req){
-	const content = req.method + ' ' + (req.connection.remoteAddress || req.headers["x-real-ip"]) + ' ' + req.originalUrl;
+	const content = req.method + ' ' + (req.connection.remoteAddress || req.headers["x-real-ip"]) + ' ' + req.protocol + '://' + req.headers.host + req.originalUrl;
 	this.info(content);
 	//stream.write((new Date().toLocaleString() + ' ' + content).split(' ').join(';') + '\n');
 }
