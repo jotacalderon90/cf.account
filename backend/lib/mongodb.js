@@ -10,6 +10,10 @@ const self = function(){
 }
 
 self.prototype.connect = function(){
+	if(!(process.env.MONGO_URL && process.env.MONGO_DBNAME)){
+		logger.info('EMPTY MONGO ENV');
+		return;
+	}
 	return new Promise((resolve,reject)=>{
 		MongoClient.connect(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017', {useUnifiedTopology: true}, (error, client)=>{
 			if(error){
