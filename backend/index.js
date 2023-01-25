@@ -67,7 +67,7 @@ module.exports = function(express){
 						}
 					}catch(e){
 						logger.info(e);
-						response.renderMessage(res,500,'Error en servidor',e.toString());
+						response.renderMessage(req,res,500,'Error en servidor',e.toString());
 					}
 				});
 			}

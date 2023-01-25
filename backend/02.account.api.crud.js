@@ -7,10 +7,10 @@ const mongodb = require('./lib/mongodb');
 const accesscontrol = require('./lib/accesscontrol');
 const request = require('./lib/requestAsync');
 
-const onError = function(res,e){
+const onError = function(req,res,e){
 	logger.info('ERROR:' + e.toString());
 	logger.info(e);
-	response.renderError(res,e);
+	response.renderError(req,res,e);
 }
 
 const cookie = function(res,cookie){
@@ -77,14 +77,14 @@ module.exports = {
 					
 					request.post(process.env.HOST_MAILING + '/api/mailing',{},memo);
 				}
-				response.renderMessage(res,200,'Usuario registrado','Se ha enviado un correo para validar su registro','success');
+				response.renderMessage(req,res,200,'Usuario registrado','Se ha enviado un correo para validar su registro','success');
 			}else if(req.body.button && req.body.button == 'UPDATE'){
 				this.update(req,res);
 			}else if(req.body.button && req.body.button == 'DELETE'){
 				this.delete(req,res);
 			}
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -121,7 +121,7 @@ module.exports = {
 			await mongodb.updateOne("user",req.user._id,updated);
 			res.redirect(redirect);
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -134,9 +134,9 @@ module.exports = {
 			await removeLogged(req);
 			cookie(res,"null");
 			await mongodb.deleteOne("user",req.user._id);
-			response.renderMessage(res,200,'Usuario eliminado','Se ha eliminado su cuenta satisfactoriamente','success');
+			response.renderMessage(req,res,200,'Usuario eliminado','Se ha eliminado su cuenta satisfactoriamente','success');
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	}
 	

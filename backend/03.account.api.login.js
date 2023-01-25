@@ -8,10 +8,10 @@ const accesscontrol = require('./lib/accesscontrol');
 const request = require('./lib/requestAsync');
 const googleapis = require('./lib/googleapis');
 
-const onError = function(res,e){
+const onError = function(req,res,e){
 	logger.info('ERROR:' + e.toString());
 	logger.info(e);
-	response.renderError(res,e);
+	response.renderError(req,res,e);
 }
 
 const cookie = function(res,cookie){
@@ -64,7 +64,7 @@ module.exports = {
 			}
 			*/
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -76,7 +76,7 @@ module.exports = {
 			cookie(res,"null");
 			res.redirect("/login");
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -92,9 +92,9 @@ module.exports = {
 			}
 			row[0].activate = true;
 			await mongodb.updateOne("user",row[0]._id,row[0]);
-			response.renderMessage(res,200,'Usuario activado','Se ha completado su registro satisfactoriamente','success');
+			response.renderMessage(req,res,200,'Usuario activado','Se ha completado su registro satisfactoriamente','success');
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -110,9 +110,9 @@ module.exports = {
 			}
 			row[0].activate = false;
 			await mongodb.updateOne("user",row[0]._id,row[0]);
-			response.renderMessage(res,200,'Usuario desactivado','Se ha completado su desactivación satisfactoriamente','success');
+			response.renderMessage(req,res,200,'Usuario desactivado','Se ha completado su desactivación satisfactoriamente','success');
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -141,9 +141,9 @@ module.exports = {
 				request.post(process.env.HOST_MAILING + '/api/mailing',{},memo);
 			}
 			
-			response.renderMessage(res,200,'Recuperación de cuenta','Se ha enviado un correo para poder reestablecer su contraseña','success');
+			response.renderMessage(req,res,200,'Recuperación de cuenta','Se ha enviado un correo para poder reestablecer su contraseña','success');
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -165,11 +165,11 @@ module.exports = {
 					const updated = {$set: {password: helper.toHash(req.body.password + user[0].email,user[0].hash)}};
 					await mongodb.updateOne("user",user[0]._id,updated);
 					
-					response.renderMessage(res,200,'Actualización de contraseña','Se ha actualizado su contraseña correctamente','success');
+					response.renderMessage(req,res,200,'Actualización de contraseña','Se ha actualizado su contraseña correctamente','success');
 				break;
 			}
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -232,7 +232,7 @@ module.exports = {
 				res.redirect("/");
 			}
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	}
 }

@@ -6,13 +6,13 @@ const self = function(){
 	
 }
 
-self.prototype.renderMessage = function(res,status,title,msg){
-	res.status(status).render("messageFromServer", {title: title, msg: msg, class: "danger",status: status, redirectTo: res.redirectTo});	
+self.prototype.renderMessage = function(req,res,status,title,msg){
+	res.status(status).render(req.headers.host + "/error", {title: title, msg: msg, class: "danger",status: status, redirectTo: res.redirectTo, __sitename: req.headers.host});	
 }
 
 /*Respuesta para 404*/
 self.prototype.notFound = function(req,res){
-	this.renderMessage(res,404, 'Error 404', 'La URL ' +  req.originalUrl + ' no pudo ser procesada');
+	this.renderMessage(req,res,404, 'Error 404', 'La URL ' +  req.originalUrl + ' no pudo ser procesada');
 }
 
 /*Respuesta satisfactoria para APIS*/
@@ -30,20 +30,20 @@ self.prototype.APIError = function(res,e){
 }
 
 /*Responder archivo*/
-self.prototype.sendFile = function(res,file){
+/*self.prototype.sendFile = function(res,file){
 	if(fs.existsSync(file)){
 		res.sendFile(file);
 	}else{
 		this.renderMessage(res,500,'File not Found', 'El archivo solicitado internamente no existe');
 	}
-}
+}*/
 
 /*Renderizar pagina*/
-self.prototype.render = function(res,view,data){
+self.prototype.render = function(req,res,view,data){
 	if(fs.existsSync(process.cwd() + '/frontend/' + view + '.html')){
 		res.status(200).render(view, data);
 	}else{
-		this.renderMessage(res,500,'Page not Found', 'La página no existe');
+		this.renderMessage(req,res,500,'Page not Found', 'La página no existe');
 	}
 }
 
@@ -54,8 +54,8 @@ self.prototype.renderHtml = function(data,req,res){
 }
 
 /*Renderizar pagina de error*/
-self.prototype.renderError = function(res,error){
-	this.renderMessage(res,500,'Server Error', error.toString());
+self.prototype.renderError = function(req,res,error){
+	this.renderMessage(req,res,500,'Server Error', error.toString());
 }
 
 /*Respuesta 401*/
@@ -63,10 +63,10 @@ self.prototype.unauthorize = function(req,res){
 	if(req.url.indexOf("/api/")>-1){
 		res.sendStatus(401);
 	}else{
-		req.session.redirectTo = process.env.HOST + req.url;//paragoogleoauth??
-		res.cookie("redirectTo",process.env.HOST + req.url);
-		res.redirectTo = process.env.HOST + req.url;
-		this.renderMessage(res,401,'Acceso restringido','No tiene permisos para ejecutar esta acción');
+		req.session.redirectTo = req.protocol + '://' + req.headers.host + req.url;
+		res.cookie("redirectTo",req.protocol + '://' + req.headers.host + req.url);
+		res.redirectTo = req.protocol + '://' + req.headers.host + req.url;
+		this.renderMessage(req,res,401,'Acceso restringido','No tiene permisos para ejecutar esta acción');
 	}
 }
 

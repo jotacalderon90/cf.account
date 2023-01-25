@@ -7,10 +7,10 @@ const mongodb = require('./lib/mongodb');
 const accesscontrol = require('./lib/accesscontrol');
 const request = require('./lib/requestAsync');
 
-const onError = function(res,e){
+const onError = function(req,res,e){
 	logger.info('ERROR:' + e.toString());
 	logger.info(e);
-	response.APIError(res,e);
+	response.APIError(req,res,e);
 }
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
 			const total = await mongodb.count('user',req.query);
 			res.send({data: total});
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -38,7 +38,7 @@ module.exports = {
 			const data = await mongodb.find('user',req.query,req.options);
 			res.send({data: data});
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -50,7 +50,7 @@ module.exports = {
 			const data = await mongodb.distinct('user','roles');
 			res.send({data: data});
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -83,7 +83,7 @@ module.exports = {
 			await mongodb.insertOne("user",doc);
 			res.send({data: true});
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -126,7 +126,7 @@ module.exports = {
 			}
 			res.send({data: true});
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	},
 	
@@ -138,7 +138,7 @@ module.exports = {
 			await mongodb.deleteOne('user',req.params.id);
 			res.send({data: true});
 		}catch(e){
-			onError(res,e);
+			onError(req,res,e);
 		}
 	}
 	
