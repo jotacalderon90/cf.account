@@ -7,7 +7,8 @@ const self = function(){
 }
 
 self.prototype.renderMessage = function(req,res,status,title,msg){
-	res.status(status).render(req.headers.host + "/error", {title: title, msg: msg, class: "danger",status: status, redirectTo: res.redirectTo, __sitename: req.headers.host});	
+	const v = (fs.existsSync(process.cwd() + '/frontend/' + req.headers.host + "/error" + '.html'))?req.headers.host + "/error":'error';
+	res.status(status).render(v, {title: title, msg: msg, class: "danger",status: status, redirectTo: res.redirectTo, __sitename: req.headers.host});	
 }
 
 /*Respuesta para 404*/
@@ -30,13 +31,13 @@ self.prototype.APIError = function(res,e){
 }
 
 /*Responder archivo*/
-/*self.prototype.sendFile = function(res,file){
+self.prototype.sendFile = function(res,file){
 	if(fs.existsSync(file)){
 		res.sendFile(file);
 	}else{
 		this.renderMessage(res,500,'File not Found', 'El archivo solicitado internamente no existe');
 	}
-}*/
+}
 
 /*Renderizar pagina*/
 self.prototype.render = function(req,res,view,data){
