@@ -28,20 +28,24 @@
 		logger.info('import compression');
 		const compression = require('compression');
 		express.use(compression());
-			
-		logger.info('import express-session');
-		const session = require('express-session');
-		express.use(session({
-			secret: process.env.SESSION_SECRET,
-			resave: false,
-			saveUninitialized: false,
-			cookie: process.env.COOKIE_DOMAIN || undefined
-		}));
-
-		logger.info('import express-fileupload');
-		const upload = require('express-fileupload');
-		express.use(upload());
-
+		
+		if(process.env.SESSION_SECRET){		
+			logger.info('import express-session');
+			const session = require('express-session');
+			express.use(session({
+				secret: process.env.SESSION_SECRET,
+				resave: false,
+				saveUninitialized: false,
+				cookie: process.env.COOKIE_DOMAIN || undefined
+			}));	
+		}
+		
+		if(process.env.FILE_UPLOAD && process.env.FILE_UPLOAD.toString().trim()=='1'){
+			logger.info('import express-fileupload');
+			const upload = require('express-fileupload');
+			express.use(upload());
+		}
+		
 		logger.info('import helmet');
 		const helmet = require('helmet');
 		express.use(helmet());
@@ -66,11 +70,25 @@
 			next();
 		});
 		
+		if(process.env.FRONT_MULTIDOMAIN && process.env.FRONT_MULTIDOMAIN.toString().trim()=='1'){		
+			express.use(function(req,res,next){
+				//req.headers.host = 'www.demo.cl';
+				const p = process.cwd() + '/frontend/' + req.headers.host + req.path;
+				if(req.path != '/' && fs.existsSync(p)){
+					res.sendFile(p);
+				}else{
+					next();
+				}
+			});
+		}
+		
 		logger.info('public routes');
 		require('./backend')(express);
-
-		logger.info('public default folder');
-		express.use('/', ex.static(__dirname + '/frontend'));
+		
+		if(!process.env.STATIC_FOLDER || process.env.STATIC_FOLDER.toString().trim()=='1'){
+			logger.info('public default folder');
+			express.use('/', ex.static(__dirname + '/frontend'));
+		}
 		
 		express.use(function(req,res,next){
 			logger.info("404 " + req.originalUrl);
