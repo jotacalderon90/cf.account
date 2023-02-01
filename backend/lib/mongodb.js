@@ -141,10 +141,10 @@ self.prototype.deleteOne = function(collection,id){
 	});
 }
 
-self.prototype.distinct = function(collection,field){
+self.prototype.distinct = function(collection,field,query){
 	return new Promise((resolve,reject)=>{
 		if(this.client /*&& this.client.isConnected()*/){
-			this.db.collection(collection).distinct(field, function(error, data) {
+			this.db.collection(collection).distinct(field, (query || {}), function(error, data) {
 				if (error){
 					return reject(error);
 				}else{
