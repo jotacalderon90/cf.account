@@ -64,7 +64,7 @@ self.prototype.unauthorize = function(req,res){
 	if(req.url.indexOf("/api/")>-1){
 		res.sendStatus(401);
 	}else{
-		req.session.redirectTo = req.protocol + '://' + req.headers.host + req.url;
+		//req.session.redirectTo = req.protocol + '://' + req.headers.host + req.url;
 		res.cookie("redirectTo",req.protocol + '://' + req.headers.host + req.url);
 		res.redirectTo = req.protocol + '://' + req.headers.host + req.url;
 		this.renderMessage(req,res,401,'Acceso restringido','No tiene permisos para ejecutar esta acción');
