@@ -22,7 +22,7 @@ self.prototype.APISuccess = function(res){
 }
 
 /*Respuesta erronea para APIS*/
-self.prototype.APIError = function(res,e){
+self.prototype.APIError = function(req,res,e){
 	if(e==401){
 		res.sendStatus(e);
 	}else{
