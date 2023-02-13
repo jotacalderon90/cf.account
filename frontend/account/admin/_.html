@@ -1,0 +1,86 @@
+<!--use:main-->
+
+<!--define:script-->
+	<script src="/account/admin/_.js"></script>
+<!--/define:script-->
+
+<!--define:main-->
+
+	<!--include:promise/prompt-->
+
+	<h4 class="modal-title">Administración de account</h4>
+	<div class="btn-group menu-inside btn-head left">
+		<button type="button" class="dropdown-toggle btn-head" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="fa fa-bars"></i>
+		</button>
+		<ul class="dropdown-menu">
+			<li data-ng-repeat="tag in ctrl.object.tags" data-ng-click="ctrl.object.refresh(tag)" data-ng-show="tag!='root'">
+				{{tag}}
+			</li>
+		</ul>
+	</div>
+	<button type="button" class="btn-head" data-ng-click="ctrl.object.refresh()">
+			<i class="fa fa-refresh"></i>
+		</button>
+	<div data-ng-repeat="row in ctrl.object.coll">
+		<a class="btn btn-default btn-block" role="button" data-toggle="collapse" href="/" data-ng-href="#users_user_action{{$index}}" aria-expanded="false" aria-controls="users_user_action{{$index}}">
+			{{row.email}}
+		</a>
+		<div class="collapse" id="users_user_action{{$index}}">
+			<div class="well">
+				<button class="btn btn-default btn-block" data-ng-click="ctrl.object.changeRoles(row)" title="actualizar roles">
+					<span>Actualizar roles</span>
+					<i class="fa fa-info-circle pull-right"></i>
+				</button>
+				<button class="btn btn-block" data-ng-class="(row.activate)?'btn-primary':'btn-warning'" data-ng-click="ctrl.object.activate(row)" title="{{((row.activate)?'Deshabilitar':'Habilitar')}}">
+					<span>{{((row.activate)?'Deshabilitar':'Habilitar')}}</span>
+					<i class="fa pull-right" data-ng-class="(row.activate)?'fa-link':'fa-unlink'"></i>
+				</button>
+				<button class="btn btn-info btn-block" data-ng-click="ctrl.object.changePassword(row)" title="actualizar contraseña">
+					<span>Cambiar contraseña</span>
+					<i class="fa pull-right">电</i>
+				</button>
+				<button class="btn btn-default btn-block" data-ng-click="ctrl.object.enableRecovery(row)" title="enviar correo para recuperar contraseña">
+					<span>Enviar correo para actualizar contraseña</span>
+					<i class="fa fa-envelope pull-right"></i>
+				</button>
+				<button class="btn btn-danger btn-block" data-ng-click="ctrl.object.delete(row._id)" title="eliminar usuario">
+					<span>Eliminar usuario</span>
+					<i class="fa fa-trash pull-right"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+	<p class="text-right" data-ng-click="ctrl.object.getCollection()">{{ctrl.object.coll.length}}/{{ctrl.object.cant}}</p>
+	<!--
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+	Email
+					</th>
+					<th>
+	Roles
+					</th>
+				</tr>
+			</thead>
+			<tr data-ng-repeat="row in ctrl.object.coll">
+				<td>
+					{{row.email}}
+				</td>
+				<td>
+					{{row.roles}}
+					<a href="/" data-ng-href="/admin/edit/{{row._id}}" class="pull-right">
+	<i class="fa fa-eye"></i>
+					</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	-->
+
+
+
+
+<!--/define:main-->

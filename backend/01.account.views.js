@@ -8,38 +8,38 @@ module.exports = {
 	//@method(['get'])
 	//@roles(['root','admin','user'])
 	renderDocument: function(req,res){
-		res.render('account/document',{user: req.user});
+		res.render('account/perfil/_',{user: req.user});
 	},
 	
 	//@route('/form')
 	//@method(['get'])
 	renderForm: function(req,res){
-		res.render('account/form');
+		res.render('account/form/_');
 	},
 	
 	//@route('/login')
 	//@method(['get'])
 	renderLogin: function(req,res){
-		res.render('account/login', {google_auth: googleapis.getURL()});
+		res.render('account/login/_', {google_auth: googleapis.getURL()});
 	},
 	
 	//@route('/forget')
 	//@method(['get'])
 	renderForget: function(req,res){
-		res.render('account/forget');
+		res.render('account/forget/_');
 	},
 	
 	//@route('/recovery')
 	//@method(['get'])
 	renderRecovery: function(req,res){
-		res.render('account/recovery');
+		res.render('account/recovery/_');
 	},
 	
 	//@route('/admin/admin')
 	//@method(['get'])
 	//@roles(['root','admin'])
 	renderAdmin: function(req,res){
-		res.render('account/admin');
+		res.render('account/admin/_',{user: req.user});
 	}
 	
 }

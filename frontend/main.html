@@ -5,77 +5,50 @@
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		
-		<meta name="keywords" content="{{data:(doc.keywords || 'informática,software,programación,pwa,algoritmo')}}" />
-		<meta name="description" content="{{data:(doc.description || 'plataforma del informático')}}" />
-		<meta name="Author" content="{{data:(doc.author || '@jotace')}}" />		
-		<meta property="og:title" content="{{data:(doc.title || 'Account')}}" />
-		<meta property="og:image" content="{{data:(doc.img)?process.env.HOST + doc.img.replace('/media/','/'):process.env.HOST_ARCHIVOSPUBLICOS + '/media/img/logo.png'}}" />
-
-		<title>{{data:(doc.title || 'Account')}}</title>
+		<title>Cuenta de usuario</title>
 		
 		<base href="/" />
 		
-		<link rel="shortcut icon" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/media/img/favicon.ico" type="image/x-icon">
-		<link rel="icon" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/media/img/favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+		<link rel="icon" href="favicon.ico" type="image/x-icon">
 		
 		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/bootstrap/dist/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery-ui/themes/base/jquery-ui.min.css" />
-		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/supersized/supersized.3.2.7.css" />
-		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/main.css" media="all"/>
+		<link rel="stylesheet" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/trascender/main.css" />
 		
 		<!--define:css-->
 		
 	</head>
 	<body>
 		
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery-ui/jquery-ui.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/angular/angular.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/moment.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/moment-with-locales.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/trascender/global.js"></script>
+		
+		<!--define:script-->
+		
 		<div class="loader">
 			<i class="fa fa-spin fa-spinner"></i>
 		</div>
 		
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery/dist/jquery.min.js"></script>
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/jquery-ui/jquery-ui.min.js"></script>
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/supersized/supersized.3.2.7.js"></script>
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/matrix.js"></script>
-			
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/bower_components/angular/angular.min.js"></script>
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/moment.js"></script>
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/moment-with-locales.js"></script>
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/helper.js"></script>
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/trascender.js"></script>
-		
-		<!--define:script-->
-		
-		<script>
-			document.host = '{{data:process.env.HOST}}';	
-			moment.locale("es");
-			const app = angular.module('myApp', []);
-			app.modules = {};
-		</script>
-			
 		<div id="app" data-ng-app="myApp" data-ng-controller="myCtrl as ctrl">
-			<!--include:background/index-->
-			<!--define:main-->
+			<!--include:account/nav-->
+			<div class="container-fluid">
+				<div class="col-md-2">
+					<!--include:account/menu-->
+				</div>
+				<div class="col-md-10">
+					<!--define:main-->
+				</div>
+			</div>
 		</div>
 		
-		<script>
-			app.controller("myCtrl", function($scope){
-				this.refresh = function(){
-					try{
-						$scope.$digest(function(){});
-					}catch(e){
-						console.log(e);
-					}
-				}
-				for(module in app.modules){
-					this[module] = new app.modules[module](this);
-					if(this[module].start){
-						this[module].start();
-					}
-				}
-			});
-		</script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/lib/trascender/controlador.js"></script>
 		
 	</body>
 </html>
