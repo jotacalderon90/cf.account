@@ -8,9 +8,13 @@
 
 	<!--include:promise/prompt-->
 
-	<h4 class="modal-title">Administración de account</h4>
-	<div class="btn-group menu-inside btn-head left">
-		<button type="button" class="dropdown-toggle btn-head" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	<h1>
+		<span data-ng-dblclick="ctrl.object.refresh()">Administración de usuarios</span>
+		<small data-ng-click="ctrl.object.getCollection()">{{ctrl.object.coll.length}}/{{ctrl.object.cant}}</small>
+	</h1>
+	
+	<div class="btn-group pull-right">
+		<button type="button" class="dropdown-toggle btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<i class="fa fa-bars"></i>
 		</button>
 		<ul class="dropdown-menu">
@@ -19,10 +23,10 @@
 			</li>
 		</ul>
 	</div>
-	<button type="button" class="btn-head" data-ng-click="ctrl.object.refresh()">
-			<i class="fa fa-refresh"></i>
-		</button>
-	<div data-ng-repeat="row in ctrl.object.coll">
+	
+	<hr>
+	
+	<div data-ng-repeat="row in ctrl.object.coll" class="text-left">
 		<a class="btn btn-default btn-block" role="button" data-toggle="collapse" href="/" data-ng-href="#users_user_action{{$index}}" aria-expanded="false" aria-controls="users_user_action{{$index}}">
 			{{row.email}}
 		</a>

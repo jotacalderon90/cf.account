@@ -12,11 +12,22 @@
 		<!--if:doc.user-->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav navbar-right">
-				<li>
-					<a>{{data:doc.user.nickname}}</a>
-				</li>
-				<li>
-					<a href="/api/account/logout">Cerrar sesión</a>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						{{data:doc.user.nickname}}
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="/">Perfil</a></li>
+						<!--if:doc.user.roles.indexOf('root')>-1-->
+							<li><a href="/admin/admin">Usuarios</a></li>
+						<!--/if-->
+						<!--if:doc.user.roles.indexOf('root')>-1 || doc.user.roles.indexOf('cms')>-1-->
+							<li><a href="{{data:process.env.HOST_CMS}}">CMS</a></li>
+						<!--/if-->
+						<li role="separator" class="divider"></li>
+						<li><a href="/api/account/logout">Cerrar sesión</a></li>
+					</ul>
 				</li>
 			</ul>
 		</div>

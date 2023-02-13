@@ -39,7 +39,7 @@ module.exports = {
 	//@method(['get'])
 	//@roles(['root','admin'])
 	renderAdmin: function(req,res){
-		res.render('account/admin/_',{user: req.user});
+		res.render('account/admin/index/_',{user: req.user});
 	}
 	
 }
