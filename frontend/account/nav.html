@@ -13,7 +13,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-						{{data:doc.user.nickname}}
+						{{data:doc.user.nickname || 'anonimo'}}
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
@@ -25,7 +25,9 @@
 							<li><a href="{{data:process.env.HOST_CMS}}">CMS</a></li>
 						<!--/if-->
 						<li role="separator" class="divider"></li>
+						<!--if:doc.user-->
 						<li><a href="/api/account/logout">Cerrar sesión</a></li>
+						<!--/if-->
 					</ul>
 				</li>
 			</ul>
