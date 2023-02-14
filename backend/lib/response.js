@@ -1,13 +1,13 @@
 "use strict";
 
-const fs	 = require("fs");
+const fs = require("fs");
 
 const self = function(){
 	
 }
 
 self.prototype.renderMessage = function(req,res,status,title,msg){
-	const v = (fs.existsSync(process.cwd() + '/frontend/' + req.headers.host + "/error" + '.html'))?req.headers.host + "/error":'error';
+	const v = (fs.existsSync(process.cwd() + '/frontend/' + req.headers.host + "/message" + '.html'))?req.headers.host + "/message":'message';
 	res.status(status).render(v, {title: title, msg: msg, class: "danger",status: status, redirectTo: res.redirectTo, __sitename: req.headers.host});	
 }
 
