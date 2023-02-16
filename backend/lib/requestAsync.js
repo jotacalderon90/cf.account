@@ -16,7 +16,7 @@ self.prototype.response = function(res,resolve){
 	res.on('end', () => {
 		logger.info(res.statusCode);
 		logger.info(rawData);
-		resolve();
+		resolve(rawData);
 	});
 }
 
