@@ -2,7 +2,7 @@
 
 const jwt = require("jwt-simple");
 const mongodb = require("./mongodb");
-const request = require('./requestAsync');
+const request = require('./request');
 const logger = require('./log')('lib.accesscontrol');
 
 const self = function(){
