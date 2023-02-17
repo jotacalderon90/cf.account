@@ -1,6 +1,6 @@
 "use strict";
 
-const googleapis = require('./lib/googleapis');
+const googleapis = require('./lib/ext/googleapis');
 
 module.exports = {
 	

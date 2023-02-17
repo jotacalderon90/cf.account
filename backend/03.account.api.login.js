@@ -6,7 +6,7 @@ const helper = require('./lib/helper');
 const mongodb = require('./lib/mongodb');
 const accesscontrol = require('./lib/accesscontrol');
 const request = require('./lib/request');
-const googleapis = require('./lib/googleapis');
+const googleapis = require('./lib/ext/googleapis');
 
 const onError = function(req,res,e){
 	logger.info('ERROR:' + e.toString());
