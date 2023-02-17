@@ -178,7 +178,11 @@ self.prototype.dropCollection = function(collection){
 		if(this.client /*&& this.client.isConnected()*/){
 			this.db.collection(collection).drop(function(error, data) {
 				if (error){ 
-					return reject(error);
+					if(error.toString().indexOf('ns not found')> -1){
+						resolve();
+					}else{
+						return reject(error);
+					}
 				}else{
 					resolve(data);
 				}
