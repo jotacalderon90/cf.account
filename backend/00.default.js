@@ -11,7 +11,8 @@ module.exports = {
 	//@route('/robots.txt')
 	//@method(['get'])
 	robots: function(req,res){
-		res.redirect(process.env.HOST_ARCHIVOSPUBLICOS + '/media/doc/robots.txt');
+		res.setHeader('content-type', 'text/plain');
+		res.send('User-agent: *\n\nDisallow: /');
 	}
 	
 };
