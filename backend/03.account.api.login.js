@@ -1,18 +1,11 @@
 "use strict";
 
-const logger = require('./lib/log')('router.account.api.login');
-const response = require('./lib/response');
-const helper = require('./lib/helper');
-const mongodb = require('./lib/mongodb');
-const accesscontrol = require('./lib/accesscontrol');
-const request = require('./lib/request');
-const googleapis = require('./lib/ext/googleapis');
-
-const onError = function(req,res,e){
-	logger.info('ERROR:' + e.toString());
-	logger.info(e);
-	response.renderError(req,res,e);
-}
+const response = require('cl.jotacalderon.cf.framework/lib/response');
+const helper = require('cl.jotacalderon.cf.framework/lib/helper');
+const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
+const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
+const request = require('cl.jotacalderon.cf.framework/lib/request');
+const googleapis = require('./lib/googleapis');
 
 const cookie = function(res,cookie){
 	if(process.env.COOKIE_DOMAIN){
@@ -64,7 +57,7 @@ module.exports = {
 			}
 			*/
 		}catch(e){
-			onError(req,res,e);
+			response.renderError(req,res,e);
 		}
 	},
 	
@@ -76,7 +69,7 @@ module.exports = {
 			cookie(res,"null");
 			res.redirect("/login");
 		}catch(e){
-			onError(req,res,e);
+			response.renderError(req,res,e);
 		}
 	},
 	
@@ -94,7 +87,7 @@ module.exports = {
 			await mongodb.updateOne("user",row[0]._id,row[0]);
 			response.renderMessage(req,res,200,'Usuario activado','Se ha completado su registro satisfactoriamente','success');
 		}catch(e){
-			onError(req,res,e);
+			response.renderError(req,res,e);
 		}
 	},
 	
@@ -112,7 +105,7 @@ module.exports = {
 			await mongodb.updateOne("user",row[0]._id,row[0]);
 			response.renderMessage(req,res,200,'Usuario desactivado','Se ha completado su desactivación satisfactoriamente','success');
 		}catch(e){
-			onError(req,res,e);
+			response.renderError(req,res,e);
 		}
 	},
 	
@@ -143,7 +136,7 @@ module.exports = {
 			
 			response.renderMessage(req,res,200,'Recuperación de cuenta','Se ha enviado un correo para poder reestablecer su contraseña','success');
 		}catch(e){
-			onError(req,res,e);
+			response.renderError(req,res,e);
 		}
 	},
 	
@@ -169,7 +162,7 @@ module.exports = {
 				break;
 			}
 		}catch(e){
-			onError(req,res,e);
+			response.renderError(req,res,e);
 		}
 	},
 	
@@ -232,7 +225,7 @@ module.exports = {
 				res.redirect("/");
 			}
 		}catch(e){
-			onError(req,res,e);
+			response.renderError(req,res,e);
 		}
 	}
 }

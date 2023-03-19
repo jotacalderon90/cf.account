@@ -7,16 +7,25 @@ x-common-variables: &common-variables
   COOKIE_DOMAINs: ".jotace.cl"
   MONGO_URL: "mongodb://host.docker.internal:27017"
   MONGO_DBNAME: "miprimeradb"
-  SOCKET: ""
+  SESION_STORAGE_HOST: redis
+  SESION_STORAGE_PORT: 6379
 
 services:
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+         
   archivospublicos:
     build:
       context: ../cf.archivospublicos
       dockerfile: Dockerfile.dev
     image: archivospublicos:0.0.1
     container_name: archivospublicos
+    depends_on:
+      - redis
     volumes:
       - ../cf.archivospublicos:/srv/cf.archivospublicos/
       - /srv/cf.archivospublicos/node_modules

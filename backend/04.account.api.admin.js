@@ -1,17 +1,9 @@
 "use strict";
 
-const logger = require('./lib/log')('router.account.api.admin');
-const response = require('./lib/response');
-const helper = require('./lib/helper');
-const mongodb = require('./lib/mongodb');
-const accesscontrol = require('./lib/accesscontrol');
-const request = require('./lib/request');
-
-const onError = function(req,res,e){
-	logger.info('ERROR:' + e.toString());
-	logger.info(e);
-	response.APIError(req,res,e);
-}
+const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
+const response = require('cl.jotacalderon.cf.framework/lib/response');
+const helper = require('cl.jotacalderon.cf.framework/lib/helper');
+const request = require('cl.jotacalderon.cf.framework/lib/request');
 
 module.exports = {
 	
@@ -24,7 +16,7 @@ module.exports = {
 			const total = await mongodb.count('user',req.query);
 			res.send({data: total});
 		}catch(e){
-			onError(req,res,e);
+			response.APIError(req,res,e);
 		}
 	},
 	
@@ -38,7 +30,7 @@ module.exports = {
 			const data = await mongodb.find('user',req.query,req.options);
 			res.send({data: data});
 		}catch(e){
-			onError(req,res,e);
+			response.APIError(req,res,e);
 		}
 	},
 	
@@ -50,7 +42,7 @@ module.exports = {
 			const data = await mongodb.distinct('user','roles');
 			res.send({data: data});
 		}catch(e){
-			onError(req,res,e);
+			response.APIError(req,res,e);
 		}
 	},
 	
@@ -83,7 +75,7 @@ module.exports = {
 			await mongodb.insertOne("user",doc);
 			res.send({data: true});
 		}catch(e){
-			onError(req,res,e);
+			response.APIError(req,res,e);
 		}
 	},
 	
@@ -126,7 +118,7 @@ module.exports = {
 			}
 			res.send({data: true});
 		}catch(e){
-			onError(req,res,e);
+			response.APIError(req,res,e);
 		}
 	},
 	
@@ -138,7 +130,7 @@ module.exports = {
 			await mongodb.deleteOne('user',req.params.id);
 			res.send({data: true});
 		}catch(e){
-			onError(req,res,e);
+			response.APIError(req,res,e);
 		}
 	}
 	

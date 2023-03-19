@@ -1,17 +1,10 @@
 "use strict";
 
-const logger = require('./lib/log')('router.account.api.crud');
-const response = require('./lib/response');
-const helper = require('./lib/helper');
-const mongodb = require('./lib/mongodb');
-const accesscontrol = require('./lib/accesscontrol');
-const request = require('./lib/request');
-
-const onError = function(req,res,e){
-	logger.info('ERROR:' + e.toString());
-	logger.info(e);
-	response.renderError(req,res,e);
-}
+const response = require('cl.jotacalderon.cf.framework/lib/response');
+const helper = require('cl.jotacalderon.cf.framework/lib/helper');
+const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
+const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
+const request = require('cl.jotacalderon.cf.framework//request');
 
 const cookie = function(res,cookie){
 	if(process.env.COOKIE_DOMAIN){
@@ -84,7 +77,7 @@ module.exports = {
 				this.delete(req,res);
 			}
 		}catch(e){
-			onError(req,res,e);
+			response.renderError(req,res,e);
 		}
 	},
 	
@@ -121,7 +114,7 @@ module.exports = {
 			await mongodb.updateOne("user",req.user._id,updated);
 			res.redirect(redirect);
 		}catch(e){
-			onError(req,res,e);
+			response.renderError(req,res,e);
 		}
 	},
 	
@@ -136,7 +129,7 @@ module.exports = {
 			await mongodb.deleteOne("user",req.user._id);
 			response.renderMessage(req,res,200,'Usuario eliminado','Se ha eliminado su cuenta satisfactoriamente','success');
 		}catch(e){
-			onError(req,res,e);
+			response.renderError(req,res,e);
 		}
 	}
 	
