@@ -1,8 +1,8 @@
 version: "3.9"
 
 x-common-variables: &common-variables
-  HOST_ARCHIVOSPUBLICOS: "http://192.168.42.4:2201"
-  HOST_ACCOUNT: "http://192.168.42.4:2202"
+  HOST_ARCHIVOSPUBLICOS: "http://192.168.1.8:2201"
+  HOST_ACCOUNT: "http://192.168.1.8:2202"
   SESSION_SECRET: "trascender-con-sso"
   COOKIE_DOMAINs: ".jotace.cl"
   MONGO_URL: "mongodb://host.docker.internal:27017"
@@ -32,7 +32,8 @@ services:
       - /srv/cf.archivospublicos/frontend/bower_components
     environment:
        <<: *common-variables
-       HOST: "http://192.168.42.4:2201"
+       HOST: "http://192.168.1.8:2201"
+       SESION_STORAGE_PREFIX: "archivospublicos:"
     ports:
       - "2201:80"
        
@@ -49,7 +50,8 @@ services:
       - /srv/cf.account/node_modules
     environment:
        <<: *common-variables
-       HOST: "http://192.168.42.4:2202"
+       HOST: "http://192.168.1.8:2202"
+       SESION_STORAGE_PREFIX: "account:"
     ports:
       - "2202:80"
       
