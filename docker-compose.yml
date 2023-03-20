@@ -7,16 +7,20 @@ x-common-variables: &common-variables
   COOKIE_DOMAINs: ".jotace.cl"
   MONGO_URL: "mongodb://host.docker.internal:27017"
   MONGO_DBNAME: "miprimeradb"
-  SESION_STORAGE_HOST: redis
-  SESION_STORAGE_PORT: 6379
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+  REDIS_DB: 0
 
 services:
 
   redis:
     image: redis:latest
     container_name: redis
+    volumes:
+      - ../redis/redis.conf:/usr/local/etc/redis/redis.conf
     ports:
       - "6379:6379"
+    command: redis-server /usr/local/etc/redis/redis.conf
          
   archivospublicos:
     build:
@@ -33,7 +37,7 @@ services:
     environment:
        <<: *common-variables
        HOST: "http://192.168.1.8:2201"
-       SESION_STORAGE_PREFIX: "archivospublicos:"
+       REDIS_PREFIX: "archivospublicos:"
     ports:
       - "2201:80"
        
@@ -51,7 +55,7 @@ services:
     environment:
        <<: *common-variables
        HOST: "http://192.168.1.8:2202"
-       SESION_STORAGE_PREFIX: "account:"
+       REDIS_PREFIX: "account:"
     ports:
       - "2202:80"
       
