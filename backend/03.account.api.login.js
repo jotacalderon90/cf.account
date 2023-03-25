@@ -2,6 +2,7 @@
 
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
+const recaptcha = require('cl.jotacalderon.cf.framework/lib/recaptcha');
 const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
 const request = require('cl.jotacalderon.cf.framework/lib/request');
@@ -27,7 +28,7 @@ module.exports = {
 	//@method(['post'])
 	login: async function(req,res){
 		try{
-			await helper.recaptcha(req);
+			await recaptcha.validate(req);
 			req.body.email = req.body.email.toLowerCase();
 			let rows = await mongodb.find("user",{email: req.body.email, activate: true});
 			if(rows.length!=1){
@@ -114,7 +115,7 @@ module.exports = {
 	forget: async function(req,res){
 		try{
 			
-			await helper.recaptcha(req);
+			await recaptcha.validate(req);
 			req.body.email = req.body.email.toLowerCase();
 			const user = await mongodb.find("user",{email: req.body.email});
 			if(user.length!=1){
@@ -150,7 +151,7 @@ module.exports = {
 					res.render('admin/recovery', {hash: req.query.hash});
 				break;
 				case "post":
-					await helper.recaptcha(req);
+					await recaptcha.validate(req);
 					const user = await mongodb.find("user",{password:  new Buffer(req.body.hash,"base64").toString("ascii")});
 					if(user.length!=1){
 						throw("Los datos ingresados no corresponden");

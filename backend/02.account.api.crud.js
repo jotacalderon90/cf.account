@@ -2,6 +2,7 @@
 
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
+const recaptcha = require('cl.jotacalderon.cf.framework/lib/recaptcha');
 const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
 const request = require('cl.jotacalderon.cf.framework/lib/request');
@@ -32,7 +33,7 @@ module.exports = {
 				if(!helper.isEmail(req.body.email)){
 					throw("El email ingresado no es válido");
 				}
-				await helper.recaptcha(req);
+				await recaptcha.validate(req);
 				if(req.body.password==undefined || req.body.password==null || req.body.password.length < 5){ 
 					throw("La contraseña ingresada debe tener al menos 5 caracteres");
 				}
