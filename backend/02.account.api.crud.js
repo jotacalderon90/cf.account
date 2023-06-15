@@ -35,7 +35,7 @@ module.exports = {
 					throw("El email ingresado no es válido");
 				}
 				await recaptcha.validate(req);
-				if(validPassword(req.body.password)){ 
+				if(!validPassword(req.body.password)){ 
 					throw("La contraseña ingresada no es segura");
 				}
 				const cantXEmail = await mongodb.count("user",{email: req.body.email});
@@ -106,7 +106,7 @@ module.exports = {
 			};
 			let redirect = "/";
 			if(!req.user.google && req.body.password!=req.user.password){
-				if(validPassword(req.body.password)){ 
+				if(!validPassword(req.body.password)){ 
 					throw("La contraseña ingresada no es segura");
 				}else{
 					updated["$set"]["password"] = helper.toHash(req.body.password + req.user.email,req.user.hash);
