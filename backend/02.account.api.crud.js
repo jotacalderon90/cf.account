@@ -6,6 +6,7 @@ const recaptcha = require('cl.jotacalderon.cf.framework/lib/recaptcha');
 const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
 const request = require('cl.jotacalderon.cf.framework/lib/request');
+const validPassword = require('./lib/validPassword');
 
 const cookie = function(res,cookie){
 	if(process.env.COOKIE_DOMAIN){
@@ -34,8 +35,8 @@ module.exports = {
 					throw("El email ingresado no es válido");
 				}
 				await recaptcha.validate(req);
-				if(req.body.password==undefined || req.body.password==null || req.body.password.length < 5){ 
-					throw("La contraseña ingresada debe tener al menos 5 caracteres");
+				if(validPassword(req.body.password)){ 
+					throw("La contraseña ingresada no es segura");
 				}
 				const cantXEmail = await mongodb.count("user",{email: req.body.email});
 				if(cantXEmail!=0){
@@ -105,8 +106,8 @@ module.exports = {
 			};
 			let redirect = "/";
 			if(!req.user.google && req.body.password!=req.user.password){
-				if(req.body.password==undefined || req.body.password==null || req.body.password.length < 5){
-					throw("La contraseña ingresada debe tener al menos 5 caracteres");
+				if(validPassword(req.body.password)){ 
+					throw("La contraseña ingresada no es segura");
 				}else{
 					updated["$set"]["password"] = helper.toHash(req.body.password + req.user.email,req.user.hash);
 					redirect = "/api/account/logout";
