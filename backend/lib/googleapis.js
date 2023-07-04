@@ -72,6 +72,7 @@ self.prototype.sendMemo = async function(tokens,raw){
 		const auth = this.createConnection();
 		auth.setCredentials(tokens);
 		const plus = this.getGooglePlusApi(auth);
+		console.log(plus);
 		const res = await plus.users.messages.send({ userId: 'me', requestBody: {raw: raw}});
 		return res.data;
 	}catch(e){
