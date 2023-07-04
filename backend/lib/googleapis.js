@@ -59,10 +59,23 @@ self.prototype.getUserInfo = async function(code){
 		const plus = this.getGooglePlusApi(auth);
 		const me = await plus.people.get({ userId: 'me' });
 		
+		me.data.tokens = tokens;
+		
 		return me.data;
 	}catch(e){
-		this.error = e;
-		return null;
+		throw(e);
+	}
+}
+
+self.prototype.sendMemo = async function(tokens,raw){
+	try{
+		const auth = this.createConnection();
+		auth.setCredentials(tokens);
+		const plus = this.getGooglePlusApi(auth);
+		const res = await plus.users.messages.send({ userId: 'me', requestBody: {raw: raw}});
+		return res.data;
+	}catch(e){
+		throw(e);
 	}
 }
 

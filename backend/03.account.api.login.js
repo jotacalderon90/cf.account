@@ -182,9 +182,6 @@ module.exports = {
 	loginGoogleExecute: async function(req,res){
 		try{
 			const user = await googleapis.getUserInfo(req.query.code);
-			if(user.error){
-				throw(user.error);
-			}
 			let row = await mongodb.find("user",{email: user.emails[0].value});
 			if(row.length!=1){
 				row = {};
@@ -203,7 +200,7 @@ module.exports = {
 				let updated = {
 					$set: {
 						//nickname: user.displayName,
-						//thumb: user.image.url,
+						thumb: user.image.url,
 						google: user
 					}
 				};
