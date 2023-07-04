@@ -40,6 +40,18 @@ module.exports = {
 	//@roles(['root','admin'])
 	renderAdmin: function(req,res){
 		res.render('account/admin/index/_',{user: req.user});
+	},
+	
+	//@route('/politicas-de-privacidad')
+	//@method(['get'])
+	renderPoliticasPrivacidad: function(req,res){
+		res.render('account/contenido/politicas');
+	},
+	
+	//@route('/condiciones-del-servicio')
+	//@method(['get'])
+	renderCondicionesServicio: function(req,res){
+		res.render('account/contenido/condiciones');
 	}
 	
 }
