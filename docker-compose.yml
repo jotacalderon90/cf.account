@@ -1,12 +1,12 @@
 version: "3.9"
 
 x-common-variables: &common-variables
-  HOST_ARCHIVOSPUBLICOS: "http://192.168.1.8:2201"
-  HOST_ACCOUNT: "http://192.168.1.8:2202"
+  HOST_ARCHIVOSPUBLICOS: "http://192.168.42.5:2201"
+  HOST_ACCOUNT: "http://192.168.42.5:2202"
   SESSION_SECRET: "trascender-con-sso"
   COOKIE_DOMAINs: ".jotace.cl"
   MONGO_URL: "mongodb://host.docker.internal:27017"
-  MONGO_DBNAME: "miprimeradb"
+  MONGO_DBNAME: "miscolecciones"
   REDIS_HOST: redis
   REDIS_PORT: 6379
   REDIS_DB: 0
@@ -36,7 +36,7 @@ services:
       - /srv/cf.archivospublicos/frontend/bower_components
     environment:
        <<: *common-variables
-       HOST: "http://192.168.1.8:2201"
+       HOST: "http://192.168.42.5:2201"
        REDIS_PREFIX: "archivospublicos:"
     ports:
       - "2201:80"
@@ -54,8 +54,11 @@ services:
       - /srv/cf.account/node_modules
     environment:
        <<: *common-variables
-       HOST: "http://192.168.1.8:2202"
+       HOST: "http://192.168.42.5:2202"
        REDIS_PREFIX: "account:"
+       CANCREATE: "1"
+       CANRECOVERY: "1"
+       CANCREATEADMIN: "1"
     ports:
       - "2202:80"
       

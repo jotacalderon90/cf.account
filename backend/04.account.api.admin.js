@@ -7,6 +7,39 @@ const request = require('cl.jotacalderon.cf.framework/lib/request');
 
 module.exports = {
 	
+	//@route('/api/admin/account/createadmin')
+	//@method(['post'])
+	createAdmin: async function(req,res){
+		try{
+			
+			if(process.env.CANCREATEADMIN=='1'){
+				throw("none");
+			}
+			
+			req.body.email = req.body.email.toLowerCase();
+			const cantXEmail = await mongodb.count("user",{email: req.body.email});
+			if(cantXEmail!=0){
+				throw("El email ingresado ya está registrado");
+			}
+			const doc = {};
+			doc.email = req.body.email;
+			doc.hash = helper.random(10);
+			doc.password = helper.toHash(req.body.password + req.body.email,doc.hash);
+			doc.nickname = req.body.email;
+			doc.notification = true;
+			doc.thumb = process.env.HOST_ARCHIVOSPUBLICOS + "/media/img/user.png";
+			doc.roles = ["root"];
+			doc.created = new Date();
+			doc.activate = true;
+			await mongodb.insertOne("user",doc);
+			
+			response.renderMessage(req,res,200,'Cuenta administrador','Se ha creado el usuario administrador de manera correcta','success');
+		}catch(e){
+			response.renderError(req,res,e);
+		}
+	},
+	
+	
 	//@route('/api/admin/account/total')
 	//@method(['get'])
 	//@roles(['root','admin'])

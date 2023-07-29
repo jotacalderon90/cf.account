@@ -28,6 +28,11 @@ module.exports = {
 	//@method(['post'])
 	create: async function(req,res){
 		try{
+			
+			if(process.env.CANCREATE!='1'){
+				throw("none");
+			}
+			
 			req.user = await accesscontrol.getUser(req);
 			if(req.user==null){
 				req.body.email = req.body.email.toLowerCase();

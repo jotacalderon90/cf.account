@@ -39,8 +39,15 @@
 				<!--/if-->
 				
 				<hr>
+				
+				<!--if:process.env.CANCREATE && process.env.CANCREATE=='1'-->
 				<a href="/form" class="pull-left">Crear cuenta</a>
+				<!--/if-->
+				
+				<!--if:process.env.CANRECOVERY && process.env.CANRECOVERY=='1'-->
 				<a href="/forget" class="pull-right">¿Olvidaste tu password?</a>
+				<!--/if-->
+				
 			</form>
 		</div>
 	</div>

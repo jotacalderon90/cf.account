@@ -115,6 +115,10 @@ module.exports = {
 	forget: async function(req,res){
 		try{
 			
+			if(process.env.CANRECOVERY!='1'){
+				throw("none");
+			}
+			
 			await recaptcha.validate(req);
 			req.body.email = req.body.email.toLowerCase();
 			const user = await mongodb.find("user",{email: req.body.email});
@@ -145,6 +149,10 @@ module.exports = {
 	//@method(['get','post'])
 	recovery: async function(req,res){
 		try{
+			
+			if(process.env.CANRECOVERY!='1'){
+				throw("none");
+			}
 			
 			switch(req.method.toLowerCase()){
 				case "get":

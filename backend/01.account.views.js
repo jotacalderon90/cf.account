@@ -14,7 +14,11 @@ module.exports = {
 	//@route('/form')
 	//@method(['get'])
 	renderForm: function(req,res){
-		res.render('account/form/_');
+		if(process.env.CANCREATE=='1'){
+			res.render('account/form/_', {action: '/api/account'});
+		}else{
+			res.redirect("/");
+		}
 	},
 	
 	//@route('/login')
@@ -26,13 +30,21 @@ module.exports = {
 	//@route('/forget')
 	//@method(['get'])
 	renderForget: function(req,res){
-		res.render('account/forget/_');
+		if(process.env.CANRECOVERY=='1'){
+			res.render('account/forget/_');
+		}else{
+			res.redirect("/");
+		}
 	},
 	
 	//@route('/recovery')
 	//@method(['get'])
 	renderRecovery: function(req,res){
-		res.render('account/recovery/_');
+		if(process.env.CANRECOVERY=='1'){
+			res.render('account/recovery/_');
+		}else{
+			res.redirect("/");
+		}
 	},
 	
 	//@route('/admin/admin')
@@ -52,6 +64,16 @@ module.exports = {
 	//@method(['get'])
 	renderCondicionesServicio: function(req,res){
 		res.render('account/contenido/condiciones');
+	},
+	
+	//@route('/form-admin')
+	//@method(['get'])
+	renderFormAdmin: function(req,res){
+		if(process.env.CANCREATEADMIN=='1'){
+			res.render('account/form/_', {action: '/api/admin/account/createadmin'});
+		}else{
+			res.redirect("/");
+		}
 	}
 	
 }
