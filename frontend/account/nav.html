@@ -24,6 +24,9 @@
 						<!--if:doc.user.roles.indexOf('root')>-1 || doc.user.roles.indexOf('cms')>-1-->
 							<li><a href="{{data:process.env.HOST_CMS}}">CMS</a></li>
 						<!--/if-->
+						<!--if:doc.user.roles.indexOf('root')>-1 || doc.user.roles.indexOf('cotizador')>-1-->
+							<li><a href="https://cotizador.jotace.cl">COTIZADOR</a></li>
+						<!--/if-->
 						<li role="separator" class="divider"></li>
 						<!--if:doc.user-->
 						<li><a href="/api/account/logout">Cerrar sesión</a></li>
