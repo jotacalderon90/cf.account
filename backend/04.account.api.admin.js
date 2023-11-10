@@ -12,7 +12,7 @@ module.exports = {
 	createAdmin: async function(req,res){
 		try{
 			
-			if(process.env.CANCREATEADMIN=='1'){
+			if(!process.env.CANCREATEADMIN=='1'){
 				throw("none");
 			}
 			
