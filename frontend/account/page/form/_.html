@@ -1,15 +1,19 @@
-<!--use:account/main-->
+<!--use:main-->
 
-<!--define:css-->
+<!--define:head-->
 
 	<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<!--/if-->
 		
-<!--/define:css-->
+<!--/define:head-->
 
 <!--define:main-->
 	
+	<br>
+	<br>
+	<br>
+	<br>
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4 text-center">	
 			<form action="{{data:doc.action}}" method="POST">
