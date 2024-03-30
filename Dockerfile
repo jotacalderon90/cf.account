@@ -1,4 +1,4 @@
-FROM node:16.13.1 as build-stage
+FROM node:alpine
 
 CMD mkdir /srv/cf.account
 
@@ -10,6 +10,6 @@ RUN npm install --only=production
 
 COPY [".", "/srv/cf.account/"]
 
-EXPOSE 80
+EXPOSE $PORT
 
 CMD [ "npm", "run", "start" ]
