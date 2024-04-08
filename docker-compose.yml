@@ -28,8 +28,6 @@ services:
       - /srv/cf.archivospublicos/frontend/bower_components
     environment:
        <<: *common-variables
-       HOST: "http://localhost:2201"
-       REDIS_PREFIX: "archivospublicos:"
        PORT: ${PORT:-2201}
     ports:
       - "${PORT:-2201}:2201"
@@ -47,11 +45,6 @@ services:
       - /srv/cf.account/node_modules
     environment:
        <<: *common-variables
-       HOST: "http://localhost:2202"
-       REDIS_PREFIX: "account:"
-       CANCREATE: "1"
-       CANRECOVERY: "1"
-       CANCREATEADMIN: "1"
        PORT: ${PORT:-2202}
     ports:
       - "${PORT:-2202}:2202"
