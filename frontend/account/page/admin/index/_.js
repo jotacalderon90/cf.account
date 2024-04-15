@@ -237,6 +237,45 @@ app.modules.object.prototype.delete = async function(id) {
 	$(".loader").fadeOut();
 }
 
+app.modules.object.prototype.create = async function(id) {
+	try {
+		
+		const email = await this.parent.prompt.execute('Nuevo usuario', 'text', 'Ingrese email', "");
+		if (email.trim() == '') {
+			return;
+		}
+		
+		await wait(500);
+		
+		const password = await this.parent.prompt.execute('Ingrese password', 'text', 'Ingrese password', email);
+		if (password.trim() == '') {
+			return;
+		}
+		
+		if (!confirm("Confirme creación del documento")) {
+			return;
+		}
+		
+		$(".loader").fadeIn();
+		const service = await this.services.create({}, {
+			email: email,
+			password: password
+		});
+		
+		if(service.error){
+			throw(service.error);
+		}
+		
+		alert("Documento creado correctamente");
+		this.refresh();
+		
+	} catch (e) {
+		alert(e.error || e);
+		console.log(e);
+		$(".loader").fadeOut();
+	}
+}
+
 app.modules.object.prototype.start = function() {
 	this.getTags();
 }
