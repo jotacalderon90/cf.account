@@ -1,50 +1,22 @@
 version: "3.9"
 
-x-common-variables: &common-variables
-  NODE_ENV: "development"
-
 services:
-
-  redis:
-    image: redis:latest
-    container_name: redis
-    volumes:
-      - ../redis/redis.conf:/usr/local/etc/redis/redis.conf
-    ports:
-      - "6379:6379"
-    command: redis-server /usr/local/etc/redis/redis.conf
-         
-  archivospublicos:
-    build:
-      context: ../cf.archivospublicos
-      dockerfile: Dockerfile.dev
-    image: archivospublicos:0.0.1
-    container_name: archivospublicos
-    depends_on:
-      - redis
-    volumes:
-      - ../cf.archivospublicos:/srv/cf.archivospublicos/
-      - /srv/cf.archivospublicos/node_modules
-      - /srv/cf.archivospublicos/frontend/bower_components
-    environment:
-       <<: *common-variables
-       PORT: ${PORT:-2201}
-    ports:
-      - "${PORT:-2201}:2201"
        
   account:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     image: account:0.0.1
     container_name: account
-    depends_on:
-      - archivospublicos
     volumes:
       - .:/srv/cf.account/
       - /srv/cf.account/node_modules
     environment:
-       <<: *common-variables
-       PORT: ${PORT:-2202}
+      NODE_ENV: "production"
     ports:
-      - "${PORT:-2202}:2202"
+      - "2202:80"
+      
+networks:
+  default:
+    external:
+      name: jotace
