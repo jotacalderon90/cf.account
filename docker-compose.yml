@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.10"
 
 services:
        
@@ -13,8 +13,9 @@ services:
       - /srv/cf.account/node_modules
     environment:
       NODE_ENV: "production"
+       PORT: ${PORT:-2202}
     ports:
-      - "2202:80"
+      - "${PORT:-2202}:2202"
       
 networks:
   default:
