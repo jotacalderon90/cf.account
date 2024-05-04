@@ -29,12 +29,13 @@ module.exports = {
 	create: async function(req,res){
 		try{
 			
-			if(process.env.CANCREATE!='1'){
-				throw("none");
-			}
-			
 			req.user = await accesscontrol.getUser(req);
 			if(req.user==null){
+				
+				if(process.env.CANCREATE!='1'){
+					throw("none");
+				}
+				
 				req.body.email = req.body.email.toLowerCase();
 				if(!helper.isEmail(req.body.email)){
 					throw("El email ingresado no es válido");
