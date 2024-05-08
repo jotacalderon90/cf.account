@@ -41,12 +41,21 @@ Se debe reemplazar la IP por la que tiene su máquina usando el comando ipconfig
 El resto de atributos son modificables 
 
 PORT: Puerto a utilizar
+
 HOST: Nombre del Host o DNS a utilizar, considerar el http/https
+
 HOST_ARCHIVOSPUBLICOS: Host/DNS del sistema de archivos públicos
+
 HOST_ACCOUNT: Debe ser igual a HOST
+
 SESSION_SECRET: Cualquier string
+
 MONGO_URL: Conexión a MongoDB
+
 MONGO_DBNAME: Nombre de la db en MongoDB
+
 CANCREATE: "1" Permite que usuarios anónimos se registren como usuario
+
 CANRECOVERY: "1" Permite que usuarios puedan recuperar su contraseña (ver más adelante)
+
 CANCREATEADMIN: "1" Para disponibilizar el formulario y crear cuenta de administrador/quitar una vez utilizado
