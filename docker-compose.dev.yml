@@ -4,12 +4,21 @@ x-common-variables: &common-variables
 
 services:
 
+  mongodb_service:
+    image: mongo
+    container_name: mongodb_service
+    volumes:
+      - ../_mongodb:/data/db
+    restart: always
+  
   archivospublicos:
     build:
       context: ../cf.archivospublicos
       dockerfile: Dockerfile.dev
     image: archivospublicos:0.0.1
     container_name: archivospublicos
+    depends_on:
+      - mongodb_service
     volumes:
       - ../cf.archivospublicos:/srv/cf.archivospublicos/
       - /srv/cf.archivospublicos/node_modules

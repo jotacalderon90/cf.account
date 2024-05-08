@@ -59,3 +59,10 @@ CANCREATE: "1" Permite que usuarios anónimos se registren como usuario
 CANRECOVERY: "1" Permite que usuarios puedan recuperar su contraseña (ver más adelante)
 
 CANCREATEADMIN: "1" Para disponibilizar el formulario y crear cuenta de administrador/quitar una vez utilizado
+
+## Crear usuario administrador
+
+La propiedad CANCREATEADMIN permite crear al usuario administrador, se debe evitar su uso en producción por razones lógicas.
+La url para configurar es la siguiente (cambie por IP registrada):
+
+http://192.168.42.3:2202/form-admin
