@@ -12,7 +12,7 @@ services:
       - /srv/cf.account/node_modules
     environment:
       NODE_ENV: "production"
-       PORT: ${PORT:-2202}
+      PORT: ${PORT:-2202}
     ports:
       - "${PORT:-2202}:2202"
       
