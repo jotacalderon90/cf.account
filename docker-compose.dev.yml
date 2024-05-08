@@ -1,4 +1,3 @@
-version: "3.10"
 
 x-common-variables: &common-variables
   NODE_ENV: "development"

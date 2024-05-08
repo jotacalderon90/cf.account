@@ -24,21 +24,22 @@
 		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/bower_components/jquery-ui/jquery-ui.min.js"></script>
 		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/bower_components/angular/angular.min.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/bower_components/axios/dist/axios.min.js"></script>
 		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/moment.js"></script>
 		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/moment-with-locales.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/vue3.4.26.js"></script>
+		
 		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/trascender/global.js"></script>
 		<!--define:script-->
-		
-		<div class="loader">
-			<i class="fa fa-spin fa-spinner"></i>
-		</div>
-		
-		<div id="app" data-ng-app="myApp" data-ng-controller="myCtrl as ctrl">
+			
+		<div id="app">
+			<div id="loader" v-show="loader">
+				<i class="fa fa-spin fa-spinner"></i>
+			</div>
 			<!--define:main-->
 		</div>
 		
-		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/trascender/controlador.js"></script>
+		<script src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/trascender/controladorV.js"></script>
 		
 	</body>
 </html>

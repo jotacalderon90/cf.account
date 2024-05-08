@@ -1,4 +1,4 @@
-app.modules.object = function(parent) {
+const object = function(parent) {
 	this.parent = parent;
 	this.name = 'account';
 	this.query = {};
@@ -32,9 +32,11 @@ app.modules.object = function(parent) {
 			}
 		}
 	});
+	
+	this.coll = [];
 }
 
-app.modules.object.prototype.getTags = async function() {
+object.prototype.getTags = async function() {
 	try {
 		const tags = await this.services.tag();
 		if(tags.error){
@@ -48,7 +50,7 @@ app.modules.object.prototype.getTags = async function() {
 	this.refresh();
 }
 
-app.modules.object.prototype.refresh = function(roles) {
+object.prototype.refresh = function(roles) {
 	if (roles) {
 		this.query.roles = roles;
 	} else {
@@ -60,7 +62,7 @@ app.modules.object.prototype.refresh = function(roles) {
 	this.getTotal();
 }
 
-app.modules.object.prototype.getTotal = async function() {
+object.prototype.getTotal = async function() {
 	$('.loader').fadeIn();
 	try {
 		const cant = await this.services.total(this.paramsToGetTotal());
@@ -75,13 +77,13 @@ app.modules.object.prototype.getTotal = async function() {
 	}
 }
 
-app.modules.object.prototype.paramsToGetTotal = function() {
+object.prototype.paramsToGetTotal = function() {
 	return {
 		query: JSON.stringify(this.query)
 	};
 }
 
-app.modules.object.prototype.getCollection = async function() {
+object.prototype.getCollection = async function() {
 	$('.loader').fadeIn();
 	try {
 		this.obtaining = true;
@@ -93,7 +95,7 @@ app.modules.object.prototype.getCollection = async function() {
 		this.coll = this.coll.concat(coll.data);
 		this.obtained = this.coll.length;
 		this.obtaining = false;
-		this.parent.refresh();
+		//this.parent.refresh();
 	} catch (e) {
 		alert(e);
 		console.log(e);
@@ -101,14 +103,14 @@ app.modules.object.prototype.getCollection = async function() {
 	$('.loader').fadeOut();
 }
 
-app.modules.object.prototype.paramsToGetCollection = function() {
+object.prototype.paramsToGetCollection = function() {
 	return {
 		query: JSON.stringify(this.query),
 		options: JSON.stringify(this.getOptions())
 	};
 }
 
-app.modules.object.prototype.getOptions = function() {
+object.prototype.getOptions = function() {
 	return {
 		...this.options,
 		skip: this.obtained,
@@ -116,7 +118,7 @@ app.modules.object.prototype.getOptions = function() {
 	};
 }
 
-app.modules.object.prototype.changeRoles = async function(row) {
+object.prototype.changeRoles = async function(row) {
 	try {
 		console.log(this.parent);
 		const newroles = await this.parent.prompt.execute('Actualizar roles', 'text', 'Ingrese roles separados por coma', row.roles.join(','));
@@ -142,7 +144,7 @@ app.modules.object.prototype.changeRoles = async function(row) {
 	$(".loader").fadeOut();
 }
 
-app.modules.object.prototype.activate = async function(row) {
+object.prototype.activate = async function(row) {
 	try {
 		const q = (row.activate) ? "Deshabilitar" : "Habilitar";
 		if (!confirm('Confirma ' + q)) {
@@ -166,7 +168,7 @@ app.modules.object.prototype.activate = async function(row) {
 	$(".loader").fadeOut();
 }
 
-app.modules.object.prototype.changePassword = async function(row) {
+object.prototype.changePassword = async function(row) {
 	try {
 		if (!confirm('Confirma querer cambiar contraseña')) {
 			return;
@@ -194,7 +196,7 @@ app.modules.object.prototype.changePassword = async function(row) {
 	$(".loader").fadeOut();
 }
 
-app.modules.object.prototype.enableRecovery = async function(row) {
+object.prototype.enableRecovery = async function(row) {
 	try {
 		if (!confirm('Confirma enviar correo de recuperación')) {
 			return;
@@ -216,7 +218,7 @@ app.modules.object.prototype.enableRecovery = async function(row) {
 	$(".loader").fadeOut();
 }
 
-app.modules.object.prototype.delete = async function(id) {
+object.prototype.delete = async function(id) {
 	try {
 		if (!confirm("Confirme eliminación del documento")) {
 			return;
@@ -237,7 +239,7 @@ app.modules.object.prototype.delete = async function(id) {
 	$(".loader").fadeOut();
 }
 
-app.modules.object.prototype.create = async function(id) {
+object.prototype.create = async function(id) {
 	try {
 		
 		const email = await this.parent.prompt.execute('Nuevo usuario', 'text', 'Ingrese email', "");
@@ -276,6 +278,8 @@ app.modules.object.prototype.create = async function(id) {
 	}
 }
 
-app.modules.object.prototype.start = function() {
+object.prototype.start = function() {
 	this.getTags();
 }
+
+app.modules.object = object;
