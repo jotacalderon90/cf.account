@@ -31,7 +31,7 @@ HOST_ACCOUNT: "http://192.168.42.3:2202"
 
 SESSION_SECRET: "trascender-con-sso"
 
-MONGO_URL: "mongodb://host.docker.internal:27017""
+MONGO_URL: "mongodb://host.docker.internal:27017"
 MONGO_DBNAME: "miscolecciones"
 
 CANCREATEADMIN: "1"
