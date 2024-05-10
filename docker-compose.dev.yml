@@ -22,7 +22,7 @@ services:
     volumes:
       - ../cf.archivospublicos:/srv/cf.archivospublicos/
       - /srv/cf.archivospublicos/node_modules
-      - /srv/cf.archivospublicos/frontend/assets/lib/bower_components
+      - /srv/cf.archivospublicos/frontend/assets/lib/node_modules
     environment:
        <<: *common-variables
        PORT: ${PORT:-2201}
