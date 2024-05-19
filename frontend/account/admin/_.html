@@ -8,7 +8,7 @@
 
 <!--define:main-->
 	
-	<!--include:account/section/nav-->
+	<!--include:account/_section/nav-->
 	
 	<!--include:promise/prompt-->
 	
@@ -84,10 +84,14 @@
 									<span>Cambiar contraseña</span>
 									<i class="fa pull-right">电</i>
 								</button>
+								
+								<!--if:process.env.HOST_MAILING-->
 								<button class="btn btn-default" v-on:click="object.enableRecovery(row)" title="enviar correo para recuperar contraseña">
 									<span>Enviar correo para actualizar contraseña</span>
 									<i class="fa fa-envelope pull-right"></i>
 								</button>
+								<!--/if-->
+								
 								<button class="btn btn-danger" v-on:click="object.delete(row._id)" title="eliminar usuario">
 									<i class="fa fa-trash pull-right"></i>
 								</button>
@@ -102,6 +106,6 @@
 		
 	</div>
 	
-	<script src="/account/page/admin/index/_.js"></script>
+	<script src="/account/admin/_.js"></script>
 
 <!--/define:main-->
