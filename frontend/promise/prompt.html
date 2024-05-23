@@ -15,8 +15,9 @@
 </div>
 
 <script>
-	app.modules.prompt = function(parent){
-		this.parent = parent;
+
+	app.modules.prompt = function(){
+		
 	}
 	
 	app.modules.prompt.prototype.execute = function(title,type,placeholder,value){
@@ -44,7 +45,4 @@
 		});
 	}
 	
-	app.modules.start = function(){
-		$('#promise_modal_prompt').modal('hide');
-	}
 </script>

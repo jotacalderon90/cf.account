@@ -1,5 +1,4 @@
-const object = function(parent) {
-	this.parent = parent;
+const object = function() {
 	this.name = 'account';
 	this.query = {};
 	this.options = {
@@ -36,21 +35,22 @@ const object = function(parent) {
 	this.coll = [];
 }
 
-object.prototype.getTags = async function() {
+object.prototype.start = async function(parent){
+	this.parent = parent;
 	try {
 		const tags = await this.services.tag();
 		if(tags.error){
 			throw(tags.error);
 		}
 		this.tags = tags.data;
+		await this.refresh();
 	} catch (e) {
 		alert(e);
 		console.log(e);
 	}
-	this.refresh();
 }
 
-object.prototype.refresh = function(roles) {
+object.prototype.refresh = async function(roles) {
 	if (roles) {
 		this.query.roles = roles;
 	} else {
@@ -59,11 +59,10 @@ object.prototype.refresh = function(roles) {
 	this.cant = 0;
 	this.obtained = 0;
 	this.coll = [];
-	this.getTotal();
+	await this.getTotal();
 }
 
 object.prototype.getTotal = async function() {
-	$('.loader').fadeIn();
 	try {
 		const cant = await this.services.total(this.paramsToGetTotal());
 		if(cant.error){
@@ -84,7 +83,7 @@ object.prototype.paramsToGetTotal = function() {
 }
 
 object.prototype.getCollection = async function() {
-	$('.loader').fadeIn();
+	this.parent.loader.active = true;
 	try {
 		this.obtaining = true;
 
@@ -95,12 +94,11 @@ object.prototype.getCollection = async function() {
 		this.coll = this.coll.concat(coll.data);
 		this.obtained = this.coll.length;
 		this.obtaining = false;
-		//this.parent.refresh();
 	} catch (e) {
 		alert(e);
 		console.log(e);
 	}
-	$('.loader').fadeOut();
+	this.parent.loader.active = false;
 }
 
 object.prototype.paramsToGetCollection = function() {
@@ -125,7 +123,7 @@ object.prototype.changeRoles = async function(row) {
 		if (newroles.trim() == '') {
 			return;
 		}
-		$(".loader").fadeIn();
+		this.parent.loader.active = true;
 		const update = await this.services.update({
 			id: row._id
 		}, {
@@ -141,7 +139,7 @@ object.prototype.changeRoles = async function(row) {
 		alert(e.error || e);
 		console.log(e);
 	}
-	$(".loader").fadeOut();
+	this.parent.loader.active = false;
 }
 
 object.prototype.activate = async function(row) {
@@ -150,7 +148,7 @@ object.prototype.activate = async function(row) {
 		if (!confirm('Confirma ' + q)) {
 			return;
 		}
-		$(".loader").fadeIn();
+		this.parent.loader.active = true;
 		const update = await this.services.update({
 			id: row._id
 		}, {
@@ -165,7 +163,7 @@ object.prototype.activate = async function(row) {
 		alert(e.error || e);
 		console.log(e);
 	}
-	$(".loader").fadeOut();
+	this.parent.loader.active = false;
 }
 
 object.prototype.changePassword = async function(row) {
@@ -177,7 +175,7 @@ object.prototype.changePassword = async function(row) {
 		if (newpassword.trim() == '') {
 			return;
 		}
-		$(".loader").fadeIn();
+		this.parent.loader.active = true;
 		const update = await this.services.update({
 			id: row._id
 		}, {
@@ -193,7 +191,7 @@ object.prototype.changePassword = async function(row) {
 		alert(e.error || e);
 		console.log(e);
 	}
-	$(".loader").fadeOut();
+	this.parent.loader.active = false;
 }
 
 object.prototype.enableRecovery = async function(row) {
@@ -201,7 +199,7 @@ object.prototype.enableRecovery = async function(row) {
 		if (!confirm('Confirma enviar correo de recuperación')) {
 			return;
 		}
-		$(".loader").fadeIn();
+		this.parent.loader.active = true;
 		const update = await this.services.update({
 			id: row._id
 		}, {
@@ -215,7 +213,7 @@ object.prototype.enableRecovery = async function(row) {
 		alert(e.error || e);
 		console.log(e);
 	}
-	$(".loader").fadeOut();
+	this.parent.loader.active = false;
 }
 
 object.prototype.delete = async function(id) {
@@ -223,7 +221,7 @@ object.prototype.delete = async function(id) {
 		if (!confirm("Confirme eliminación del documento")) {
 			return;
 		}
-		$(".loader").fadeIn();
+		this.parent.loader.active = true;
 		const del = await this.services.delete({
 			id: id || this.doc._id
 		});
@@ -236,7 +234,7 @@ object.prototype.delete = async function(id) {
 		alert(e.error || e);
 		console.log(e);
 	}
-	$(".loader").fadeOut();
+	this.parent.loader.active = false;
 }
 
 object.prototype.create = async function(id) {
@@ -258,7 +256,7 @@ object.prototype.create = async function(id) {
 			return;
 		}
 		
-		$(".loader").fadeIn();
+		this.parent.loader.active = true;
 		const service = await this.services.create({}, {
 			email: email,
 			password: password
@@ -274,12 +272,8 @@ object.prototype.create = async function(id) {
 	} catch (e) {
 		alert(e.error || e);
 		console.log(e);
-		$(".loader").fadeOut();
+		this.parent.loader.active = false;
 	}
-}
-
-object.prototype.start = function() {
-	this.getTags();
 }
 
 app.modules.object = object;
