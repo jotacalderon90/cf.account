@@ -1,5 +1,6 @@
 "use strict";
 
+const logger = require('cl.jotacalderon.cf.framework/lib/log')('api.03.account.login');
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
 const recaptcha = require('cl.jotacalderon.cf.framework/lib/recaptcha');
@@ -50,15 +51,10 @@ module.exports = {
 			}else{
 				res.redirect("/");
 			}
-			/*
-			if(req.session.redirectTo){
-				res.redirect(req.session.redirectTo);
-			}else{
-				res.redirect("/");
-			}
-			*/
-		}catch(e){
-			response.renderError(req,res,e);
+			
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	},
 	
@@ -69,8 +65,9 @@ module.exports = {
 			await removeLogged(req);
 			cookie(res,"null");
 			res.redirect("/login");
-		}catch(e){
-			response.renderError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	},
 	
@@ -87,8 +84,9 @@ module.exports = {
 			row[0].activate = true;
 			await mongodb.updateOne("user",row[0]._id,row[0]);
 			response.renderMessage(req,res,200,'Usuario activado','Se ha completado su registro satisfactoriamente','success');
-		}catch(e){
-			response.renderError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	},
 	
@@ -105,8 +103,9 @@ module.exports = {
 			row[0].activate = false;
 			await mongodb.updateOne("user",row[0]._id,row[0]);
 			response.renderMessage(req,res,200,'Usuario desactivado','Se ha completado su desactivación satisfactoriamente','success');
-		}catch(e){
-			response.renderError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	},
 	
@@ -140,8 +139,9 @@ module.exports = {
 			}
 			
 			response.renderMessage(req,res,200,'Recuperación de cuenta','Se ha enviado un correo para poder reestablecer su contraseña','success');
-		}catch(e){
-			response.renderError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	},
 	
@@ -170,8 +170,9 @@ module.exports = {
 					response.renderMessage(req,res,200,'Actualización de contraseña','Se ha actualizado su contraseña correctamente','success');
 				break;
 			}
-		}catch(e){
-			response.renderError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	},
 	
@@ -180,8 +181,9 @@ module.exports = {
 	loginGoogleGetURL: async function(req,res){
 		try{
 			res.json({data: googleapis.getURL()});
-		}catch(e){
-			res.json({data: null, error: e});
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -230,8 +232,9 @@ module.exports = {
 			}else{
 				res.redirect("/");
 			}
-		}catch(e){
-			response.renderError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	}
 }

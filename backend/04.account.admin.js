@@ -1,5 +1,6 @@
 "use strict";
 
+const logger = require('cl.jotacalderon.cf.framework/lib/log')('api.04.account.admin');
 const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
@@ -34,8 +35,9 @@ module.exports = {
 			await mongodb.insertOne("user",doc);
 			
 			response.renderMessage(req,res,200,'Cuenta administrador','Se ha creado el usuario administrador de manera correcta','success');
-		}catch(e){
-			response.renderError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	},
 	
@@ -48,8 +50,9 @@ module.exports = {
 			req.query = (req.query.query && req.query.query!=':query')?JSON.parse(req.query.query):{};
 			const total = await mongodb.count('user',req.query);
 			res.send({data: total});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -62,8 +65,9 @@ module.exports = {
 			req.query = (req.query.query)?JSON.parse(req.query.query):{};
 			const data = await mongodb.find('user',req.query,req.options);
 			res.send({data: data});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -74,8 +78,9 @@ module.exports = {
 		try{
 			const data = await mongodb.distinct('user','roles');
 			res.send({data: data});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -107,8 +112,9 @@ module.exports = {
 			doc.activate = true;
 			await mongodb.insertOne("user",doc);
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -150,8 +156,9 @@ module.exports = {
 				break;
 			}
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -162,8 +169,9 @@ module.exports = {
 		try{
 			await mongodb.deleteOne('user',req.params.id);
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	}
 	

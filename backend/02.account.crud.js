@@ -1,5 +1,6 @@
 "use strict";
 
+const logger = require('cl.jotacalderon.cf.framework/lib/log')('api.02.account.crud');
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
 const recaptcha = require('cl.jotacalderon.cf.framework/lib/recaptcha');
@@ -84,8 +85,9 @@ module.exports = {
 			}else if(req.body.button && req.body.button == 'DELETE'){
 				this.delete(req,res);
 			}
-		}catch(e){
-			response.renderError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	},
 	
@@ -94,8 +96,9 @@ module.exports = {
 	read: async function(req,res){
 		try{
 			res.send({data: await accesscontrol.getUser(req)});
-		}catch(e){
-			res.json({error: e.toString()});
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -121,8 +124,9 @@ module.exports = {
 			}
 			await mongodb.updateOne("user",req.user._id,updated);
 			res.redirect(redirect);
-		}catch(e){
-			response.renderError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	},
 	
@@ -136,8 +140,9 @@ module.exports = {
 			cookie(res,"null");
 			await mongodb.deleteOne("user",req.user._id);
 			response.renderMessage(req,res,200,'Usuario eliminado','Se ha eliminado su cuenta satisfactoriamente','success');
-		}catch(e){
-			response.renderError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.renderError(req,res,error);
 		}
 	}
 	

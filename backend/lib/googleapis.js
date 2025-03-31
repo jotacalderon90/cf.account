@@ -1,3 +1,5 @@
+
+const logger = require('cl.jotacalderon.cf.framework/lib/log')('lib.googleapis');
 const {google} = require('googleapis');
 
 const self = function(){
@@ -39,8 +41,9 @@ const self = function(){
 self.prototype.getURL = function(){
 	try{
 		return (this.enabled)?this.getConnectionUrl(this.createConnection()):'';
-	}catch(e){
-		this.error = e;
+	}catch(error){
+		logger.error(error);
+		this.error = error;
 		return null;
 	}
 }
@@ -63,8 +66,9 @@ self.prototype.getUserInfo = async function(code){
 		me.data.tokens = tokens;
 		
 		return me.data;
-	}catch(e){
-		throw(e);
+	}catch(error){
+		logger.error(error);
+		throw(error);
 	}
 }
 
@@ -76,8 +80,9 @@ self.prototype.sendMemo = async function(tokens,raw){
 		console.log(plus);
 		const res = await plus.users.messages.send({ userId: 'me', requestBody: {raw: raw}});
 		return res.data;
-	}catch(e){
-		throw(e);
+	}catch(error){
+		logger.error(error);
+		throw(error);
 	}
 }
 
