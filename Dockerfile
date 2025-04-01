@@ -6,7 +6,7 @@ COPY ["package.json","/srv/cf.account/"]
 
 WORKDIR /srv/cf.account
 
-RUN npm install --only=production
+RUN npm install --omit=dev
 
 COPY [".", "/srv/cf.account/"]
 
