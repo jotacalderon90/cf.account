@@ -14,7 +14,7 @@ const cookie = function(res,cookie){
 		res.cookie("Authorization", cookie, { 
 			domain: process.env.COOKIE_DOMAIN, 
 			path: "/", 
-			secure: true 
+			secure: true,
 			httpOnly: true,         // inaccesible vía JavaScript/XSS
 			sameSite: "Strict"		// protege contra CSRF
 		});
