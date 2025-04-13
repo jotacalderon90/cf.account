@@ -23,12 +23,6 @@ const cookie = function(res,cookie){
 	}
 }
 
-const removeLogged = async function(req){
-	if(req.user){
-		req.session.destroy();
-	}
-}
-
 module.exports = {
 	
 	//@route('/api/account/login')
@@ -44,7 +38,8 @@ module.exports = {
 			if(helper.toHash(req.body.password+req.body.email,rows[0].hash) != rows[0].password){
 				throw("Los datos ingresados no corresponden");
 			}
-			cookie(res,accesscontrol.encode(rows[0]));
+			const jwt = accesscontrol.encode(rows[0]);
+			cookie(res,jwt);
 			
 			if(process.env.HOST_PUSH){
 				const headers = {};
@@ -52,10 +47,14 @@ module.exports = {
 				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login', body: req.body.email});
 			}
 			
-			if(req.headers.referer.indexOf('redirectoTo=')>-1){
-				res.redirect(301, helper.strRight(req.headers.referer,'redirectoTo='));
+			if(req.body.jwt===true){
+				res.send({data:jwt});
 			}else{
-				res.redirect("/");
+				if(req.headers.referer.indexOf('redirectoTo=')>-1){
+					res.redirect(301, helper.strRight(req.headers.referer,'redirectoTo='));
+				}else{
+					res.redirect("/");
+				}					
 			}
 			
 		}catch(error){
@@ -68,9 +67,19 @@ module.exports = {
 	//@method(['get'])
 	logout: async function(req,res){
 		try{
-			await removeLogged(req);
+			
+			if(req.user){
+				req.session.destroy();
+			}
+			
 			cookie(res,"null");
-			res.redirect("/login");
+			
+			if(req.query.jwt){
+				res.send({data: true});
+			}else{
+				res.redirect("/login");
+			}
+			
 		}catch(error){
 			logger.error(error);
 			response.renderError(req,res,error);
