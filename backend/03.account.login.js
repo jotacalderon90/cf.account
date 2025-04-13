@@ -11,7 +11,13 @@ const googleapis = require('./lib/googleapis');
 
 const cookie = function(res,cookie){
 	if(process.env.COOKIE_DOMAIN){
-		res.cookie("Authorization", cookie, { domain: process.env.COOKIE_DOMAIN, path: "/", secure: true });
+		res.cookie("Authorization", cookie, { 
+			domain: process.env.COOKIE_DOMAIN, 
+			path: "/", 
+			secure: true 
+			httpOnly: true,         // inaccesible vía JavaScript/XSS
+			sameSite: "Strict"		// protege contra CSRF
+		});
 	}else{
 		res.cookie("Authorization",cookie);
 	}
