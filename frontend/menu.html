@@ -1,0 +1,16 @@
+<div class="ms-auto dropdown">
+	<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+		<i class="fa fa-user"></i> 
+		{{data:doc.user.nickname || 'anonimo'}}
+	</button>
+	<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+		<li><a class="dropdown-item" href="{{data:process.env.HOST_ACCOUNT}}">Perfil</a></li>
+		<li><a class="dropdown-item" href="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}">Archivos Públicos</a></li>
+		<li><a class="dropdown-item" href="{{data:process.env.HOST_ARCHIVOSPRIVADOS}}">Archivos Privados</a></li>
+		<li><a class="dropdown-item" href="{{data:process.env.HOST_DATABASE}}">Base de Datos</a></li>
+		<li><a class="dropdown-item" href="{{data:process.env.HOST_ANALYTIC}}">Analytic</a></li>
+		<li><a class="dropdown-item" href="{{data:process.env.HOST_ERROR}}">Errores</a></li>
+		<li><hr class="dropdown-divider"></li>
+		<li><a class="dropdown-item" href="{{data:process.env.HOST_ACCOUNT}}/api/account/logout">Cerrar sesión</a></li>
+	</ul>
+</div>

@@ -4,102 +4,99 @@
 
 <!--define:main-->
 	
-	<!--include:account/_section/nav-->
+	<!--include:header-->
 	
 	<!--include:promise/prompt-->
 	
-	<div class="container">
-	
-		<ol class="breadcrumb">
-			<li><a href="/">Perfil</a></li>
-			<li class="active">Usuarios</li>
-			<li class="pull-right">
-				<button class="btn btn-xs btn-primary" v-on:click="object.create()">
+	<div class="container-fluid">
+		<div class="row">
+			<aside class="border border-right col-md-3 col-lg-2 bg-body-tertiary min-vh-100 offcanvas-md offcanvas-end" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+				<nav class="nav flex-column px-3 mt-4">
+					<a class="nav-link" href="/">Inicio</a>
+					<!--if:doc.user.roles.indexOf('root')>-1-->
+						<a class="nav-link" href="/admin/admin">Usuarios</a>
+					<!--/if-->
+				</nav>
+			</aside>
+			<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+				
+				<button class="btn btn-xs btn-primary float-end mt-4" v-on:click="object.create()">
 					<i class="fa fa-plus"></i>
 				</button>
-			</li>
-		</ol>
-		
-		<div class="btn-group pull-right">
-			<button type="button" class="dropdown-toggle btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<i class="fa fa-bars"></i>
-			</button>
-			<ul class="dropdown-menu">
-				<li v-for="tag in object.tags" v-on:click="object.refresh(tag)">
-					{{tag}}
-				</li>
-			</ul>
-		</div>
-		
-		<h4>
-			Administración de usuarios
-			<small>
-				<span v-show="object.query.tag">| {{object.query.tag}}</span>
-				<span v-on:click="object.getCollection()"> {{object.coll.length}}/{{object.cant}}</span>
-			</small>
-		</h4>
-		
-		<hr>
-						
-		<div class="table-responsive">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>
-							Información
-							<div class="pull-right">
-								<!--
-								<a class="btn btn-xs btn-primary" :href="/{{object.name}}/form?host={{object.host}}">
-									<i class="fa fa-plus"></i>
-								</a>
-								-->
-								<button type="button" class="btn btn-xs btn-info" v-on:click="object.refresh()">
-									<i class="fa fa-refresh"></i>
-								</button>
-							</div>
-						</th>
-					</tr>
-				</thead>
-				<tbody>			
-					<tr v-for="row in object.coll">
-						<td>
-							{{row.email}},
-							{{row.roles.join(',')}},
-							{{row.activate}}
-							
-							<div class="pull-right">
-								<button class="btn btn-default" v-on:click="object.changeRoles(row)" title="actualizar roles">
-									<span>Actualizar roles</span>
-									<i class="fa fa-info-circle pull-right"></i>
-								</button>
-								<button class="btn" :class="(row.activate)?'btn-primary':'btn-warning'" v-on:click="object.activate(row)" title="{{((row.activate)?'Deshabilitar':'Habilitar')}}">
-									<span>{{((row.activate)?'Deshabilitar':'Habilitar')}}</span>
-									<i class="fa pull-right" :class="(row.activate)?'fa-link':'fa-unlink'"></i>
-								</button>
-								<button class="btn btn-info" v-on:click="object.changePassword(row)" title="actualizar contraseña">
-									<span>Cambiar contraseña</span>
-									<i class="fa pull-right">电</i>
-								</button>
+				
+				<h4 class="mb-4 mt-4" v-on:dblclick="object.refresh()" title="Doble click para refrescar">Lista de usuarios</h4>
+				
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Email</th>
+								<th>														
+									<div class="dropdown">
+										<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+											Roles
+										</button>
+										<ul class="dropdown-menu">
+											<li v-on:click="object.refresh()"><span class="dropdown-item">Todos</span></li>
+											<li v-for="tag in object.tags" v-on:click="object.refresh(tag)">
+												<span class="dropdown-item">{{tag}}</span>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="text-center">Estado</th>
+								<th class="text-center">Acciones</th>
+								<th class="text-center">Eliminar</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(row,index) in object.coll">
+								<td>{{index+1}}</td>
+								<td>{{row.email}}</td>
+								<td v-on:dblclick="object.changeRoles(row)" title="Doble click para actualizar">
+									<span v-for="rol in row.roles">
+										<span class="badge text-bg-primary">{{rol}}</span>
+										&nbsp;
+									</span>
+								</td>
+								<td class="text-center">
+									<button class="btn btn-sm" 
+										v-on:dblclick="object.activate(row)" 
+										:class="(row.activate)?'btn-success':'btn-warning'" 
+										:title="'Doble click para ' + ((row.activate)?'desactivar':'activar')">
+										<span>{{((row.activate)?'Activado':'Desactivado')}}&nbsp;</span>
+										<i class="fa pull-right" :class="(row.activate)?'fa-link':'fa-unlink'"></i>
+									</button>
+								</td>
+								<td class="text-center">
+									<button class="btn btn-sm btn-info" v-on:click="object.changePassword(row)" title="Actualizar contraseña">
+										<span>Cambiar contraseña&nbsp;</span>
+										<i class="fa">电</i>
+									</button>
+									
+									<!--if:process.env.HOST_MAILING-->
+									<button class="btn btn-sm btn-default" v-on:click="object.enableRecovery(row)" title="Enviar correo para recuperar contraseña">
+										<span>Enviar correo para actualizar contraseña</span>
+										<i class="fa fa-envelope pull-right"></i>
+									</button>
+									<!--/if-->
 								
-								<!--if:process.env.HOST_MAILING-->
-								<button class="btn btn-default" v-on:click="object.enableRecovery(row)" title="enviar correo para recuperar contraseña">
-									<span>Enviar correo para actualizar contraseña</span>
-									<i class="fa fa-envelope pull-right"></i>
-								</button>
-								<!--/if-->
-								
-								<button class="btn btn-danger" v-on:click="object.delete(row._id)" title="eliminar usuario">
-									<i class="fa fa-trash pull-right"></i>
-								</button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+								</td>
+								<td class="text-center">
+									<button class="btn btn-sm btn-danger" v-on:click="object.delete(row._id)" title="Eliminar usuario">
+										<i class="fa fa-trash"></i>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<p class="btn btn-primary float-end" v-on:click="object.getCollection()">{{object.coll.length}}/{{object.cant}}</p>
+				
+			</main>
 		</div>
-		
-		<p class="text-right" v-on:click="object.getCollection()">{{object.coll.length}}/{{object.cant}}</p>
-		
 	</div>
 	
 	<script src="/account/admin/_.js"></script>

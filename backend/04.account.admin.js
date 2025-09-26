@@ -138,7 +138,8 @@ module.exports = {
 					if(req.body.password==undefined || req.body.password==null || req.body.password.length < 5){ 
 						throw("La contraseña ingresada debe tener al menos 5 caracteres");
 					}
-					await mongodb.updateOne('user',req.params.id,{$set: {password: helper.toHash(req.body.password + row.email,row.hash)}});
+					const updated = await mongodb.updateOne('user',req.params.id,{$set: {password: helper.toHash(req.body.password + row.email,row.hash)}});
+					console.log(updated);
 				break;
 				case 'notify':
 					if(process.env.HOST_MAILING){

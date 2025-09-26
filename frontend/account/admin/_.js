@@ -22,7 +22,7 @@ const object = function() {
 		tag: createService('GET', '/api/admin/' + this.name + '/tag/collection')
 	}
 
-	this.scroller = '#account_modal_admin .modal-content';
+	/*this.scroller = '#account_modal_admin .modal-content';
 	$(this.scroller).scroll(() => {
 		const p = $(this.scroller)[0].scrollHeight - $(document).height();
 		if (($(this.scroller).scrollTop() * 100) / p >= 99) {
@@ -30,7 +30,7 @@ const object = function() {
 				this.getCollection();
 			}
 		}
-	});
+	});*/
 	
 	this.coll = [];
 }

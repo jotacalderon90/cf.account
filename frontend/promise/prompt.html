@@ -1,13 +1,11 @@
-<div class="modal fade" id="promise_modal_prompt" >
-	<div class="modal-dialog modal-sm">
+<div class="modal fade" tabindex="-1" id="promise_modal_prompt" >
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="left btn-head">
-					<i class="fa fa-close"></i>
-				</button>
-				<span class="modal-title"></span>
+				<h5 class="modal-title"></h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
-			<div class="modal-body text-justify">
+			<div class="modal-body">
 				
 			</div>
 		</div>
@@ -16,33 +14,53 @@
 
 <script>
 
-	app.modules.prompt = function(){
-		
+	const prompt = function(){
+	
 	}
 	
-	app.modules.prompt.prototype.execute = function(title,type,placeholder,value){
-		return new Promise((resolve,reject)=>{
+	prompt.prototype.execute = function(title, type, placeholder, value) {
+		return new Promise((resolve, reject) => {
+			
+			const modal = document.getElementById('promise_modal_prompt');
+			const modalB = new bootstrap.Modal(modal);
+			
+			//titulo
+			modal.querySelector('.modal-title').textContent = title;
+			
+			//boton cerrar
+			const btnHead = modal.querySelector('.btn-close');
+			const newBtn = btnHead.cloneNode(true);
+			btnHead.parentNode.replaceChild(newBtn, btnHead);
+			newBtn.addEventListener('click', () => {
+				modalB.hide();
+				resolve('');
+			});
+			
+			//input
 			const input = document.createElement('input');
 			input.type = type;
 			input.value = value || '';
 			input.placeholder = placeholder;
-			input.setAttribute('class','form-control');
-			input.addEventListener( 'keypress' , function(event){
-				if(event.which === 13){
-					$('#promise_modal_prompt').modal('hide');
+			input.classList.add('form-control');
+			input.addEventListener('keypress', function(event) {
+				if (event.key === 'Enter') {
+					modalB.hide();
 					resolve(this.value);
 				}
 			});
-			$('#promise_modal_prompt .modal-title').html(title);
-			$('#promise_modal_prompt .modal-body').html(input);
-			$('#promise_modal_prompt').modal('show');
+			modal.querySelector('.modal-body').innerHTML = '';
+			modal.querySelector('.modal-body').appendChild(input);
+			input.focus();
 			
-			$('#promise_modal_prompt .btn-head').unbind('click');
-			$('#promise_modal_prompt .btn-head').click(()=>{
-				$('#promise_modal_prompt').modal('hide');
-				resolve('')
+			modal.addEventListener('shown.bs.modal', function handler() {
+				input.focus();
+				modal.removeEventListener('shown.bs.modal', handler);
 			});
+
+			modalB.show();
 		});
 	}
+	
+	app.modules.prompt = prompt;
 	
 </script>
