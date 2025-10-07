@@ -15,7 +15,3 @@ services:
       PORT: ${PORT:-2202}
     ports:
       - "127.0.0.1:2202:2202"
-
-networks:
-  default:
-    name: host
