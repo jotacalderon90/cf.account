@@ -43,7 +43,7 @@ module.exports = {
 			
 			if(process.env.HOST_PUSH){
 				const headers = {};
-				headers['x-api-key'] = process.env.X_API_KEY;
+				headers['x-api-key'] = process.env.HOST_PUSH_X_API_KEY;
 				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login', body: req.body.email});
 			}
 			
@@ -238,7 +238,7 @@ module.exports = {
 			
 			if(process.env.HOST_PUSH){
 				const headers = {};
-				headers['x-api-key'] = process.env.X_API_KEY;
+				headers['x-api-key'] = process.env.HOST_PUSH_X_API_KEY;
 				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login Google', body: row.email});
 			}
 					
