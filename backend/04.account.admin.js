@@ -47,8 +47,8 @@ module.exports = {
 	//@roles(['root','admin'])
 	total: async function(req,res){
 		try{
-			req.query = (req.query.query && req.query.query!=':query')?JSON.parse(req.query.query):{};
-			const total = await mongodb.count('user',req.query);
+			const query = (req.query.query && req.query.query!=':query')?JSON.parse(req.query.query):{};
+			const total = await mongodb.count('user',query);
 			res.send({data: total});
 		}catch(error){
 			logger.error(error);
@@ -61,9 +61,9 @@ module.exports = {
 	//@roles(['root','admin'])
 	collection: async function(req,res){
 		try{
-			req.options = (req.query.options)?JSON.parse(req.query.options):{};
-			req.query = (req.query.query)?JSON.parse(req.query.query):{};
-			const data = await mongodb.find('user',req.query,req.options);
+			const options = (req.query.options)?JSON.parse(req.query.options):{};
+			const query = (req.query.query)?JSON.parse(req.query.query):{};
+			const data = await mongodb.find('user',query,options);
 			res.send({data: data});
 		}catch(error){
 			logger.error(error);
