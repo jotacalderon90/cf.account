@@ -50,17 +50,11 @@ module.exports = {
 			if(req.body.jwt===true){
 				res.send({data:jwt});
 			}else{
-        
-        //20251015:la actualización de librerias elimino el parametro referer en headers, por lo que acudo a la cookie :S
-        console.log('cookie',req.headers.cookie);
-        const params = new URLSearchParams(req.headers.cookie.replace(/; /g, '&'));
-        const redirectTo = params.get('redirectTo');
-        
-				if(redirectTo){
-					res.redirect(301, redirectTo);
-				}else{
-					res.redirect("/");
-				}					
+        if(req.query.redirectTo){
+          res.redirect(301, redirectTo);
+        }else{
+          res.redirect("/");
+        }	
 			}
 			
 		}catch(error){
