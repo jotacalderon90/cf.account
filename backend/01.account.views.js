@@ -24,9 +24,7 @@ module.exports = {
 	//@route('/login')
 	//@method(['get'])
 	renderLogin: function(req,res){
-    console.log(req.query);
-    console.log(req.params);
-		res.render('account/03.login/_', {redirectTo: req.query.redirectTo, google_auth: googleapis.getURL()});
+		res.render('account/03.login/_', {redirectTo: req.query.redirectoTo, google_auth: googleapis.getURL()});
 	},
 	
 	//@route('/forget')
