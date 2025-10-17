@@ -14,7 +14,7 @@
 	
 	<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
 		<div class="p-5 bg-white rounded shadow">
-			<form action="/api/account/login" method="POST">
+			<form action="/api/account/login?redirectTo={{data:doc.redirectTo}}" method="POST">
 				
 				<h2 class="mb-4">Iniciar sesión</h2>
 				
