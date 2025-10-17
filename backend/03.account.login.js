@@ -52,6 +52,7 @@ module.exports = {
 			}else{
         
         //20251015:la actualización de librerias elimino el parametro referer en headers, por lo que acudo a la cookie :S
+        console.log('cookie',req.headers.cookie);
         const params = new URLSearchParams(req.headers.cookie.replace(/; /g, '&'));
         const redirectTo = params.get('redirectTo');
         
