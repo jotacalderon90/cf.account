@@ -2,6 +2,13 @@
 
 <!--define:title-->Administración<!--/define:title-->
 
+<!--define:script-->
+  <script>
+    const host_database = "{{data:process.env.HOST_DATABASE}}";
+  </script>
+	<script src="/account/admin/_.js"></script>
+<!--/define:script-->
+
 <!--define:main-->
 	
 	<!--include:header-->
@@ -47,6 +54,7 @@
 								</th>
 								<th class="text-center">Estado</th>
 								<th class="text-center">Acciones</th>
+								<th class="text-center">Json</th>
 								<th class="text-center">Eliminar</th>
 							</tr>
 						</thead>
@@ -84,6 +92,11 @@
 								
 								</td>
 								<td class="text-center">
+									<a class="btn btn-sm btn-primary" :href="object.host_database + row._id">
+										<i class="fa fa-database"></i>
+									</a>
+								</td>
+								<td class="text-center">
 									<button class="btn btn-sm btn-danger" v-on:click="object.delete(row._id)" title="Eliminar usuario">
 										<i class="fa fa-trash"></i>
 									</button>
@@ -99,6 +112,5 @@
 		</div>
 	</div>
 	
-	<script src="/account/admin/_.js"></script>
 
 <!--/define:main-->

@@ -276,4 +276,8 @@ object.prototype.create = async function(id) {
 	}
 }
 
+object.prototype.host_database = function() {
+  return host_database + '/objetos/user/';
+}
+
 app.modules.object = object;
