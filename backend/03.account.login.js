@@ -16,7 +16,7 @@ const cookie = function(res,cookie){
 			path: "/", 
 			secure: true,
 			httpOnly: true,         // inaccesible vía JavaScript/XSS
-			sameSite: "Strict"		// protege contra CSRF
+			sameSite: process.env.COOKIE_SAMESITE || "Strict"		// protege contra CSRF
 		});
 	}else{
 		res.cookie("Authorization",cookie);
