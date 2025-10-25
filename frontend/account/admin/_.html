@@ -4,6 +4,7 @@
 
 <!--define:script-->
   <script>
+    const roles = {{data:JSON.stringify(doc.user.roles)}};
     const host_database = "{{data:process.env.HOST_DATABASE}}";
   </script>
 	<script src="/account/admin/_.js"></script>
