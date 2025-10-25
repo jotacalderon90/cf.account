@@ -241,12 +241,13 @@ module.exports = {
 				headers['x-api-key'] = process.env.HOST_PUSH_X_API_KEY;
 				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login Google', body: row.email});
 			}
-					
-			if((redirectTo != null && redirectTo != '') || (req.session.redirectTo && req.session.redirectTo!='')){
+      //20251025:no funciona redirect
+			/*if((redirectTo != null && redirectTo != '') || (req.session.redirectTo && req.session.redirectTo!='')){
 				res.redirect(301, redirectTo || req.session.redirectTo);
 			}else{
 				res.redirect("/");
-			}
+			}*/
+      res.redirect("/");
 		}catch(error){
 			logger.error(error);
 			response.renderError(req,res,error);
