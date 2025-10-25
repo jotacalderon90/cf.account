@@ -242,12 +242,8 @@ module.exports = {
 				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login Google', body: req.email});
 			}
 			
-      if(req.body.jwt===true){
-				res.send({data:jwt});
-			}else{
-        logger.info('redirecciona a /');
-        res.redirect("/");
-      }
+      logger.info('redirecciona a /');
+      res.redirect("/");
       
 			/*20251025:no funciona redirect
       const redirectTo = helper.getCookie(req,'redirectTo');
