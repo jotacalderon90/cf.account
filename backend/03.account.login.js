@@ -50,7 +50,7 @@ module.exports = {
 			if(req.body.jwt===true){
 				res.send({data:jwt});
 			}else{
-        if(req.query.redirectTo){
+        if(req.query.redirectTo && req.query.redirectTo.trim()!=''){
           res.redirect(301, req.query.redirectTo);
         }else{
           res.redirect("/");
