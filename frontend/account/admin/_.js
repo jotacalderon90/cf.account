@@ -50,6 +50,10 @@ object.prototype.start = async function(parent){
 	}
 }
 
+object.prototype.hasRole = function(role){
+	return roles.indexOf(role) > -1;
+}
+
 object.prototype.refresh = async function(roles) {
 	if (roles) {
 		this.query.roles = roles;

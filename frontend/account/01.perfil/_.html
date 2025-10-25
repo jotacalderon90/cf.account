@@ -2,6 +2,13 @@
 
 <!--define:title-->Perfil<!--/define:title-->
 
+<!--define:script-->
+  <script>
+    const roles = {{data:JSON.stringify(doc.user.roles)}};
+  </script>
+	<script type="text/javascript" src="/account/01.perfil/_.js"></script>
+<!--/define:script-->
+
 <!--define:main-->
 	
 	<!--include:header-->
@@ -11,9 +18,7 @@
 			<aside class="border border-right col-md-3 col-lg-2 bg-body-tertiary min-vh-100 offcanvas-md offcanvas-end" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
 				<nav class="nav flex-column px-3 mt-4">
 					<a class="nav-link" href="/">Inicio</a>
-					<!--if:doc.user.roles.indexOf('root')>-1-->
-						<a class="nav-link" href="/admin/admin">Usuarios</a>
-					<!--/if-->
+					<a v-show="object.hasRole('root')" class="nav-link" href="/admin/admin">Usuarios</a>
 				</nav>
 			</aside>
 			<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
