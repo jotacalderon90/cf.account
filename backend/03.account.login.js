@@ -232,22 +232,32 @@ module.exports = {
 				row = row[0];
 				await mongodb.updateOne("user",row._id,updated);
 			}
-			cookie(res,accesscontrol.encode(row));
-			
-			const redirectTo = helper.getCookie(req,'redirectTo');
+      
+      const jwt = accesscontrol.encode(row);
+			cookie(res,jwt);
 			
 			if(process.env.HOST_PUSH){
 				const headers = {};
 				headers['x-api-key'] = process.env.HOST_PUSH_X_API_KEY;
-				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login Google', body: row.email});
+				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login Google', body: req.email});
 			}
-      //20251025:no funciona redirect
-			/*if((redirectTo != null && redirectTo != '') || (req.session.redirectTo && req.session.redirectTo!='')){
+			
+      if(req.body.jwt===true){
+				res.send({data:jwt});
+			}else{
+        logger.info('redirecciona a /');
+        res.redirect("/");
+      }
+      
+			/*20251025:no funciona redirect
+      const redirectTo = helper.getCookie(req,'redirectTo');
+			if((redirectTo != null && redirectTo != '') || (req.session.redirectTo && req.session.redirectTo!='')){
 				res.redirect(301, redirectTo || req.session.redirectTo);
 			}else{
 				res.redirect("/");
-			}*/
-      res.redirect("/");
+			}
+      */
+      
 		}catch(error){
 			logger.error(error);
 			response.renderError(req,res,error);
