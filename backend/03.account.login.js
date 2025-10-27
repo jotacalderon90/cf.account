@@ -15,12 +15,29 @@ const cookie = function(res,cookie){
 			domain: process.env.COOKIE_DOMAIN, 
 			path: "/", 
 			secure: true,
-			httpOnly: true,         // inaccesible vía JavaScript/XSS
+			httpOnly: true, // inaccesible vía JavaScript/XSS
+      maxAge: 1000 * 60 * 60, // 1 hora, ajusta según necesidad
 			sameSite: process.env.COOKIE_SAMESITE || "Strict"		// protege contra CSRF
 		});
 	}else{
 		res.cookie("Authorization",cookie);
 	}
+}
+
+const toTracking = function(req,email) {
+  req.session.email = email;
+  req.session.loginTime = new Date().toISOString();
+  req.session.userAgent = req.headers['user-agent'];
+  req.session.ip = req.ip;
+}
+
+const destroySession = function(req) {
+  req.session.destroy((err) => {
+    if (err) {
+      logger.error('Error al destruir session:');
+      logger.error(err);
+    }
+  });
 }
 
 module.exports = {
@@ -38,19 +55,23 @@ module.exports = {
 			if(helper.toHash(req.body.password+req.body.email,rows[0].hash) != rows[0].password){
 				throw("Los datos ingresados no corresponden");
 			}
-			const jwt = accesscontrol.encode(rows[0]);
-			cookie(res,jwt);
 			
+      const jwt = accesscontrol.encode(rows[0]);
+			
+      cookie(res,jwt);
+			
+      toTracking(req,req.body.email);
+      
 			if(process.env.HOST_PUSH){
 				const headers = {};
 				headers['x-api-key'] = process.env.HOST_PUSH_X_API_KEY;
-				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login', body: req.body.email});
+				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login ' + (new Date().toISOString()), body: req.body.email});
 			}
 			
 			if(req.body.jwt===true){
 				res.send({data:jwt});
 			}else{
-        if(req.query.redirectTo && req.query.redirectTo.trim()!=''){
+        if(req.query.redirectTo && req.query.redirectTo.trim()!='' && req.query.redirectTo.trim()!='undefined'){
           res.redirect(301, req.query.redirectTo);
         }else{
           res.redirect("/");
@@ -74,6 +95,8 @@ module.exports = {
 			
 			cookie(res,"null");
 			
+      destroySession(req);
+      
 			if(req.query.jwt){
 				res.send({data: true});
 			}else{
@@ -234,12 +257,15 @@ module.exports = {
 			}
       
       const jwt = accesscontrol.encode(row);
+      
 			cookie(res,jwt);
 			
+      toTracking(req,row.email);
+      
 			if(process.env.HOST_PUSH){
 				const headers = {};
 				headers['x-api-key'] = process.env.HOST_PUSH_X_API_KEY;
-				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login Google', body: req.email});
+				request.post(process.env.HOST_PUSH + '/api/push/admin',{headers: headers},{title: 'Login Google ' + (new Date().toISOString()), body: req.email});
 			}
 			
       logger.info('redirecciona a /');
