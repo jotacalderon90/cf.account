@@ -1,6 +1,6 @@
 FROM node:18-alpine
 
-CMD mkdir /srv/cf.account
+RUN mkdir -p /srv/cf.account
 
 COPY ["package.json","/srv/cf.account/"]
 
