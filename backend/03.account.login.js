@@ -9,36 +9,7 @@ const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
 const request = require('cl.jotacalderon.cf.framework/lib/request');
 const googleapis = require('./lib/googleapis');
 
-const cookie = function(res,cookie){
-	if(process.env.COOKIE_DOMAIN){
-		res.cookie("Authorization", cookie, { 
-			domain: process.env.COOKIE_DOMAIN, 
-			path: "/", 
-			secure: true,
-			httpOnly: true, // inaccesible vía JavaScript/XSS
-      maxAge: 1000 * 60 * 60, // 1 hora, ajusta según necesidad
-			sameSite: process.env.COOKIE_SAMESITE || "Strict"		// protege contra CSRF
-		});
-	}else{
-		res.cookie("Authorization",cookie);
-	}
-}
-
-const toTracking = function(req,email) {
-  req.session.email = email;
-  req.session.loginTime = new Date().toISOString();
-  req.session.userAgent = req.headers['user-agent'];
-  req.session.ip = req.ip;
-}
-
-const destroySession = function(req) {
-  req.session.destroy((err) => {
-    if (err) {
-      logger.error('Error al destruir session:');
-      logger.error(err);
-    }
-  });
-}
+const session = require('./lib/session');
 
 module.exports = {
 	
@@ -58,9 +29,7 @@ module.exports = {
 			
       const jwt = accesscontrol.encode(rows[0]);
 			
-      cookie(res,jwt);
-			
-      toTracking(req,req.body.email);
+      session.create(req, res , jwt, req.body.email);
       
 			if(process.env.HOST_PUSH){
 				const headers = {};
@@ -89,13 +58,7 @@ module.exports = {
 	logout: async function(req,res){
 		try{
 			
-			if(req.user){
-				req.session.destroy();
-			}
-			
-			cookie(res,"null");
-			
-      destroySession(req);
+      session.destroy(req, res);
       
 			if(req.query.jwt){
 				res.send({data: true});
@@ -258,9 +221,7 @@ module.exports = {
       
       const jwt = accesscontrol.encode(row);
       
-			cookie(res,jwt);
-			
-      toTracking(req,row.email);
+			session.create(req, res, jwt, email);
       
 			if(process.env.HOST_PUSH){
 				const headers = {};
@@ -270,15 +231,6 @@ module.exports = {
 			
       logger.info('redirecciona a /');
       res.redirect("/");
-      
-			/*20251025:no funciona redirect
-      const redirectTo = helper.getCookie(req,'redirectTo');
-			if((redirectTo != null && redirectTo != '') || (req.session.redirectTo && req.session.redirectTo!='')){
-				res.redirect(301, redirectTo || req.session.redirectTo);
-			}else{
-				res.redirect("/");
-			}
-      */
       
 		}catch(error){
 			logger.error(error);

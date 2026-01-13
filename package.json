@@ -8,9 +8,11 @@
     "dev": "npx nodemon --legacy-watch app  --ignore frontend"
   },
   "dependencies": {
-    "cl.jotacalderon.cf.framework": "0.0.61",
+    "cl.jotacalderon.cf.framework": "0.0.62",
+    "argon2": "0.44.0",
     "express-recaptcha": "2.1.0",
-    "googleapis": "^75.0.0"
+    "googleapis": "^75.0.0",
+    "zod": "4.1.12"
   },
   "devDependencies": {
     "nodemon": "latest"

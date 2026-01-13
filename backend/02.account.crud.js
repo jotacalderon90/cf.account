@@ -1,5 +1,7 @@
 "use strict";
 
+const controlador = require('./lib/02.account.crud/controller');
+
 const logger = require('cl.jotacalderon.cf.framework/lib/log')('api.02.account.crud');
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
@@ -7,21 +9,8 @@ const recaptcha = require('cl.jotacalderon.cf.framework/lib/recaptcha');
 const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
 const request = require('cl.jotacalderon.cf.framework/lib/request');
-const validPassword = require('./lib/validPassword');
 
-const cookie = function(res,cookie){
-	if(process.env.COOKIE_DOMAIN){
-		res.cookie("Authorization", cookie, { domain: process.env.COOKIE_DOMAIN, path: "/", secure: true });
-	}else{
-		res.cookie("Authorization",cookie);
-	}
-}
-
-const removeLogged = async function(req){
-	if(req.user){
-		req.session.destroy();
-	}
-}
+const password = require('./lib/password');
 
 module.exports = {
 	
@@ -42,7 +31,7 @@ module.exports = {
 					throw("El email ingresado no es válido");
 				}
 				await recaptcha.validate(req);
-				if(!validPassword(req.body.password)){ 
+				if(!password.isValid(req.body.password)){ 
 					throw("La contraseña ingresada no es segura");
 				}
 				const cantXEmail = await mongodb.count("user",{email: req.body.email});
@@ -95,7 +84,16 @@ module.exports = {
 	//@method(['get'])
 	read: async function(req,res){
 		try{
-			res.send({data: await accesscontrol.getUser(req)});
+      
+      const token = accesscontrol.getToken(req);
+      let user;
+			if(token != null && token.sub){
+				user = await mongodb.findOne("user",token.sub);
+			}else{
+				user = null;
+			}
+      
+			res.send({data: user});
 		}catch(error){
 			logger.error(error);
 			response.APIError(req,res,error);
@@ -115,7 +113,7 @@ module.exports = {
 			};
 			let redirect = "/";
 			if(!req.user.google && req.body.password!=req.user.password){
-				if(!validPassword(req.body.password)){ 
+				if(!password.isValid(req.body.password)){ 
 					throw("La contraseña ingresada no es segura");
 				}else{
 					updated["$set"]["password"] = helper.toHash(req.body.password + req.user.email,req.user.hash);
@@ -134,16 +132,7 @@ module.exports = {
 	//@method(['delete'])
 	//@roles(['root','admin'])
 	delete: async function(req,res){
-		//al igual que update, este metodo se llama desde el post con button diferenciador
-		try{
-			await removeLogged(req);
-			cookie(res,"null");
-			await mongodb.deleteOne("user",req.user._id);
-			response.renderMessage(req,res,200,'Usuario eliminado','Se ha eliminado su cuenta satisfactoriamente','success');
-		}catch(error){
-			logger.error(error);
-			response.renderError(req,res,error);
-		}
+    controlador.delete(req,res);
 	}
 	
 }

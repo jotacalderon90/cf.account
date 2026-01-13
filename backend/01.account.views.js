@@ -1,79 +1,63 @@
 "use strict";
 
-const googleapis = require('./lib/googleapis');
+const controlador = require('./lib/01.account.views/controller');
 
 module.exports = {
 	
 	//@route('/')
 	//@method(['get'])
 	//@roles(['root','admin','user'])
-	renderDocument: function(req,res){
-		res.render('account/01.perfil/_',{user: req.user});
+	renderIndex: function(req,res){
+		controlador.renderIndex(req,res);
 	},
 	
 	//@route('/form')
 	//@method(['get'])
 	renderForm: function(req,res){
-		if(process.env.CANCREATE=='1'){
-			res.render('account/02.form/_', {action: '/api/account'});
-		}else{
-			res.redirect("/");
-		}
+		controlador.renderForm(req,res);
 	},
 	
 	//@route('/login')
 	//@method(['get'])
 	renderLogin: function(req,res){
-		res.render('account/03.login/_', {redirectTo: req.query.redirectoTo, google_auth: googleapis.getURL()});
+		controlador.renderLogin(req,res);
 	},
 	
 	//@route('/forget')
 	//@method(['get'])
 	renderForget: function(req,res){
-		if(process.env.CANRECOVERY=='1'){
-			res.render('account/04.forget/_');
-		}else{
-			res.redirect("/");
-		}
+		controlador.renderForget(req,res);
 	},
 	
 	//@route('/recovery')
 	//@method(['get'])
 	renderRecovery: function(req,res){
-		if(process.env.CANRECOVERY=='1'){
-			res.render('account/05.recovery/_');
-		}else{
-			res.redirect("/");
-		}
+		controlador.renderRecovery(req,res);
 	},
 	
 	//@route('/admin/admin')
 	//@method(['get'])
 	//@roles(['root','admin'])
 	renderAdmin: function(req,res){
-		res.render('account/admin/_',{user: req.user});
+		controlador.renderAdmin(req,res);
 	},
 	
 	//@route('/politicas-de-privacidad')
 	//@method(['get'])
 	renderPoliticasPrivacidad: function(req,res){
-		res.render('account/politicas');
+		controlador.renderPoliticasPrivacidad(req,res);
 	},
 	
 	//@route('/condiciones-del-servicio')
 	//@method(['get'])
 	renderCondicionesServicio: function(req,res){
-		res.render('account/condiciones');
+		controlador.renderCondicionesServicio(req,res);
 	},
 	
 	//@route('/form-admin')
 	//@method(['get'])
 	renderFormAdmin: function(req,res){
-		if(process.env.CANCREATEADMIN=='1'){
-			res.render('account/02.form/_', {action: '/api/admin/account/createadmin'});
-		}else{
-			res.redirect("/");
-		}
+		controlador.renderFormAdmin(req,res);
 	}
 	
 }
