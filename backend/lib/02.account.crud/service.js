@@ -1,42 +1,67 @@
 "use strict";
 
-const path = require('path');
-const logger = require('cl.jotacalderon.cf.framework/lib/log')(path.basename(__filename));
+const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const constants = require('./constants');
 const repository = require('./repository');
+
+const password = require('../password');
+const hooks = require('../hooks');
 
 module.exports = {
   
   create: async function(input) {
     try {
       
-      const validaexiste_articulo_traspaso_x_id_articulo = await repository.validaexiste_articulo_traspaso_x_id_articulo(input);
+      const nuevoUsuario = {};
+      nuevoUsuario.email = input.email;
+      nuevoUsuario.nickname = input.email;
+      nuevoUsuario.password = await password.hash(input.password);
       
-			if(validaexiste_articulo_traspaso_x_id_articulo > 0){
-				return 1;
-			}
+      const created = await repository.create(nuevoUsuario);
+      logger.info(created);
       
-      const validaexiste_cod_art_x_id_articulo = await repository.validaexiste_cod_art_x_id_articulo(input);
-      if(validaexiste_cod_art_x_id_articulo.length == 0) {
-        throw new Error(`No se encontró el artículo con ID ${input.id_articulo}`);
+      if(created === constants.error.rest.createEmailExiste) {
+        return constants.error.rest.createEmailExiste;
       }
       
-      const validaexiste_id_articulo_otrasucursal = await repository.validaexiste_id_articulo_otrasucursal({
-        ...input, 
-        cod_art: validaexiste_cod_art_x_id_articulo[0].COD_ART
-      });
-      if(validaexiste_id_articulo_otrasucursal.length == 0) {
-        throw new Error(`No se encontró el artículo en la otra sucursal con CÓD_ART ${validaexiste_cod_art_x_id_articulo[0].COD_ART}`);
+      hooks.pushOnCreate(nuevoUsuario.email);
+      
+      hooks.mailingOnCreate(nuevoUsuario.email, nuevoUsuario.password);
+      
+      return true;
+      
+    }catch(error) {
+      logger.error(error);
+      throw new Error((error instanceof Error) ? error.message : constants.error.rest.create + ' ' + constants.error.servicio);
+    }
+  },
+  
+  read: async function(token) {
+    try {
+      
+      return await repository.read(token);
+      
+    }catch(error) {
+      logger.error(error);
+      throw new Error((error instanceof Error) ? error.message : constants.error.rest.read + ' ' + constants.error.servicio);
+    }
+  },
+  
+  update: async function(input, user) {
+    try {
+      
+      //validaciones de negocio para password
+      let redirect = '/';
+      if(input.password != user.password){
+        input.password = await password.hash(input.password);
+        redirect = "/api/account/logout";
       }
       
-      const validaexiste_articulo_traspaso_x_id_articulo2 = await repository.validaexiste_articulo_traspaso_x_id_articulo({
-        id_articulo: validaexiste_id_articulo_otrasucursal[0].ID_ARTICULO
-      });
+      const updated = await repository.update(input, user);
+      logger.info(updated);
       
-      if(validaexiste_articulo_traspaso_x_id_articulo2 > 0){
-        return 2;
-      }
+      return redirect;
       
     }catch(error) {
       logger.error(error);

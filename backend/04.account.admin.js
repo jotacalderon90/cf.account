@@ -6,6 +6,8 @@ const response = require('cl.jotacalderon.cf.framework/lib/response');
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
 const request = require('cl.jotacalderon.cf.framework/lib/request');
 
+const password = require('./lib/password');
+
 module.exports = {
 	
 	//@route('/api/admin/account/createadmin')
@@ -25,15 +27,17 @@ module.exports = {
 			const doc = {};
 			doc.email = req.body.email;
 			doc.hash = helper.random(10);
-			doc.password = helper.toHash(req.body.password + req.body.email,doc.hash);
+			doc.password = await password.hash(req.body.password);//helper.toHash(req.body.password + req.body.email,doc.hash);
 			doc.nickname = req.body.email;
 			doc.notification = true;
 			doc.thumb = process.env.HOST_ARCHIVOSPUBLICOS + "/assets/img/user.png";
 			doc.roles = ["root"];
 			doc.created = new Date();
 			doc.activate = true;
-			await mongodb.insertOne("user",doc);
-			
+		 
+      const created = await mongodb.insertOne("user",doc);
+			console.log(doc, created);
+      
 			response.renderMessage(req,res,200,'Cuenta administrador','Se ha creado el usuario administrador de manera correcta','success');
 		}catch(error){
 			logger.error(error);
@@ -103,7 +107,7 @@ module.exports = {
 			const doc = {};
 			doc.email = req.body.email;
 			doc.hash = helper.random(10);
-			doc.password = helper.toHash(req.body.password + req.body.email,doc.hash);
+			doc.password = await password.hash(req.body.password);//helper.toHash(req.body.password + req.body.email,doc.hash);
 			doc.nickname = req.body.email;
 			doc.notification = true;
 			doc.thumb = process.env.HOST_ARCHIVOSPUBLICOS + "/assets/img/user.png";
@@ -138,7 +142,7 @@ module.exports = {
 					if(req.body.password==undefined || req.body.password==null || req.body.password.length < 5){ 
 						throw("La contraseña ingresada debe tener al menos 5 caracteres");
 					}
-					const updated = await mongodb.updateOne('user',req.params.id,{$set: {password: helper.toHash(req.body.password + row.email,row.hash)}});
+					const updated = await mongodb.updateOne('user',req.params.id,{$set: {password: await password.hash(req.body.password)/*;helper.toHash(req.body.password + row.email,row.hash)*/}});
 					console.log(updated);
 				break;
 				case 'notify':

@@ -1,7 +1,6 @@
 "use strict";
 
-const path = require('path');
-const logger = require('cl.jotacalderon.cf.framework/lib/log')(path.basename(__filename));
+const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const constants = require('./constants');
 
@@ -12,7 +11,9 @@ module.exports = {
   renderIndex: async function(req, res) {
     try{
       
-      res.render('account/01.perfil/_', { user: req.user});
+      res.render('account/01.perfil/_', { 
+        user: req.user
+      });
       
 		}catch(error){
       logger.error(error);
@@ -24,7 +25,9 @@ module.exports = {
     try{
       
       if(process.env.CANCREATE=='1'){
-        res.render('account/02.form/_', { action: '/api/account'});
+        res.render('account/02.form/_', { 
+          action: '/api/account'
+        });
         
       }else{
         res.redirect("/");
@@ -40,7 +43,10 @@ module.exports = {
   renderLogin: async function(req, res) {
     try{
       
-      res.render('account/03.login/_', { redirectTo: req.query.redirectoTo, google_auth: googleapis.getURL()});
+      res.render('account/03.login/_', { 
+        redirectTo: req.query.redirectoTo, 
+        google_auth: googleapis.getURL()
+      });
       
 		}catch(error){
       logger.error(error);
@@ -85,7 +91,9 @@ module.exports = {
   renderAdmin: async function(req, res) {
     try{
       
-      res.render('account/admin/_', { user: req.user});
+      res.render('account/admin/_', { 
+        user: req.user
+      });
       
 		}catch(error){
       logger.error(error);
@@ -96,7 +104,7 @@ module.exports = {
   renderPoliticasPrivacidad: async function(req, res) {
     try{
       
-      res.render('account/admin/_', { user: req.user});
+      res.render('account/admin/_');
       
 		}catch(error){
       logger.error(error);
@@ -107,7 +115,7 @@ module.exports = {
   renderCondicionesServicio: async function(req, res) {
     try{
       
-      res.render('account/admin/_', { user: req.user});
+      res.render('account/admin/_');
       
 		}catch(error){
       logger.error(error);
@@ -119,7 +127,9 @@ module.exports = {
     try{
       
       if(process.env.CANCREATEADMIN=='1'){
-        res.render('account/02.form/_', {action: '/api/admin/account/createadmin'});
+        res.render('account/02.form/_', {
+          action: '/api/admin/account/createadmin'
+        });
 
       }else{
         res.redirect("/");

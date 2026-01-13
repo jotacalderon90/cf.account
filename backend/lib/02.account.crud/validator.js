@@ -1,31 +1,54 @@
-"use strict";
+'use strict';
 
-const { z } = require("zod");
+const { z } = require('zod');
+
+const password = require('../password');
 
 module.exports = {
   
-  articulos: z.object({
-    sucursal: z.enum(["", "1", "2"]).optional(),
-    filter: z
+  create: z.object({
+    email: z
       .string()
       .trim()
-      .transform((v) =>
-        v
-          .toUpperCase()
-          .split(/\s+/)
-          .filter(Boolean)
+      .toLowerCase()
+      .refine(
+        (val) => !val || /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val),
+        { message: 'El formato del email no es válido' }
+      ),
+    password: z
+      .string()
+      .refine(
+        (val) => password.isValid(val),
+        {
+          message: 'La contraseña no cumple con los requisitos de seguridad'
+        }
       )
+      .optional()
+      .or(z.literal(''))
   }),
   
-  create: z.object({
-    id: z
-      .number()
-      .int("id_orden_compra debe ser un número entero")
-      .positive("id_orden_compra debe ser un número positivo"),
-    id_articulo: z
-      .number()
-      .int("id_orden_compra debe ser un número entero")
-      .positive("id_orden_compra debe ser un número positivo")
+  update: z.object({
+    nickname: z
+      .string()
+      .min(3, 'El nickname debe tener al menos 3 caracteres')
+      .max(20, 'El nickname no puede exceder 20 caracteres')
+      .regex(
+        /^[a-zA-Z0-9_@.-]+$/,
+        'El nickname solo puede contener letras, números, guiones y guiones bajos'
+      )
+      .trim(),
+    password: z
+      .string()
+      .refine(
+        (val) => password.isValid(val),
+        {
+          message: 'La contraseña no cumple con los requisitos de seguridad'
+        }
+      )
+      .optional()
+      .or(z.literal('')),
+    button: z
+      .enum(['UPDATE'])
   })
   
 }

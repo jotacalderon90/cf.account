@@ -11,6 +11,8 @@ const googleapis = require('./lib/googleapis');
 
 const session = require('./lib/session');
 
+const password = require('./lib/password');
+
 module.exports = {
 	
 	//@route('/api/account/login')
@@ -21,11 +23,15 @@ module.exports = {
 			req.body.email = req.body.email.toLowerCase();
 			let rows = await mongodb.find("user",{email: req.body.email, activate: true});
 			if(rows.length!=1){
-				throw("Los datos ingresados no corresponden");
+				throw new Error("Los datos ingresados no corresponden .1");
 			}
-			if(helper.toHash(req.body.password+req.body.email,rows[0].hash) != rows[0].password){
+			/*if(helper.toHash(req.body.password+req.body.email,rows[0].hash) != rows[0].password){
 				throw("Los datos ingresados no corresponden");
-			}
+			}*/
+      const isValidPassword = await password.verify(req.body.password, rows[0].password);
+      if(!isValidPassword) {
+        throw new Error("Los datos ingresados no corresponden .2");
+      }
 			
       const jwt = accesscontrol.encode(rows[0]);
 			
@@ -165,7 +171,12 @@ module.exports = {
 					if(user.length!=1){
 						throw("Los datos ingresados no corresponden");
 					}
-					const updated = {$set: {password: helper.toHash(req.body.password + user[0].email,user[0].hash)}};
+					const updated = {
+            $set: {
+              //password: helper.toHash(req.body.password + user[0].email,user[0].hash)
+              password: password.hash(req.body.password)
+            }
+          };
 					await mongodb.updateOne("user",user[0]._id,updated);
 					
 					response.renderMessage(req,res,200,'Actualización de contraseña','Se ha actualizado su contraseña correctamente','success');
@@ -198,8 +209,9 @@ module.exports = {
 				row = {};
 				row.email = user.emails[0].value;
 				row.hash = helper.random(10);
-				row.password = helper.toHash(row.hash + user.emails[0].value,row.hash);
-				row.nickname = user.displayName;
+				//row.password = helper.toHash(row.hash + user.emails[0].value,row.hash);
+				//row.password: password.hash(user.emails[0])
+        row.nickname = user.displayName;
 				row.notification = true;
 				row.thumb = user.image.url;
 				row.roles = ["user"];

@@ -1,7 +1,6 @@
 "use strict";
 
-const path = require('path');
-const logger = require('cl.jotacalderon.cf.framework/lib/log')(path.basename(__filename));
+const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const constants = require('./constants');
 

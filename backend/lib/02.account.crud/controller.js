@@ -1,121 +1,111 @@
 "use strict";
 
-const path = require('path');
-const logger = require('cl.jotacalderon.cf.framework/lib/log')(path.basename(__filename));
+const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const response = require('cl.jotacalderon.cf.framework/lib/response');
+const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
+const recaptcha = require('cl.jotacalderon.cf.framework/lib/recaptcha');
 
 const constants = require('./constants');
 const validator = require('./validator');
 const service = require('./service');
 
-const sessionCookie = require('../session');
+const session = require('../session');
 
 module.exports = {
-  
-  articulos: async function(req, res) {
-    try{
-      
-      const parseResult = validator.articulos.safeParse(req.query);
-      
-      if (!parseResult.success) {
-        logger.error(parseResult);
-        throw new Error(constants.error.validacion);
-      }
-      
-      const respuesta = await service.articulos(parseResult.data);
-      
-			res.send({data: respuesta});
-      
-		}catch(error){
-			logger.error(error);
-			response.APIError(req,res,error);
-		}
-  },
-  
-  porllegar: async function(req, res) {
-    try{
-      
-      const parseResult = validator.porllegar.safeParse(req.query);
-      
-      if (!parseResult.success) {
-        logger.error(parseResult);
-        throw new Error(constants.error.validacion);
-      }
-      
-      const respuesta = await service.porllegar(parseResult.data);
-      
-			res.send({data: respuesta});
-      
-		}catch(error){
-			logger.error(error);
-			response.APIError(req,res,error);
-		}
-  },
-  
-  validaexiste: async function(req, res) {
-    try{
-      
-      const parseResult = validator.validaexiste.safeParse(req.query);
-      
-      if (!parseResult.success) {
-        logger.error(parseResult);
-        throw new Error(constants.error.validacion);
-      }
-      
-      const respuesta = await service.validaexiste(parseResult.data);
-      
-			res.send({data: respuesta});
-      
-		}catch(error){
-			logger.error(error);
-			response.APIError(req,res,error);
-		}
-  },
-  
-  total: async function(req, res) {
-    try{
-      
-      const respuesta = await service.total();
-      
-			res.send({data: respuesta});
-      
-		}catch(error){
-			logger.error(error);
-			response.APIError(req,res,error);
-		}
-  },
-  
-  collection: async function(req, res) {
-    try{
-      
-      const respuesta = await service.collection();
-      
-			res.send({data: respuesta});
-      
-		}catch(error){
-			logger.error(error);
-			response.APIError(req,res,error);
-		}
-  },
   
   create: async function(req, res) {
     try{
       
-      const parseResult = validator.create.safeParse(req.body);
+      req.user = await accesscontrol.getUser(req);
       
-      if (!parseResult.success) {
-        logger.error(parseResult);
-        throw new Error(constants.error.validacion);
-      }
+			if(req.user == null){
+        
+        //POST!
+        
+        if(process.env.CANCREATE!='1'){
+          response.renderError(req, res, constants.error.rest.createNOCAN);
+          return;
+				}
+        
+        //VALIDO RECAPTCHA
+        await recaptcha.validate(req);
+        
+        //VALIDO INPUT
+        const parseResult = validator.create.safeParse(req.body);
+        
+        if (!parseResult.success) {
+          response.renderError(req, res, constants.error.validacion);
+          return;
+        }
+        
+        //EJECUTO SERVICIO
+        const respuesta = await service.create({
+          ...parseResult.data
+        });
+        
+        if(respuesta === true) {
+          response.renderMessage(req, res, 200, 'Usuario registrado', 'Se ha enviado un correo para validar su registro','success');
+          return;
+        }else {
+          response.renderError(req, res, respuesta);
+          return;
+        }
       
-      const respuesta = await service.create({...parseResult.data, creador: req.user.email});
-      
-			res.send({data: respuesta});
+      //DELEGO OTROS METODOS!
+      }else if(req.body.button && req.body.button === 'UPDATE'){
+				this.update(req, res);
+        
+			}else if(req.body.button && req.body.button === 'DELETE'){
+				this.delete(req, res);
+        
+			}
       
 		}catch(error){
 			logger.error(error);
-			response.APIError(req,res,error);
+			response.renderError(req, res, constants.error.rest.create + ' ' + constants.error.controlador);
+		}
+  },
+  
+  read: async function(req, res) {
+    try{
+      
+      const token = accesscontrol.getToken(req);
+      
+      if(token != null && token.sub){
+        
+        const respuesta = await service.read(token.sub);
+        
+        res.send({data: respuesta});
+        
+      }else {
+        res.send({data: null});
+        
+      }
+      
+		}catch(error){
+			logger.error(error);
+			response.renderError(req, res, constants.error.rest.read + ' ' + constants.error.controlador);
+		}
+  },
+  
+  update: async function(req, res) {
+    try{
+      
+      const parseResult = validator.update.safeParse(req.body);
+      
+      if (!parseResult.success) {
+        response.renderError(req, res, constants.error.validacion);
+        return;
+      }
+      
+      const respuesta = await service.update(parseResult.data, req.user);
+      
+      res.redirect(respuesta);
+      
+		}catch(error){
+			logger.error(error);
+			response.renderError(req, res, constants.error.rest.update + ' ' + constants.error.controlador);
 		}
   },
   
@@ -124,7 +114,7 @@ module.exports = {
       
       await service.delete(req.user._id);
       
-      await session.logout(req, res);
+      session.destroy(req, res);
       
 			response.renderMessage(req, res, 200, 'Usuario eliminado', 'Se ha eliminado su cuenta satisfactoriamente','success');
       
