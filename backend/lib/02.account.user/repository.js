@@ -25,12 +25,12 @@ module.exports = {
       nuevoUsuario.hash = input.hash;
       nuevoUsuario.password = input.password;
       nuevoUsuario.nickname = input.nickname;
+      nuevoUsuario.thumb = input.thumb;
+      nuevoUsuario.activate = input.activate;
+      nuevoUsuario.roles = input.roles;
       
-      nuevoUsuario.activate = false;
       nuevoUsuario.notification = true;
-      nuevoUsuario.roles = ['user'];
       nuevoUsuario.created = new Date();
-      nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
       
       const created = await mongodb.insertOne('user', nuevoUsuario);
       
@@ -42,10 +42,10 @@ module.exports = {
     }
   },
   
-  read: async function(token) {
+  read: async function(id) {
     try {
       
-      const user = await mongodb.findOne('user', token);
+      const user = await mongodb.findOne('user', id);
       
       return user;
       
@@ -55,15 +55,10 @@ module.exports = {
     }
   },
   
-  update: async function(input, user) {
+  update: async function(input, id) {
     try {
       
-      const updated = await mongodb.updateOne('user', user._id, {
-        $set: {
-					nickname: input.nickname,
-          password: input.password
-				}
-      });
+      const updated = await mongodb.updateOne('user', id, {$set: input});
 			
       return updated;
       
@@ -85,4 +80,44 @@ module.exports = {
       throw new Error(constants.error.rest.delete + ' ' + constants.error.repositorio);
     }
   },
+
+  find: async function(query, options) {
+    try {
+      
+      const users = await mongodb.find('user', query, options);
+      
+      return users;
+      
+    } catch(error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.find + ' ' + constants.error.repositorio);
+    }
+  },
+  
+  count: async function(query) {
+    try {
+      
+      const total = await mongodb.count('user', query);
+      
+      return total;
+      
+    } catch(error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.count + ' ' + constants.error.repositorio);
+    }
+  },
+  
+  tag: async function() {
+    try {
+      
+      const tag = await mongodb.distinct('user', 'roles');
+      
+      return tag;
+      
+    } catch(error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.tag + ' ' + constants.error.repositorio);
+    }
+  }
+
 }

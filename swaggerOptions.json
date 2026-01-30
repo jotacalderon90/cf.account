@@ -1,0 +1,35 @@
+{
+  "definition": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "cf.account",
+      "version": "1.0.0",
+      "description": "Documentación del backend",
+      "contact": {
+        "name": "Jhonatan Calderón Leiva",
+        "email": "info@jotace.cl"
+      },
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "servers": [
+      {
+        "url": "http://172.27.16.1:2202",
+        "description": "Servidor local"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Usuarios",
+        "description": "Workflow para usuarios"
+      },
+      {
+        "name": "Administrador",
+        "description": "Acciones para administrador"
+      }
+    ]
+  },
+  "apis": ["./backend/*.js"]
+}

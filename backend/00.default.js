@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const controlador = require('./lib/00.default/controller');
 

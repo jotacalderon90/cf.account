@@ -3,6 +3,7 @@
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const constants = require('./constants');
+const validator = require('./validator');
 
 const googleapis = require('../googleapis');
 
@@ -74,8 +75,15 @@ module.exports = {
   renderRecovery: async function(req, res) {
     try{
       
-      if(process.env.CANRECOVERY=='1'){
-        res.render('account/05.recovery/_');
+      if(process.env.CANRECOVERY == '1'){
+        
+        const parseResult = validator.renderRecovery.safeParse(req.query);
+        if (!parseResult.success) {
+          response.renderError(req, res, constants.error.validacion);
+          return;
+        }
+        
+        res.render('account/05.recovery/_', parseResult.data);
 
       }else{
         res.redirect("/");
@@ -85,19 +93,6 @@ module.exports = {
 		}catch(error){
       logger.error(error);
 			response.APIError(req,res,constants.error.rest.renderRecovery + ' ' + constants.error.controlador);
-		}
-  },
-  
-  renderAdmin: async function(req, res) {
-    try{
-      
-      res.render('account/admin/_', { 
-        user: req.user
-      });
-      
-		}catch(error){
-      logger.error(error);
-			response.APIError(req,res,constants.error.rest.renderAdmin + ' ' + constants.error.controlador);
 		}
   },
   
@@ -120,6 +115,19 @@ module.exports = {
 		}catch(error){
       logger.error(error);
 			response.APIError(req,res,constants.error.rest.renderCondicionesServicio + ' ' + constants.error.controlador);
+		}
+  },
+  
+  renderAdmin: async function(req, res) {
+    try{
+      
+      res.render('account/admin/_', { 
+        user: req.user
+      });
+      
+		}catch(error){
+      logger.error(error);
+			response.APIError(req,res,constants.error.rest.renderAdmin + ' ' + constants.error.controlador);
 		}
   },
   

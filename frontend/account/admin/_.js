@@ -13,8 +13,8 @@ const object = function() {
 	};
 	//this.services = document.helper.createServices('/api/admin/' + this.name);
 	this.services = {
-		total: createService('GET', '/api/admin/' + this.name + '/total?query=:query'),
-		collection: createService('GET', '/api/admin/' + this.name + '/collection?query=:query&options=:options'),
+		total: createService('GET', '/api/admin/' + this.name + '/total?roles=:roles'),
+		collection: createService('GET', '/api/admin/' + this.name + '/collection?roles=:roles&skip=:skip'),
 		tag: createService('GET', '/api/admin/' + this.name + '/tag/collection'),
 		create: createService('POST', '/api/admin/' + this.name),
 		update: createService('PUT', '/api/admin/' + this.name + '/:id'),
@@ -81,9 +81,12 @@ object.prototype.getTotal = async function() {
 }
 
 object.prototype.paramsToGetTotal = function() {
-	return {
+	/*return {
 		query: JSON.stringify(this.query)
-	};
+	};*/
+  return {
+    roles: this.query.roles || ''
+  };
 }
 
 object.prototype.getCollection = async function() {
@@ -106,10 +109,15 @@ object.prototype.getCollection = async function() {
 }
 
 object.prototype.paramsToGetCollection = function() {
+  return {
+    roles: this.query.roles || '',
+    skip: this.obtained
+  };
+  /*
 	return {
 		query: JSON.stringify(this.query),
 		options: JSON.stringify(this.getOptions())
-	};
+	};*/
 }
 
 object.prototype.getOptions = function() {
@@ -156,7 +164,8 @@ object.prototype.activate = async function(row) {
 		const update = await this.services.update({
 			id: row._id
 		}, {
-			type: 'activate'
+			type: 'activate',
+      activate: !row.activate
 		});
 		if(update.error){
 			throw(update.error);

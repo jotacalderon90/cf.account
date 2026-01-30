@@ -22,24 +22,17 @@ module.exports = {
 	renderLogin: function(req,res){
 		controlador.renderLogin(req,res);
 	},
-	
+		
 	//@route('/forget')
 	//@method(['get'])
 	renderForget: function(req,res){
 		controlador.renderForget(req,res);
 	},
-	
+
 	//@route('/recovery')
 	//@method(['get'])
 	renderRecovery: function(req,res){
 		controlador.renderRecovery(req,res);
-	},
-	
-	//@route('/admin/admin')
-	//@method(['get'])
-	//@roles(['root','admin'])
-	renderAdmin: function(req,res){
-		controlador.renderAdmin(req,res);
 	},
 	
 	//@route('/politicas-de-privacidad')
@@ -52,6 +45,13 @@ module.exports = {
 	//@method(['get'])
 	renderCondicionesServicio: function(req,res){
 		controlador.renderCondicionesServicio(req,res);
+	},
+	
+	//@route('/admin/admin')
+	//@method(['get'])
+	//@roles(['root','admin'])
+	renderAdmin: function(req,res){
+		controlador.renderAdmin(req,res);
 	},
 	
 	//@route('/form-admin')

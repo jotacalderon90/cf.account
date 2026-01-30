@@ -1,0 +1,41 @@
+default:
+/favicon.ico                        => favicon
+/robots.txt                         => robots
+
+views:
+/                                   => renderIndex
+/form                               => renderForm
+/login                              => renderLogin
+/forget                             => renderForget
+/recovery                           => renderRecovery
+/politicas-de-privacidad            => renderPoliticasPrivacidad
+/condiciones-del-servicio           => renderCondicionesServicio
+/admin/admin                        => renderAdmin
+/form-admin                         => renderFormAdmin
+
+user:
+/api/account                        => create/update/delete
+/api/account                        => read
+/api/account/activate/:hash         => activate
+/api/account/forget                 => forget
+/api/account/recovery               => recovery
+/api/account/login                  => login
+/api/account/logout                 => logout
+
+admin:
+/api/admin/tracking                 => tracking
+/api/admin/account/total            => count
+/api/admin/account/collection       => collection
+/api/admin/account/tag/collection   => tag
+/api/admin/account/createadmin      => createadmin
+/api/admin/account                  => createbyadmin
+/api/admin/account/:id              => updatebyadmin
+/api/admin/account/:id              => deletebyadmin
+
+google:
+/api/account/googleoauth            => googleoauth
+/api/account/googleoauth/callback   => googleoauthcallback
+/api/google/send                    => send
+
+parcheargon:
+/api/parcheargon                    => parcheargon
