@@ -13,7 +13,7 @@ module.exports = {
         
         request.post(process.env.HOST_PUSH + '/api/push/admin',{
           headers: {
-            ['x-api-key']: process.env.HOST_PUSH_X_API_KEY
+            'x-api-key': process.env.HOST_PUSH_X_API_KEY
           }
         },{
           title: 'nueva cuenta', 
@@ -33,7 +33,7 @@ module.exports = {
         
         request.post(process.env.HOST_PUSH + '/api/push/admin',{
           headers: {
-            ['x-api-key']: process.env.HOST_PUSH_X_API_KEY
+            'x-api-key': process.env.HOST_PUSH_X_API_KEY
           }
         },{
           title: 'Login ' + (new Date().toISOString()), 
