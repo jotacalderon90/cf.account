@@ -8,7 +8,7 @@ module.exports = {
   
   favicon: async function(req, res) {
     try{
-      res.redirectsss(process.env.HOST_ARCHIVOSPUBLICOS + '/favicon.ico');
+      res.redirect(process.env.HOST_ARCHIVOSPUBLICOS + '/favicon.ico');
 		}catch(error){
 			logger.error(error);
 			response.APIError(req,res,constants.error.rest.favicon + ' ' + constants.error.controlador);
