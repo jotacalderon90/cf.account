@@ -270,7 +270,7 @@ module.exports = {
       
 		}catch(error){
 			logger.error(error);
-			response.renderError(req, res, constants.error.rest.logout + ' ' + constants.error.controlador);
+			response.renderError(req, res, constants.error.rest.login + ' ' + constants.error.controlador);
 		}
   },
   

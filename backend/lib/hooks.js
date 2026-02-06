@@ -15,11 +15,10 @@ module.exports = {
           headers: {
             'x-api-key': process.env.HOST_PUSH_X_API_KEY
           }
-        },{
+        }, JSON.stringify({
           title: 'nueva cuenta', 
           body: email
-          
-        });
+        }));
       }
     }catch(error) {
       logger.error(error);
@@ -35,11 +34,10 @@ module.exports = {
           headers: {
             'x-api-key': process.env.HOST_PUSH_X_API_KEY
           }
-        },{
+        }, JSON.stringify({
           title: 'Login ' + (new Date().toISOString()), 
           body: email
-          
-        });
+        }));
         
       }
       
@@ -52,15 +50,16 @@ module.exports = {
     try {
       if(process.env.HOST_MAILING){
 					
-        request.post(process.env.HOST_MAILING + '/api/mailing', {}, {
+        request.post(process.env.HOST_MAILING + '/api/mailing', {
+          
+        }, JSON.stringify({
           to: email,
           hash: hash,
           subject: 'Activación de cuenta',
           type: 'template',
           template: 'accountActivate.html',
           send: true
-          
-        });
+        }));
       }
     }catch(error) {
       logger.error(error);
@@ -71,7 +70,9 @@ module.exports = {
     try {
       if(process.env.HOST_MAILING){
         
-        request.post(process.env.HOST_MAILING + '/api/mailing', {}, {
+        request.post(process.env.HOST_MAILING + '/api/mailing', {
+          
+        }, JSON.stringify({
           to: email,
           hash: hash, 
           subject: 'Reestablecer contraseña',
@@ -79,7 +80,7 @@ module.exports = {
           template: 'accountRecovery.html',
           send: true
           
-        });
+        }));
       }
     }catch(error) {
       logger.error(error);
