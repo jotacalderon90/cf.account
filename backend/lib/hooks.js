@@ -2,7 +2,7 @@
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
-const request = require('cl.jotacalderon.cf.framework/lib/requestv2');
+const request = require('cl.jotacalderon.cf.framework/lib/request');
 
 module.exports = {
   
