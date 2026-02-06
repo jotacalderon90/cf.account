@@ -1,7 +1,6 @@
-"use strict";
+'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const recaptcha = require('cl.jotacalderon.cf.framework/lib/recaptcha');
 const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
@@ -105,7 +104,7 @@ module.exports = {
         }
 
       }else{
-        res.redirect("/");
+        res.redirect('/');
 
       }
       

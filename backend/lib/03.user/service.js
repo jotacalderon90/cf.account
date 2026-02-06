@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
@@ -65,7 +65,7 @@ module.exports = {
       let redirect = '/';
       if(input.password != user.password){
         input.password = await password.hash(input.password);
-        redirect = "/api/account/logout";
+        redirect = '/api/account/logout';
       }
       
       const updated = await repository.update(input, user._id);
@@ -124,7 +124,7 @@ module.exports = {
         return 'No se encontró usuario';
       }
       
-      const hash = new Buffer(users[0].password).toString("base64");
+      const hash = new Buffer(users[0].password).toString('base64');
       
       logger.info(hash);
       
@@ -181,7 +181,7 @@ module.exports = {
       
       const isValidPassword = await password.verify(input.password, users[0].password);
       if(!isValidPassword) {
-        return "Los datos ingresados no corresponden .2";
+        return 'Los datos ingresados no corresponden .2';
       }
       
       hooks.pushOnLogin(input.email);

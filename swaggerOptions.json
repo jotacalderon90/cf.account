@@ -22,12 +22,24 @@
     ],
     "tags": [
       {
+        "name": "Default",
+        "description": "Servicios genericos"
+      },
+      {
+        "name": "Vistas",
+        "description": "Vistas del sistema"
+      },
+      {
         "name": "Usuarios",
         "description": "Workflow para usuarios"
       },
       {
         "name": "Administrador",
         "description": "Acciones para administrador"
+      },
+      {
+        "name": "Google",
+        "description": "Servicios de Google"
       }
     ]
   },

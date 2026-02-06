@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
@@ -6,7 +6,7 @@ const constants = require('./constants');
 const googleapis = require('../googleapis');
 const hooks = require('../hooks');
 
-const repositorio = require('../02.account.user/repository');
+const repositorio = require('../03.user/repository');
 
 module.exports = {
   

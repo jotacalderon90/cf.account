@@ -1,7 +1,6 @@
 'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
 
@@ -42,7 +41,7 @@ module.exports = {
       
 			session.create(req, res, jwt, respuesta.email);
       
-      res.redirect("/");
+      res.redirect('/');
       
 		}catch(error){
 			logger.error(error);

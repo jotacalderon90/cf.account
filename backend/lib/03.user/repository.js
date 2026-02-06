@@ -11,7 +11,7 @@ module.exports = {
   create: async function(input) {
     try {
       
-      const cantXEmail = await mongodb.count("user",{
+      const cantXEmail = await mongodb.count('user',{
         email: input.email
       });
       

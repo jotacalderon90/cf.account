@@ -1,6 +1,7 @@
 "use strict";
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
+const response = require('cl.jotacalderon.cf.framework/lib/response');
 
 const constants = require('./constants');
 const validator = require('./validator');

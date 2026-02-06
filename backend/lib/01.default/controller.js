@@ -1,14 +1,14 @@
 'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-
+const response = require('cl.jotacalderon.cf.framework/lib/response');
 const constants = require('./constants');
 
 module.exports = {
   
   favicon: async function(req, res) {
     try{
-      res.redirect(process.env.HOST_ARCHIVOSPUBLICOS + '/favicon.ico');
+      res.redirectsss(process.env.HOST_ARCHIVOSPUBLICOS + '/favicon.ico');
 		}catch(error){
 			logger.error(error);
 			response.APIError(req,res,constants.error.rest.favicon + ' ' + constants.error.controlador);

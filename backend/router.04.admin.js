@@ -1,6 +1,6 @@
 'use strict';
 
-const controlador = require('./lib/04.account.admin/controller');
+const controlador = require('./lib/04.admin/controller');
 
 module.exports = {
 	

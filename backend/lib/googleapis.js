@@ -1,10 +1,12 @@
+'use strict';
 
-const logger = require('cl.jotacalderon.cf.framework/lib/log')('lib.googleapis');
+const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
+
 const {google} = require('googleapis');
 
 const self = function(){
 	
-	if(process.env.GOOGLE_CLIENTID && process.env.GOOGLE_CLIENTID!=""){
+	if(process.env.GOOGLE_CLIENTID && process.env.GOOGLE_CLIENTID!=''){
 		this.enabled = true;
 	}else{
 		return;
@@ -50,7 +52,7 @@ self.prototype.getURL = function(){
 
 self.prototype.getUserInfo = async function(code){
 	try{
-		// get the auth "tokens" from the request
+		// get the auth 'tokens' from the request
 		const auth1 = this.createConnection();
 		const data = await auth1.getToken(code);
 		const tokens = data.tokens;

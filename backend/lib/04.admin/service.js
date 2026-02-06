@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
@@ -6,7 +6,7 @@ const redis = require('cl.jotacalderon.cf.framework/lib/redis');
 
 const constants = require('./constants');
 
-const repositorio = require('../02.account.user/repository');
+const repositorio = require('../03.user/repository');
 const hooks = require('../hooks');
 const password = require('../password');
 
@@ -113,7 +113,7 @@ module.exports = {
       nuevoUsuario.email = input.email;
       nuevoUsuario.nickname = input.email;
       nuevoUsuario.password = await password.hash(input.password);
-			nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + "/assets/img/user.png";
+			nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
       nuevoUsuario.activate = true;
       nuevoUsuario.roles = ['root'];
        
@@ -145,7 +145,7 @@ module.exports = {
       nuevoUsuario.email = input.email;
       nuevoUsuario.nickname = input.email;
       nuevoUsuario.password = await password.hash(input.password);
-			nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + "/assets/img/user.png";
+			nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
       nuevoUsuario.activate = true;
       nuevoUsuario.roles = ['user'];
        
@@ -210,7 +210,7 @@ module.exports = {
     try {
       
       const user = await repositorio.read(id);
-      const hash = new Buffer(user.password).toString("base64");
+      const hash = new Buffer(user.password).toString('base64');
       
       hooks.mailingOnForget(user.email, hash);
       

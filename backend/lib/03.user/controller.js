@@ -1,7 +1,6 @@
-"use strict";
+'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
 const recaptcha = require('cl.jotacalderon.cf.framework/lib/recaptcha');
@@ -253,7 +252,7 @@ module.exports = {
           if(req.query.redirectTo && req.query.redirectTo.trim()!='' && req.query.redirectTo.trim()!='undefined'){
             res.redirect(301, req.query.redirectTo);
           }else{
-            res.redirect("/");
+            res.redirect('/');
           }
           
         }
@@ -283,7 +282,7 @@ module.exports = {
 			if(req.query.jwt){
 				res.send({data: true});
 			}else{
-				res.redirect("/login");
+				res.redirect('/login');
 			}
       
 		}catch(error){
