@@ -30,7 +30,7 @@ module.exports = {
       
       hooks.pushOnCreate(nuevoUsuario.email);
       
-      hooks.mailingOnCreate(nuevoUsuario.email, process.env.HOST + '/api/account/activate/' + new Buffer(nuevoUsuario.password).toString('base64'));
+      hooks.mailingOnCreate(nuevoUsuario.email, process.env.HOST + '/api/account/activate/' + Buffer.from(nuevoUsuario.password, 'utf8').toString('base64'));
       
       return true;
       
@@ -96,7 +96,7 @@ module.exports = {
   activate: async function(input) {
     try {
       
-      const hash = new Buffer(input.hash, 'base64').toString('ascii');
+      const hash = Buffer.from(input.hash, 'base64').toString('utf8');
       
       const users = await repository.find({password: hash});
       
@@ -124,7 +124,7 @@ module.exports = {
         return 'No se encontró usuario';
       }
       
-      const hash = new Buffer(users[0].password).toString('base64');
+      const hash = Buffer.from(users[0].password, 'utf8').toString('base64');
       
       logger.info(hash);
       
@@ -141,7 +141,7 @@ module.exports = {
   recovery: async function(input) {
     try {
       
-      const users = await repository.find({password: new Buffer(input.hash,'base64').toString('ascii')});
+      const users = await repository.find({password: Buffer.from(input.hash, 'base64').toString('utf8')});
       
       if(users.length != 1){
         throw new Error(constants.error.rest.forgetNoUser);

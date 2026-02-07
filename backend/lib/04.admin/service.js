@@ -210,7 +210,7 @@ module.exports = {
     try {
       
       const user = await repositorio.read(id);
-      const hash = new Buffer(user.password).toString('base64');
+      const hash = Buffer.from(user.password, 'utf8').toString('base64');
       
       hooks.mailingOnForget(user.email, hash);
       
