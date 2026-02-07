@@ -50,15 +50,14 @@ module.exports = {
     try {
       if(process.env.HOST_MAILING){
 					
-        request.post(process.env.HOST_MAILING + '/api/mailing', {
-          
+        request.post(process.env.HOST_MAILING + '/api/mailing/multidomainmicro', {
+          'x-api-key': process.env.HOST_MAILING_X_API_KEY
         }, {
           to: email,
-          hash: hash,
           subject: 'Activación de cuenta',
-          type: 'template',
           template: 'accountActivate.html',
-          send: true
+          hash: hash,
+          message: 'Este dato no se usa pero se valida en mailing :S'
         });
       }
     }catch(error) {
@@ -70,16 +69,14 @@ module.exports = {
     try {
       if(process.env.HOST_MAILING){
         
-        request.post(process.env.HOST_MAILING + '/api/mailing', {
-          
+        request.post(process.env.HOST_MAILING + '/api/mailing/multidomainmicro', {
+          'x-api-key': process.env.HOST_MAILING_X_API_KEY
         }, {
           to: email,
-          hash: hash, 
           subject: 'Reestablecer contraseña',
-          type: 'template',
           template: 'accountRecovery.html',
-          send: true
-          
+          hash: hash,
+          message: 'Este dato no se usa pero se valida en mailing :S'
         });
       }
     }catch(error) {
