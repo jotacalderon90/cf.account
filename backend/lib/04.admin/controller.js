@@ -158,7 +158,7 @@ module.exports = {
           throw new Error('invalid type');
       }
       
-      let parseResult;
+      let parseResult = {};
       
       if(type !== 'notify') {
         
