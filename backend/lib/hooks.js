@@ -59,7 +59,7 @@ module.exports = {
           to: email,
           subject: 'Activación de cuenta',
           template: 'accountActivate.html',
-          hash: hash,
+          hash: process.env.HOST + '/api/account/activate/' + hash,
           message: 'Este dato no se usa pero se valida en mailing :S'
         });
       }
@@ -81,7 +81,7 @@ module.exports = {
           to: email,
           subject: 'Reestablecer contraseña',
           template: 'accountRecovery.html',
-          hash: hash,
+          hash: process.env.HOST + '/recovery?hash=' + hash,
           message: 'Este dato no se usa pero se valida en mailing :S'
         });
       }
