@@ -55,7 +55,7 @@ module.exports = {
             'x-api-key': process.env.HOST_MAILING_X_API_KEY
           }
         }, {
-          host: process.env.HOST,
+          host: process.env.HOST.split('//')[1],
           to: email,
           subject: 'Activación de cuenta',
           template: 'accountActivate.html',
@@ -77,7 +77,7 @@ module.exports = {
             'x-api-key': process.env.HOST_MAILING_X_API_KEY
           }
         }, {
-          host: process.env.HOST,
+          host: process.env.HOST.split('//')[1],
           to: email,
           subject: 'Reestablecer contraseña',
           template: 'accountRecovery.html',
