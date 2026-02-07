@@ -2,13 +2,13 @@
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
-const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
 
 const constants = require('./constants');
 const validator = require('./validator');
 const service = require('./service');
 
 const session = require('../session');
+const jwt = require('../jwt');
 
 module.exports = {
   
@@ -35,11 +35,11 @@ module.exports = {
         return;
       }
       
-      const respuesta = await service.googleoauthcallback(parseResult.data);
+      const userLogged = await service.googleoauthcallback(parseResult.data);
       
-      const jwt = accesscontrol.encode(respuesta);
+      const token = jwt.encode(userLogged._id);
       
-			session.create(req, res, jwt, respuesta.email);
+			session.create(req, res, token, userLogged.email);
       
       res.redirect('/');
       

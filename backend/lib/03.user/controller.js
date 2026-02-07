@@ -10,6 +10,7 @@ const validator = require('./validator');
 const service = require('./service');
 
 const session = require('../session');
+const jwt = require('../jwt');
 
 module.exports = {
   
@@ -51,7 +52,7 @@ module.exports = {
           return;
         }
       
-      //DELEGO OTROS METODOS!
+      //DELEGO OTROS METODOS BAJO FORMULARIO DE PERFIL!
       }else if(req.body.button && req.body.button === 'UPDATE'){
 				this.update(req, res);
         
@@ -69,7 +70,7 @@ module.exports = {
   read: async function(req, res) {
     try{
       
-      const token = accesscontrol.getToken(req);
+      const token = jwt.getToken(req);
       
       if(token != null && token.sub){
         
@@ -235,21 +236,30 @@ module.exports = {
         return;
       }
       
-      const respuesta = await service.login(parseResult.data);
+      const userLogged = await service.login(parseResult.data);
       
-      if(typeof respuesta !== 'string') {
+      if(typeof userLogged === 'string') {
+        if(parseResult.data.jwt === true){
+          res.send({error: userLogged});
+          
+        }else{
+          response.renderError(req, res, userLogged);
+          
+        }
+        return;
         
-        if(!respuesta.email) {
-          throw new Error(JSON.stringify(respuesta) + ' ' + constants.error.servicio);
+      }else{
+        if(!userLogged.email) {
+          throw new Error(JSON.stringify(userLogged) + ' ' + constants.error.servicio);
         }
         
-        const jwt = accesscontrol.encode(respuesta);
+        const token = jwt.encode(userLogged._id);
         
-        session.create(req, res, jwt, respuesta.email);
+        session.create(req, res, token, userLogged.email);
         
-        if(parseResult.data.jwt === true){
+        if(parseResult.data.token === true){
           
-          res.send({data:jwt});
+          res.send({data:token});
           
         }else{
           
@@ -260,16 +270,6 @@ module.exports = {
           }
           
         }
-        
-      }else {
-        if(parseResult.data.jwt === true){
-          res.send({error: respuesta});
-          
-        }else{
-          response.renderError(req, res, respuesta);
-          
-        }
-        return;
       }
       
 		}catch(error){

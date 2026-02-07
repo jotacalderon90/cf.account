@@ -7,40 +7,43 @@ const tracking = function(req,email) {
   req.session.email = email;
   req.session.loginTime = new Date().toISOString();
   req.session.userAgent = req.headers['user-agent'];
-  req.session.ip = req.ip;
+  req.session.ip = req.ip + '||' + req.headers['x-forwarded-for'];
 }
+
+const cookieOptions = {
+  path: '/', 
+  httpOnly: true,                                      // SIEMPRE
+  maxAge: 1000 * 60 * 60,                              // SIEMPRE 1 hora
+  sameSite: process.env.COOKIE_SAMESITE || 'Strict',   // SIEMPRE
+  secure: process.env.NODE_ENV === 'production',       // Solo en prod
+  ...(process.env.COOKIE_DOMAIN && { domain: process.env.COOKIE_DOMAIN })
+};
 
 module.exports = {
   
   create: function(req, res, cookie, email){
-    logger.info('creando sesion');
-    if(process.env.COOKIE_DOMAIN){
-      res.cookie('Authorization', cookie, { 
-        domain: process.env.COOKIE_DOMAIN, 
-        path: '/', 
-        secure: true,
-        httpOnly: true,                                   // inaccesible vía JavaScript/XSS
-        maxAge: 1000 * 60 * 60,                           // 1 hora
-        sameSite: process.env.COOKIE_SAMESITE || 'Strict' // protege contra CSRF
-      });
-    }else{
-      res.cookie('Authorization', cookie);
-    }
     
-    if(cookie && email) {
+    logger.info('creando sesion');
+    
+    res.cookie('Authorization', cookie, cookieOptions);
+    
+    if (cookie && email) {
       tracking(req, email);
     }
   },
   
   destroy: function(req, res) {
+    
     logger.info('destruyendo sesion');
+    
     req.session.destroy((err) => {
       if (err) {
         logger.error('Error al destruir session:');
         logger.error(err);
       }
     });
-    this.create(req, res);
+    
+    res.clearCookie('Authorization', cookieOptions);
   }
   
 }

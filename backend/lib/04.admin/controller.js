@@ -3,7 +3,6 @@
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const recaptcha = require('cl.jotacalderon.cf.framework/lib/recaptcha');
-const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
 
 const constants = require('./constants');
 const validator = require('./validator');

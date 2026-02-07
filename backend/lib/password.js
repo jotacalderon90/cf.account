@@ -7,17 +7,8 @@ const argon2 = require('argon2');
 module.exports = {
   
   isValid: function(plainPassword){
-    
     const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
-    
-    if (regex.test(plainPassword)) {
-      return true;
-      
-    } else {
-      return false;
-      
-    }
-    
+    return regex.test(plainPassword);
   },
   
   hash: async function(plainPassword) {
@@ -43,10 +34,8 @@ module.exports = {
   verify: async function(plainPassword, hashedPassword){
     try {
       
-      const match = await argon2.verify(hashedPassword, plainPassword);
+      return await argon2.verify(hashedPassword, plainPassword);
       
-      return match;
-    
     } catch (error) {
       const myError = 'Error al verificar password';
       logger.error(myError);
