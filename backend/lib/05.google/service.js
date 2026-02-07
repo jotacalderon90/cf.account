@@ -65,7 +65,7 @@ module.exports = {
         
       }
       
-      hooks.pushOnCreate(email);
+      hooks.pushOnLogin(email);
       
       return {_id: id, email: email};
       

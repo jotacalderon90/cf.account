@@ -30,7 +30,7 @@ module.exports = {
       
       hooks.pushOnCreate(nuevoUsuario.email);
       
-      hooks.mailingOnCreate(nuevoUsuario.email, process.env.HOST + '/api/account/activate/' + Buffer.from(nuevoUsuario.password, 'utf8').toString('base64'));
+      hooks.mailingOnCreate(nuevoUsuario.email, Buffer.from(nuevoUsuario.password, 'utf8').toString('base64'));
       
       return true;
       
@@ -128,7 +128,7 @@ module.exports = {
       
       logger.info(hash);
       
-      hooks.mailingOnForget(users[0].email, process.env.HOST + '/api/account/recovery?hash=' + hash);
+      hooks.mailingOnForget(users[0].email, hash);
       
       return true;
       
