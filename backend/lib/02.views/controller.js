@@ -100,7 +100,7 @@ module.exports = {
   renderPoliticasPrivacidad: async function(req, res) {
     try{
       
-      res.render('account/admin/_');
+      res.render('account/politicas');
       
 		}catch(error){
       logger.error(error);
@@ -111,7 +111,7 @@ module.exports = {
   renderCondicionesServicio: async function(req, res) {
     try{
       
-      res.render('account/admin/_');
+      res.render('account/condiciones');
       
 		}catch(error){
       logger.error(error);
