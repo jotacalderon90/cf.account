@@ -239,6 +239,10 @@ module.exports = {
       
       if(typeof respuesta !== 'string') {
         
+        if(!respuesta.email) {
+          throw new Error(JSON.stringify(respuesta) + ' ' + constants.error.servicio);
+        }
+        
         const jwt = accesscontrol.encode(respuesta);
         
         session.create(req, res, jwt, respuesta.email);
