@@ -1,15 +1,11 @@
-FROM node:18-alpine
-
-RUN mkdir -p /srv/cf.account
-
-COPY ["package.json","/srv/cf.account/"]
+FROM node:20-alpine
 
 WORKDIR /srv/cf.account
 
+COPY package.json ./
+
 RUN npm install --omit=dev
 
-COPY [".", "/srv/cf.account/"]
+COPY . .
 
-EXPOSE $PORT
-
-CMD [ "npm", "run", "start" ]
+CMD ["npm", "run", "start"]

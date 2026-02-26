@@ -14,8 +14,8 @@ const cookieOptions = {
   path: '/', 
   httpOnly: true,                                      // SIEMPRE
   maxAge: 1000 * 60 * 60,                              // SIEMPRE 1 hora
+  secure: process.env.COOKIE_SECURE === '1',           // POR PARAMETRO
   sameSite: process.env.COOKIE_SAMESITE || 'Strict',   // SIEMPRE
-  secure: process.env.NODE_ENV === 'production',       // Solo en prod
   ...(process.env.COOKIE_DOMAIN && { domain: process.env.COOKIE_DOMAIN })
 };
 
