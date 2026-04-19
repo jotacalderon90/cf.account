@@ -13,7 +13,8 @@ module.exports = {
         
         request.post(process.env.HOST_PUSH + '/api/push/admin',{
           headers: {
-            'x-api-key': process.env.HOST_PUSH_X_API_KEY
+            'x-api-key': process.env.HOST_PUSH_X_API_KEY,
+            'user-agent': 'cf.account'
           }
         }, {
           title: 'nueva cuenta', 
@@ -32,7 +33,8 @@ module.exports = {
         
         request.post(process.env.HOST_PUSH + '/api/push/admin',{
           headers: {
-            'x-api-key': process.env.HOST_PUSH_X_API_KEY
+            'x-api-key': process.env.HOST_PUSH_X_API_KEY,
+            'user-agent': 'cf.account'
           }
         }, {
           title: 'Login ' + (new Date().toISOString()), 
@@ -52,7 +54,8 @@ module.exports = {
 					
         request.post(process.env.HOST_MAILING + '/api/mailing/multidomainmicro', {
           headers: {
-            'x-api-key': process.env.HOST_MAILING_X_API_KEY
+            'x-api-key': process.env.HOST_MAILING_X_API_KEY,
+            'user-agent': 'cf.account'
           }
         }, {
           host: process.env.HOST.split('//')[1],
@@ -74,7 +77,8 @@ module.exports = {
         
         request.post(process.env.HOST_MAILING + '/api/mailing/multidomainmicro', {
           headers: {
-            'x-api-key': process.env.HOST_MAILING_X_API_KEY
+            'x-api-key': process.env.HOST_MAILING_X_API_KEY,
+            'user-agent': 'cf.account'
           }
         }, {
           host: process.env.HOST.split('//')[1],
