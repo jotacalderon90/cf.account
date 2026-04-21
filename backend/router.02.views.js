@@ -167,12 +167,12 @@ module.exports = {
 
   /**
    * @swagger
-   * /admin/admin:
+   * /admin/roles:
    *   get:
    *     tags:
    *       - Vistas
-   *     summary: obtener vista del administrador
-   *     description: obtiene vista del administrador
+   *     summary: obtener vista de administración de roles
+   *     description: obtiene vista de administración de roles
    *     responses:
    *       200:
    *         description: Respuesta en HTML
@@ -181,11 +181,34 @@ module.exports = {
    *             schema:
    *               type: string
    */
-  //@route('/admin/admin')
+  //@route('/admin/roles')
   //@method(['get'])
   //@roles(['root','admin'])
-  renderAdmin: function (req, res) {
-    controlador.renderAdmin(req, res);
+  renderAdminRoles: function (req, res) {
+    controlador.renderAdminRoles(req, res);
+  },
+
+  /**
+   * @swagger
+   * /admin/users:
+   *   get:
+   *     tags:
+   *       - Vistas
+   *     summary: obtener vista de administración de usuarios
+   *     description: obtiene vista de administración de usuarios
+   *     responses:
+   *       200:
+   *         description: Respuesta en HTML
+   *         content:
+   *           text/html:
+   *             schema:
+   *               type: string
+   */
+  //@route('/admin/users')
+  //@method(['get'])
+  //@roles(['root','admin'])
+  renderAdminUsers: function (req, res) {
+    controlador.renderAdminUsers(req, res);
   },
 
   /**

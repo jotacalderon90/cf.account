@@ -29,6 +29,29 @@ module.exports = {
 	
   /**
    * @swagger
+   * /api/admin/roles/total:
+   *   get:
+   *     tags:
+   *       - Roles
+   *     summary: Obtener total de roles
+   *     description: Obtiene total de roles
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   */
+	//@route('/api/admin/roles/total')
+	//@method(['get'])
+	//@roles(['root'])
+	total: async function(req,res){
+		controlador.total(req,res);
+	},
+	
+  /**
+   * @swagger
    * /api/admin/roles:
    *   post:
    *     tags:

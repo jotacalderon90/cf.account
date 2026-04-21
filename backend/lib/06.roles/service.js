@@ -57,6 +57,16 @@ module.exports = {
       logger.error(error);
       throw new Error((error instanceof Error) ? error.message : constants.error.rest.rolesFind + ' ' + constants.error.servicio);
     }
+  },
+
+  total: async function() {
+    try {
+      const roles = await repository.total({});
+      return roles;
+    }catch(error) {
+      logger.error(error);
+      throw new Error((error instanceof Error) ? error.message : constants.error.rest.rolesTotal + ' ' + constants.error.servicio);
+    }
   }
   
 };

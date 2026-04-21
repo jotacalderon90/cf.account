@@ -54,6 +54,16 @@ module.exports = {
       logger.error(error);
       throw new Error(constants.error.rest.rolesFind + ' ' + constants.error.repositorio);
     }
+  },
+
+  total: async function(query, options) {
+    try {
+      const total = await mongodb.count('roles', query, options);
+      return total;
+    } catch(error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.rolesTotal + ' ' + constants.error.repositorio);
+    }
   }
 
 };

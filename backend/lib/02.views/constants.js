@@ -9,7 +9,8 @@ constants.error.rest.renderForget = 'Error al renderizar forget';
 constants.error.rest.renderRecovery = 'Error al renderizar recovery';
 constants.error.rest.renderPoliticasPrivacidad = 'Error al renderizar políticas de privacidad';
 constants.error.rest.renderCondicionesServicio = 'Error al renderizar condiciones de servicio';
-constants.error.rest.renderAdmin = 'Error al renderizar admin';
+constants.error.rest.renderAdminRoles = 'Error al renderizar administración de roles';
+constants.error.rest.renderAdminUsers = 'Error al renderizar administración de usuarios';
 constants.error.rest.renderFormAdmin = 'Error al renderizar formulario de administrador';
 
 module.exports = constants;

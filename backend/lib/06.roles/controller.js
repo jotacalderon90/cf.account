@@ -86,6 +86,16 @@ module.exports = {
       logger.error(error);
       response.APIError(req, res, constants.error.rest.rolesFind + ' ' + constants.error.controlador);
     }
+  },
+
+  total: async function (req, res) {
+    try {
+      const data = await service.total();
+      res.send({ data: data });
+    } catch (error) {
+      logger.error(error);
+      response.APIError(req, res, constants.error.rest.rolesTotal + ' ' + constants.error.controlador);
+    }
   }
 
 };

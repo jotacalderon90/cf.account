@@ -119,16 +119,29 @@ module.exports = {
 		}
   },
   
-  renderAdmin: async function(req, res) {
+  renderAdminUsers: async function(req, res) {
     try{
       
-      res.render('account/admin/_', { 
+      res.render('account/06.admin_users/_', { 
         user: req.user
       });
       
 		}catch(error){
       logger.error(error);
-			response.APIError(req,res,constants.error.rest.renderAdmin + ' ' + constants.error.controlador);
+			response.APIError(req,res,constants.error.rest.renderAdminUsers + ' ' + constants.error.controlador);
+		}
+  },
+  
+  renderAdminRoles: async function(req, res) {
+    try{
+      
+      res.render('account/07.admin_roles/_', { 
+        user: req.user
+      });
+      
+		}catch(error){
+      logger.error(error);
+			response.APIError(req,res,constants.error.rest.renderAdminRoles + ' ' + constants.error.controlador);
 		}
   },
   
