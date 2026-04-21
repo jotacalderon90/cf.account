@@ -12,6 +12,29 @@ module.exports = {
    *       - Usuarios
    *     summary: Crear cuenta de usuario
    *     description: Crea una nueva cuenta de usuario, una vez logueado este servicio sirve para actualizar datos y eliminar cuenta
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               email:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *               nickname:
+   *                 type: string
+   *               button:
+   *                 type: string
+   *                 description: Enviar 'UPDATE' o 'DELETE' para interactuar con perfil
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/account')
 	//@method(['post'])
@@ -27,6 +50,13 @@ module.exports = {
    *       - Usuarios
    *     summary: Obtener información de usuario logueado
    *     description: Obtiene la información de usuario logueado o null si no está logueado
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/account')
 	//@method(['get'])
@@ -42,6 +72,19 @@ module.exports = {
    *       - Usuarios
    *     summary: Activar cuenta de usuario
    *     description: Activa una cuenta de usuario mediante el hash de activación enviado por correo
+   *     parameters:
+   *       - in: path
+   *         name: hash
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/account/activate/:hash')
 	//@method(['get'])
@@ -57,6 +100,22 @@ module.exports = {
    *       - Usuarios
    *     summary: Solicitar recuperación de contraseña
    *     description: Envía un correo con instrucciones para recuperar la contraseña olvidada
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               email:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/account/forget')
 	//@method(['post'])
@@ -72,6 +131,26 @@ module.exports = {
    *       - Usuarios
    *     summary: Recuperar contraseña
    *     description: Restablece la contraseña usando el token de recuperación
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               hash:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *               password2:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/account/recovery')
 	//@method(['post'])
@@ -88,12 +167,25 @@ module.exports = {
    *     summary: Iniciar sesión
    *     description: Autentica a un usuario y crea una sesión     
    *     requestBody:
+   *       required: true
    *       content:
    *         application/json:
-   *           example:
-   *             email: usuario@ejemplo.com
-   *             password: password123
-   *             jwt: true
+   *           schema:
+   *             type: object
+   *             properties:
+   *               email:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *               jwt:
+   *                 type: boolean
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/account/login')
 	//@method(['post'])
@@ -109,6 +201,13 @@ module.exports = {
    *       - Usuarios
    *     summary: Cerrar sesión
    *     description: Cierra la sesión del usuario actual
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/account/logout')
 	//@method(['get'])

@@ -3,7 +3,7 @@
 const controlador = require('./lib/01.default/controller');
 
 module.exports = {
-	
+
   /**
    * @swagger
    * /favicon.ico:
@@ -12,13 +12,21 @@ module.exports = {
    *       - Default
    *     summary: obtener favicon
    *     description: obtiene favicon
+   *     responses:
+   *       200:
+   *         description: Icono del sitio
+   *         content:
+   *           image/x-icon:
+   *             schema:
+   *               type: string
+   *               format: binary
    */
-	//@route('/favicon.ico')
-	//@method(['get'])
-	favicon: function(req,res){
-		controlador.favicon(req,res);
-	},
-	
+  //@route('/favicon.ico')
+  //@method(['get'])
+  favicon: function (req, res) {
+    controlador.favicon(req, res);
+  },
+
   /**
    * @swagger
    * /robots.txt:
@@ -27,11 +35,18 @@ module.exports = {
    *       - Default
    *     summary: obtener robots
    *     description: obtiene robots.txt
+   *     responses:
+   *       200:
+   *         description: Respuesta en texto plano
+   *         content:
+   *           text/plain:
+   *             schema:
+   *               type: string
    */
-	//@route('/robots.txt')
-	//@method(['get'])
-	robots: function(req,res){
-		controlador.robots(req,res);
-	}
-	
+  //@route('/robots.txt')
+  //@method(['get'])
+  robots: function (req, res) {
+    controlador.robots(req, res);
+  }
+
 };

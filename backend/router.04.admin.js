@@ -12,6 +12,13 @@ module.exports = {
    *       - Administrador
    *     summary: Obtener seguimiento de usuarios
    *     description: Obtiene información de seguimiento y actividad de usuarios (solo root)
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/admin/account/tracking')
 	//@method(['get'])
@@ -28,6 +35,18 @@ module.exports = {
    *       - Administrador
    *     summary: Contar total de usuarios
    *     description: Obtiene el número total de usuarios registrados
+   *     parameters:
+   *       - in: query
+   *         name: roles
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/admin/account/total')
 	//@method(['get'])
@@ -44,6 +63,22 @@ module.exports = {
    *       - Administrador
    *     summary: Obtener colección de usuarios
    *     description: Obtiene la lista completa de usuarios con sus datos
+   *     parameters:
+   *       - in: query
+   *         name: roles
+   *         schema:
+   *           type: string
+   *       - in: query
+   *         name: skip
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/admin/account/collection')
 	//@method(['get'])
@@ -60,6 +95,13 @@ module.exports = {
    *       - Administrador
    *     summary: Obtener colección de etiquetas
    *     description: Obtiene la lista de etiquetas asociadas a usuarios
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/admin/account/tag/collection')
 	//@method(['get'])
@@ -76,6 +118,24 @@ module.exports = {
    *       - Administrador
    *     summary: Crear cuenta de administrador
    *     description: Crea una nueva cuenta con permisos de administrador
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               email:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/admin/account/createadmin')
 	//@method(['post'])
@@ -91,6 +151,24 @@ module.exports = {
    *       - Administrador
    *     summary: Crear usuario por administrador
    *     description: Permite a un administrador crear una nueva cuenta de usuario
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               email:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/admin/account')
 	//@method(['post'])
@@ -107,6 +185,33 @@ module.exports = {
    *       - Administrador
    *     summary: Actualizar usuario por administrador
    *     description: Permite a un administrador actualizar los datos de un usuario existente
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               roles:
+   *                 type: array
+   *                 items:
+   *                   type: string
+   *               activate:
+   *                 type: boolean
+   *               password:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/admin/account/:id')
 	//@method(['put'])
@@ -123,6 +228,19 @@ module.exports = {
    *       - Administrador
    *     summary: Eliminar usuario por administrador
    *     description: Permite a un administrador eliminar una cuenta de usuario
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
 	//@route('/api/admin/account/:id')
 	//@method(['delete'])

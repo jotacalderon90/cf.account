@@ -11,65 +11,67 @@ const session = require('../session');
 const jwt = require('../jwt');
 
 module.exports = {
-  
-  googleoauth: async function(req, res) {
-    try{
-      
+
+  googleoauth: async function (req, res) {
+    try {
+
       const respuesta = await service.googleoauth();
-      
-      res.send({data: respuesta});
-      
-		}catch(error){
-			logger.error(error);
-			response.renderError(req, res, constants.error.rest.googleoauth + ' ' + constants.error.controlador);
-		}
+
+      res.send({ data: respuesta });
+
+    } catch (error) {
+      logger.error(error);
+      response.renderError(req, res, constants.error.rest.googleoauth + ' ' + constants.error.controlador);
+    }
   },
-  
-  googleoauthcallback: async function(req, res) {
-    try{
-      
+
+  googleoauthcallback: async function (req, res) {
+    try {
+
       const parseResult = validator.googleoauthcallback.safeParse(req.query);
-      
+
       if (!parseResult.success) {
+        logger.error(parseResult);
         response.renderError(req, res, constants.error.validacion);
         return;
       }
-      
+
       const userLogged = await service.googleoauthcallback(parseResult.data);
-      
+
       const token = jwt.encode(userLogged._id);
-      
-			session.create(req, res, token, userLogged.email);
-      
+
+      session.create(req, res, token, userLogged.email);
+
       res.redirect('/');
-      
-		}catch(error){
-			logger.error(error);
-			response.renderError(req, res, constants.error.rest.googleoauthcallback + ' ' + constants.error.controlador);
-		}
+
+    } catch (error) {
+      logger.error(error);
+      response.renderError(req, res, constants.error.rest.googleoauthcallback + ' ' + constants.error.controlador);
+    }
   },
-  
-  send: async function(req, res) {
-    try{
-      
+
+  send: async function (req, res) {
+    try {
+
       const parseResult = validator.send.safeParse(req.query);
-      
+
       if (!parseResult.success) {
+        logger.error(parseResult);
         response.renderError(req, res, constants.error.validacion);
         return;
       }
-      
+
       const respuesta = await service.send({
         ...parseResult.data,
         tokens: req.user.google.tokens
       });
-      
-      res.send({data: respuesta});
-      
-		}catch(error){
-			logger.error(error);
-			response.renderError(req, res, constants.error.rest.send + ' ' + constants.error.controlador);
-		}
+
+      res.send({ data: respuesta });
+
+    } catch (error) {
+      logger.error(error);
+      response.APIError(req, res, constants.error.rest.send + ' ' + constants.error.controlador);
+    }
   }
-  
+
 }
