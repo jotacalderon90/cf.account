@@ -1,4 +1,4 @@
-const object = function() {
+const object = function () {
 	this.name = 'account';
 	this.query = {};
 	this.options = {
@@ -19,30 +19,48 @@ const object = function() {
 		create: createService('POST', '/api/admin/' + this.name),
 		update: createService('PUT', '/api/admin/' + this.name + '/:id'),
 		delete: createService('DELETE', '/api/admin/' + this.name + '/:id'),
-		tag: createService('GET', '/api/admin/' + this.name + '/tag/collection')
+		tag: createService('GET', '/api/admin/' + this.name + '/tag/collection'),
+		roles: createService('GET', '/api/admin/roles/collection')
 	}
 
-	/*this.scroller = '#account_modal_admin .modal-content';
-	$(this.scroller).scroll(() => {
-		const p = $(this.scroller)[0].scrollHeight - $(document).height();
-		if (($(this.scroller).scrollTop() * 100) / p >= 99) {
-			if (this.obtained < this.cant && !this.obtaining) {
-				this.getCollection();
-			}
-		}
-	});*/
-	
 	this.coll = [];
+	this.allRoles = [];
+	this.selectedUser = null;
+	this.userRoles = [];
+	this.filterText = '';
+
+	/*this.scroller = '#account_modal_admin .modal-content';
+		 $(this.scroller).scroll(() => {
+				 const p = $(this.scroller)[0].scrollHeight - $(document).height();
+				 if (($(this.scroller).scrollTop() * 100) / p >= 99) {
+						 if (this.obtained < this.cant && !this.obtaining) {
+								 this.getCollection();
+						 }
+				 }
+		 });*/
 }
 
-object.prototype.start = async function(parent){
+// Propiedad computada simulada para filtrado local
+Object.defineProperty(object.prototype, 'filteredColl', {
+	get: function () {
+		if (!this.filterText) return this.coll;
+		const filter = this.filterText.toLowerCase();
+		return this.coll.filter(row =>
+			(row.email && row.email.toLowerCase().includes(filter)) ||
+			(row.roles && row.roles.some(r => r.toLowerCase().includes(filter)))
+		);
+	}
+});
+
+object.prototype.start = async function (parent) {
 	this.parent = parent;
 	try {
 		const tags = await this.services.tag();
-		if(tags.error){
-			throw(tags.error);
+		if (tags.error) {
+			throw (tags.error);
 		}
 		this.tags = tags.data;
+		await this.getRoles();
 		await this.refresh();
 	} catch (e) {
 		alert(e);
@@ -50,11 +68,21 @@ object.prototype.start = async function(parent){
 	}
 }
 
-object.prototype.hasRole = function(role){
+object.prototype.getRoles = async function () {
+	try {
+		const res = await this.services.roles({ skip: 0 }); // Assuming small enough for now, or fetch all
+		if (res.error) throw res.error;
+		this.allRoles = res.data;
+	} catch (e) {
+		console.error("Error fetching roles:", e);
+	}
+}
+
+object.prototype.hasRole = function (role) {
 	return roles.indexOf(role) > -1;
 }
 
-object.prototype.refresh = async function(roles) {
+object.prototype.refresh = async function (roles) {
 	if (roles) {
 		this.query.roles = roles;
 	} else {
@@ -66,11 +94,11 @@ object.prototype.refresh = async function(roles) {
 	await this.getTotal();
 }
 
-object.prototype.getTotal = async function() {
+object.prototype.getTotal = async function () {
 	try {
 		const cant = await this.services.total(this.paramsToGetTotal());
-		if(cant.error){
-			throw(cant.error);
+		if (cant.error) {
+			throw (cant.error);
 		}
 		this.cant = cant.data;
 		this.getCollection();
@@ -80,23 +108,23 @@ object.prototype.getTotal = async function() {
 	}
 }
 
-object.prototype.paramsToGetTotal = function() {
+object.prototype.paramsToGetTotal = function () {
 	/*return {
 		query: JSON.stringify(this.query)
 	};*/
-  return {
-    roles: this.query.roles || ''
-  };
+	return {
+		roles: this.query.roles || ''
+	};
 }
 
-object.prototype.getCollection = async function() {
+object.prototype.getCollection = async function () {
 	this.parent.loader.active = true;
 	try {
 		this.obtaining = true;
 
 		const coll = await this.services.collection(this.paramsToGetCollection());
-		if(coll.error){
-			throw(coll.error);
+		if (coll.error) {
+			throw (coll.error);
 		}
 		this.coll = this.coll.concat(coll.data);
 		this.obtained = this.coll.length;
@@ -108,19 +136,19 @@ object.prototype.getCollection = async function() {
 	this.parent.loader.active = false;
 }
 
-object.prototype.paramsToGetCollection = function() {
-  return {
-    roles: this.query.roles || '',
-    skip: this.obtained
-  };
-  /*
+object.prototype.paramsToGetCollection = function () {
 	return {
-		query: JSON.stringify(this.query),
-		options: JSON.stringify(this.getOptions())
-	};*/
+		roles: this.query.roles || '',
+		skip: this.obtained
+	};
+	/*
+	  return {
+		  query: JSON.stringify(this.query),
+		  options: JSON.stringify(this.getOptions())
+	  };*/
 }
 
-object.prototype.getOptions = function() {
+object.prototype.getOptions = function () {
 	return {
 		...this.options,
 		skip: this.obtained,
@@ -128,24 +156,28 @@ object.prototype.getOptions = function() {
 	};
 }
 
-object.prototype.changeRoles = async function(row) {
+object.prototype.changeRoles = async function (row) {
+	this.selectedUser = row;
+	this.userRoles = [...(row.roles || [])];
+	const modal = new bootstrap.Modal(document.getElementById('rolesModal'));
+	modal.show();
+}
+
+object.prototype.saveRoles = async function () {
 	try {
-		console.log(this.parent);
-		const newroles = await this.parent.prompt.execute('Actualizar roles', 'text', 'Ingrese roles separados por coma', row.roles.join(','));
-		if (newroles.trim() == '') {
-			return;
-		}
 		this.parent.loader.active = true;
 		const update = await this.services.update({
-			id: row._id
+			id: this.selectedUser._id
 		}, {
 			type: 'roles',
-			roles: newroles.split(',')
+			roles: this.userRoles
 		});
-		if(update.error){
-			throw(update.error);
+		if (update.error) {
+			throw (update.error);
 		}
-		alert("Documento actualizado correctamente");
+
+		bootstrap.Modal.getInstance(document.getElementById('rolesModal')).hide();
+		alert("Roles actualizados correctamente");
 		this.refresh();
 	} catch (e) {
 		alert(e.error || e);
@@ -154,7 +186,7 @@ object.prototype.changeRoles = async function(row) {
 	this.parent.loader.active = false;
 }
 
-object.prototype.activate = async function(row) {
+object.prototype.activate = async function (row) {
 	try {
 		const q = (row.activate) ? "Deshabilitar" : "Habilitar";
 		if (!confirm('Confirma ' + q)) {
@@ -165,10 +197,10 @@ object.prototype.activate = async function(row) {
 			id: row._id
 		}, {
 			type: 'activate',
-      activate: !row.activate
+			activate: !row.activate
 		});
-		if(update.error){
-			throw(update.error);
+		if (update.error) {
+			throw (update.error);
 		}
 		alert("Documento actualizado correctamente");
 		this.refresh();
@@ -179,7 +211,7 @@ object.prototype.activate = async function(row) {
 	this.parent.loader.active = false;
 }
 
-object.prototype.changePassword = async function(row) {
+object.prototype.changePassword = async function (row) {
 	try {
 		if (!confirm('Confirma querer cambiar contraseña')) {
 			return;
@@ -195,8 +227,8 @@ object.prototype.changePassword = async function(row) {
 			type: 'password',
 			password: newpassword
 		});
-		if(update.error){
-			throw(update.error);
+		if (update.error) {
+			throw (update.error);
 		}
 		alert("Documento actualizado correctamente");
 		this.refresh();
@@ -207,7 +239,7 @@ object.prototype.changePassword = async function(row) {
 	this.parent.loader.active = false;
 }
 
-object.prototype.enableRecovery = async function(row) {
+object.prototype.enableRecovery = async function (row) {
 	try {
 		if (!confirm('Confirma enviar correo de recuperación')) {
 			return;
@@ -218,8 +250,8 @@ object.prototype.enableRecovery = async function(row) {
 		}, {
 			type: 'notify'
 		});
-		if(update.error){
-			throw(update.error);
+		if (update.error) {
+			throw (update.error);
 		}
 		alert("Notificacion enviada correctamente");
 	} catch (e) {
@@ -229,7 +261,7 @@ object.prototype.enableRecovery = async function(row) {
 	this.parent.loader.active = false;
 }
 
-object.prototype.delete = async function(id) {
+object.prototype.delete = async function (id) {
 	try {
 		if (!confirm("Confirme eliminación del documento")) {
 			return;
@@ -238,8 +270,8 @@ object.prototype.delete = async function(id) {
 		const del = await this.services.delete({
 			id: id || this.doc._id
 		});
-		if(del.error){
-			throw(del.error);
+		if (del.error) {
+			throw (del.error);
 		}
 		alert("Documento eliminado correctamente");
 		this.refresh();
@@ -250,38 +282,38 @@ object.prototype.delete = async function(id) {
 	this.parent.loader.active = false;
 }
 
-object.prototype.create = async function(id) {
+object.prototype.create = async function (id) {
 	try {
-		
+
 		const email = await this.parent.prompt.execute('Nuevo usuario', 'text', 'Ingrese email', "");
 		if (email.trim() == '') {
 			return;
 		}
-		
+
 		await wait(500);
-		
+
 		const password = await this.parent.prompt.execute('Ingrese password', 'text', 'Ingrese password', email);
 		if (password.trim() == '') {
 			return;
 		}
-		
+
 		if (!confirm("Confirme creación del documento")) {
 			return;
 		}
-		
+
 		this.parent.loader.active = true;
 		const service = await this.services.create({}, {
 			email: email,
 			password: password
 		});
-		
-		if(service.error){
-			throw(service.error);
+
+		if (service.error) {
+			throw (service.error);
 		}
-		
+
 		alert("Documento creado correctamente");
 		this.refresh();
-		
+
 	} catch (e) {
 		alert(e.error || e);
 		console.log(e);
@@ -289,8 +321,8 @@ object.prototype.create = async function(id) {
 	}
 }
 
-object.prototype.host_database = function() {
-  return host_database + '/objetos/user/';
+object.prototype.host_database = function () {
+	return host_database + '/objetos/user/';
 }
 
 app.modules.object = object;
