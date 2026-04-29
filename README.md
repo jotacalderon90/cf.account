@@ -1,6 +1,6 @@
 # Sistema de Cuentas
 
-`cf.account` es el segundo componente del **proyecto Trascender**, encargado de la **gestión de identidad, autenticación y control de acceso** dentro del ecosistema.
+`cf.account` es el segundo componente del [**proyecto trascender**](https://github.com/jotacalderon90/), encargado de la **gestión de identidad, autenticación y control de acceso** dentro del ecosistema.
 
 Su propósito es centralizar el manejo de cuentas de usuario, permitiendo que múltiples aplicaciones compartan un sistema unificado de autenticación, autorización y gestión de sesiones.
 
