@@ -62,7 +62,9 @@
                   <th>Roles</th>
                   <th class="text-center">Estado</th>
                   <th class="text-center">Acciones</th>
+                  <!--if:process.env.HOST_DATABASE-->
                   <th class="text-center" style="width: 60px;">DB</th>
+                  <!--/if-->
                   <th class="text-center" style="width: 60px;">Eliminar</th>
                 </tr>
               </thead>
@@ -104,11 +106,13 @@
                       <!--/if-->
                     </div>
                   </td>
+                  <!--if:process.env.HOST_DATABASE-->
                   <td class="text-center">
                     <a target="_blank" class="btn btn-sm btn-outline-primary" :href="object.host_database() + row._id">
                       <i class="fa fa-database"></i>
                     </a>
                   </td>
+                  <!--/if-->
                   <td class="text-center">
                     <button class="btn btn-sm btn-outline-danger" v-on:click="object.delete(row._id)">
                       <i class="fa fa-trash"></i>

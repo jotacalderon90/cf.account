@@ -65,9 +65,11 @@
                       <button class="btn btn-outline-secondary" v-on:click="object.edit(row)" title="Editar rol">
                         <i class="fa fa-edit"></i>
                       </button>
+                      <!--if:process.env.HOST_DATABASE-->
                       <a target="_blank" class="btn btn-outline-primary" :href="object.host_database() + row._id" title="Ver JSON en DB">
                         <i class="fa fa-database"></i>
                       </a>
+                      <!--/if-->
                       <button class="btn btn-outline-danger" v-on:click="object.delete(row._id)" title="Eliminar rol">
                         <i class="fa fa-trash"></i>
                       </button>
