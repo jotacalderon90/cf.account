@@ -22,9 +22,7 @@ module.exports = {
    */
   //@route('/favicon.ico')
   //@method(['get'])
-  favicon: function (req, res) {
-    controlador.favicon(req, res);
-  },
+  favicon: controlador.favicon,
 
   /**
    * @swagger
@@ -44,7 +42,5 @@ module.exports = {
    */
   //@route('/robots.txt')
   //@method(['get'])
-  robots: function (req, res) {
-    controlador.robots(req, res);
-  },
+  robots: controlador.robots,
 };

@@ -21,9 +21,7 @@ module.exports = {
    */
   //@route('/api/account/googleoauth')
   //@method(['get'])
-  googleoauth: async function (req, res) {
-    controlador.googleoauth(req, res);
-  },
+  googleoauth: controlador.googleoauth,
 
   /**
    * @swagger
@@ -49,9 +47,7 @@ module.exports = {
    */
   //@route('/api/account/googleoauth/callback')
   //@method(['get'])
-  googleoauthcallback: async function (req, res) {
-    controlador.googleoauthcallback(req, res);
-  },
+  googleoauthcallback: controlador.googleoauthcallback,
 
   /**
    * @swagger
@@ -79,7 +75,5 @@ module.exports = {
   //@route('/api/google/send')
   //@method(['get'])
   //@roles(['root'])
-  send: async function (req, res) {
-    controlador.send(req, res);
-  },
+  send: controlador.send,
 };

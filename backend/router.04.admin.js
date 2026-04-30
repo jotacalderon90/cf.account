@@ -23,9 +23,7 @@ module.exports = {
   //@route('/api/admin/account/tracking')
   //@method(['get'])
   //@roles(['root'])
-  tracking: async function (req, res) {
-    controlador.tracking(req, res);
-  },
+  tracking: controlador.tracking,
 
   /**
    * @swagger
@@ -52,9 +50,7 @@ module.exports = {
   //@route('/api/admin/account/total')
   //@method(['get'])
   //@roles(['root','admin'])
-  count: async function (req, res) {
-    controlador.count(req, res);
-  },
+  count: controlador.count,
 
   /**
    * @swagger
@@ -85,9 +81,7 @@ module.exports = {
   //@route('/api/admin/account/collection')
   //@method(['get'])
   //@roles(['root','admin'])
-  collection: async function (req, res) {
-    controlador.collection(req, res);
-  },
+  collection: controlador.collection,
 
   /**
    * @swagger
@@ -109,9 +103,7 @@ module.exports = {
   //@route('/api/admin/account/tag/collection')
   //@method(['get'])
   //@roles(['root','admin'])
-  tag: async function (req, res) {
-    controlador.tag(req, res);
-  },
+  tag: controlador.tag,
 
   /**
    * @swagger
@@ -142,9 +134,7 @@ module.exports = {
    */
   //@route('/api/admin/account/createadmin')
   //@method(['post'])
-  createadmin: async function (req, res) {
-    controlador.createadmin(req, res);
-  },
+  createadmin: controlador.createadmin,
 
   /**
    * @swagger
@@ -177,9 +167,7 @@ module.exports = {
   //@route('/api/admin/account')
   //@method(['post'])
   //@roles(['root','admin'])
-  createbyadmin: async function (req, res) {
-    controlador.createbyadmin(req, res);
-  },
+  createbyadmin: controlador.createbyadmin,
 
   /**
    * @swagger
@@ -221,9 +209,7 @@ module.exports = {
   //@route('/api/admin/account/:id')
   //@method(['put'])
   //@roles(['root','admin'])
-  updatebyadmin: async function (req, res) {
-    controlador.updatebyadmin(req, res);
-  },
+  updatebyadmin: controlador.updatebyadmin,
 
   /**
    * @swagger
@@ -251,7 +237,5 @@ module.exports = {
   //@route('/api/admin/account/:id')
   //@method(['delete'])
   //@roles(['root','admin'])
-  deletebyadmin: async function (req, res) {
-    controlador.deletebyadmin(req, res);
-  },
+  deletebyadmin: controlador.deletebyadmin,
 };

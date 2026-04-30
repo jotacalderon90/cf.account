@@ -23,9 +23,7 @@ module.exports = {
   //@route('/')
   //@method(['get'])
   //@roles(['root','admin','user'])
-  renderIndex: function (req, res) {
-    controlador.renderIndex(req, res);
-  },
+  renderIndex: controlador.renderIndex,
 
   /**
    * @swagger
@@ -45,9 +43,7 @@ module.exports = {
    */
   //@route('/form')
   //@method(['get'])
-  renderForm: function (req, res) {
-    controlador.renderForm(req, res);
-  },
+  renderForm: controlador.renderForm,
 
   /**
    * @swagger
@@ -67,9 +63,7 @@ module.exports = {
    */
   //@route('/login')
   //@method(['get'])
-  renderLogin: function (req, res) {
-    controlador.renderLogin(req, res);
-  },
+  renderLogin: controlador.renderLogin,
 
   /**
    * @swagger
@@ -89,9 +83,7 @@ module.exports = {
    */
   //@route('/forget')
   //@method(['get'])
-  renderForget: function (req, res) {
-    controlador.renderForget(req, res);
-  },
+  renderForget: controlador.renderForget,
 
   /**
    * @swagger
@@ -117,9 +109,7 @@ module.exports = {
    */
   //@route('/recovery')
   //@method(['get'])
-  renderRecovery: function (req, res) {
-    controlador.renderRecovery(req, res);
-  },
+  renderRecovery: controlador.renderRecovery,
 
   /**
    * @swagger
@@ -139,9 +129,7 @@ module.exports = {
    */
   //@route('/politicas-de-privacidad')
   //@method(['get'])
-  renderPoliticasPrivacidad: function (req, res) {
-    controlador.renderPoliticasPrivacidad(req, res);
-  },
+  renderPoliticasPrivacidad: controlador.renderPoliticasPrivacidad,
 
   /**
    * @swagger
@@ -161,9 +149,7 @@ module.exports = {
    */
   //@route('/condiciones-del-servicio')
   //@method(['get'])
-  renderCondicionesServicio: function (req, res) {
-    controlador.renderCondicionesServicio(req, res);
-  },
+  renderCondicionesServicio: controlador.renderCondicionesServicio,
 
   /**
    * @swagger
@@ -185,9 +171,7 @@ module.exports = {
   //@route('/admin/roles')
   //@method(['get'])
   //@roles(['root','admin'])
-  renderAdminRoles: function (req, res) {
-    controlador.renderAdminRoles(req, res);
-  },
+  renderAdminRoles: controlador.renderAdminRoles,
 
   /**
    * @swagger
@@ -209,9 +193,7 @@ module.exports = {
   //@route('/admin/users')
   //@method(['get'])
   //@roles(['root','admin'])
-  renderAdminUsers: function (req, res) {
-    controlador.renderAdminUsers(req, res);
-  },
+  renderAdminUsers: controlador.renderAdminUsers,
 
   /**
    * @swagger
@@ -231,7 +213,5 @@ module.exports = {
    */
   //@route('/form-admin')
   //@method(['get'])
-  renderFormAdmin: function (req, res) {
-    controlador.renderFormAdmin(req, res);
-  },
+  renderFormAdmin: controlador.renderFormAdmin,
 };

@@ -23,9 +23,7 @@ module.exports = {
   //@route('/api/admin/roles/collection')
   //@method(['get'])
   //@roles(['root'])
-  collection: async function (req, res) {
-    controlador.collection(req, res);
-  },
+  collection: controlador.collection,
 
   /**
    * @swagger
@@ -47,9 +45,7 @@ module.exports = {
   //@route('/api/admin/roles/total')
   //@method(['get'])
   //@roles(['root'])
-  total: async function (req, res) {
-    controlador.total(req, res);
-  },
+  total: controlador.total,
 
   /**
    * @swagger
@@ -82,9 +78,7 @@ module.exports = {
   //@route('/api/admin/roles')
   //@method(['post'])
   //@roles(['root'])
-  create: async function (req, res) {
-    controlador.create(req, res);
-  },
+  create: controlador.create,
 
   /**
    * @swagger
@@ -112,9 +106,7 @@ module.exports = {
   //@route('/api/admin/roles/:id')
   //@method(['get'])
   //@roles(['root'])
-  read: async function (req, res) {
-    controlador.read(req, res);
-  },
+  read: controlador.read,
 
   /**
    * @swagger
@@ -152,9 +144,7 @@ module.exports = {
   //@route('/api/admin/roles/:id')
   //@method(['put'])
   //@roles(['root'])
-  update: async function (req, res) {
-    controlador.update(req, res);
-  },
+  update: controlador.update,
 
   /**
    * @swagger
@@ -182,7 +172,5 @@ module.exports = {
   //@route('/api/admin/roles/:id')
   //@method(['delete'])
   //@roles(['root'])
-  delete: async function (req, res) {
-    controlador.delete(req, res);
-  },
+  delete: controlador.delete,
 };

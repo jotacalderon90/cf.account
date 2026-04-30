@@ -37,9 +37,7 @@ module.exports = {
    */
   //@route('/api/account')
   //@method(['post'])
-  create: async function (req, res) {
-    controlador.create(req, res); //internamente update+delete
-  },
+  create: controlador.create, //internamente update y delete
 
   /**
    * @swagger
@@ -59,9 +57,7 @@ module.exports = {
    */
   //@route('/api/account')
   //@method(['get'])
-  read: async function (req, res) {
-    controlador.read(req, res);
-  },
+  read: controlador.read,
 
   /**
    * @swagger
@@ -87,9 +83,7 @@ module.exports = {
    */
   //@route('/api/account/activate/:hash')
   //@method(['get'])
-  activate: function (req, res) {
-    controlador.activate(req, res);
-  },
+  activate: controlador.activate,
 
   /**
    * @swagger
@@ -118,9 +112,7 @@ module.exports = {
    */
   //@route('/api/account/forget')
   //@method(['post'])
-  forget: async function (req, res) {
-    controlador.forget(req, res);
-  },
+  forget: controlador.forget,
 
   /**
    * @swagger
@@ -153,9 +145,7 @@ module.exports = {
    */
   //@route('/api/account/recovery')
   //@method(['post'])
-  recovery: async function (req, res) {
-    controlador.recovery(req, res);
-  },
+  recovery: controlador.recovery,
 
   /**
    * @swagger
@@ -188,9 +178,7 @@ module.exports = {
    */
   //@route('/api/account/login')
   //@method(['post'])
-  login: async function (req, res) {
-    controlador.login(req, res);
-  },
+  login: controlador.login,
 
   /**
    * @swagger
@@ -210,7 +198,5 @@ module.exports = {
    */
   //@route('/api/account/logout')
   //@method(['get'])
-  logout: async function (req, res) {
-    controlador.logout(req, res);
-  },
+  logout: controlador.logout,
 };
