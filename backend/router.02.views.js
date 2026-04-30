@@ -3,7 +3,6 @@
 const controlador = require('./lib/02.views/controller');
 
 module.exports = {
-
   /**
    * @swagger
    * /:
@@ -12,6 +11,7 @@ module.exports = {
    *       - Vistas
    *     summary: obtener vista index
    *     description: obtiene vista index
+   *     x-roles: ['root','admin','user']
    *     responses:
    *       200:
    *         description: Respuesta en HTML
@@ -173,6 +173,7 @@ module.exports = {
    *       - Vistas
    *     summary: obtener vista de administración de roles
    *     description: obtiene vista de administración de roles
+   *     x-roles: ['root','admin']
    *     responses:
    *       200:
    *         description: Respuesta en HTML
@@ -196,6 +197,7 @@ module.exports = {
    *       - Vistas
    *     summary: obtener vista de administración de usuarios
    *     description: obtiene vista de administración de usuarios
+   *     x-roles: ['root','admin']
    *     responses:
    *       200:
    *         description: Respuesta en HTML
@@ -231,6 +233,5 @@ module.exports = {
   //@method(['get'])
   renderFormAdmin: function (req, res) {
     controlador.renderFormAdmin(req, res);
-  }
-
-}
+  },
+};

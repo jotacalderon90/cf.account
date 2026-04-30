@@ -3,7 +3,6 @@
 const controlador = require('./lib/06.roles/controller');
 
 module.exports = {
-	
   /**
    * @swagger
    * /api/admin/roles/collection:
@@ -12,6 +11,7 @@ module.exports = {
    *       - Roles
    *     summary: Obtener colección de roles
    *     description: Obtiene la lista completa de roles
+   *     x-roles: ['root']
    *     responses:
    *       200:
    *         description: OK
@@ -20,13 +20,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/roles/collection')
-	//@method(['get'])
-	//@roles(['root'])
-	collection: async function(req,res){
-		controlador.collection(req,res);
-	},
-	
+  //@route('/api/admin/roles/collection')
+  //@method(['get'])
+  //@roles(['root'])
+  collection: async function (req, res) {
+    controlador.collection(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/roles/total:
@@ -35,6 +35,7 @@ module.exports = {
    *       - Roles
    *     summary: Obtener total de roles
    *     description: Obtiene total de roles
+   *     x-roles: ['root']
    *     responses:
    *       200:
    *         description: OK
@@ -43,13 +44,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/roles/total')
-	//@method(['get'])
-	//@roles(['root'])
-	total: async function(req,res){
-		controlador.total(req,res);
-	},
-	
+  //@route('/api/admin/roles/total')
+  //@method(['get'])
+  //@roles(['root'])
+  total: async function (req, res) {
+    controlador.total(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/roles:
@@ -58,6 +59,7 @@ module.exports = {
    *       - Roles
    *     summary: Crear rol
    *     description: Crea un nuevo rol
+   *     x-roles: ['root']
    *     requestBody:
    *       required: true
    *       content:
@@ -77,13 +79,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/roles')
-	//@method(['post'])
-	//@roles(['root'])
-	create: async function(req,res){
-		controlador.create(req,res);
-	},
-	
+  //@route('/api/admin/roles')
+  //@method(['post'])
+  //@roles(['root'])
+  create: async function (req, res) {
+    controlador.create(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/roles/{id}:
@@ -92,6 +94,7 @@ module.exports = {
    *       - Roles
    *     summary: Obtener rol
    *     description: Obtiene la información de un rol
+   *     x-roles: ['root']
    *     parameters:
    *       - in: path
    *         name: id
@@ -106,13 +109,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/roles/:id')
-	//@method(['get'])
-	//@roles(['root'])
-	read: async function(req,res){
-		controlador.read(req,res);
-	},
-		
+  //@route('/api/admin/roles/:id')
+  //@method(['get'])
+  //@roles(['root'])
+  read: async function (req, res) {
+    controlador.read(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/roles/{id}:
@@ -121,6 +124,7 @@ module.exports = {
    *       - Roles
    *     summary: Actualizar rol
    *     description: Actualiza un rol
+   *     x-roles: ['root']
    *     parameters:
    *       - in: path
    *         name: id
@@ -145,13 +149,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/roles/:id')
-	//@method(['put'])
-	//@roles(['root'])
-	update: async function(req,res){
-		controlador.update(req,res);
-	},
-  
+  //@route('/api/admin/roles/:id')
+  //@method(['put'])
+  //@roles(['root'])
+  update: async function (req, res) {
+    controlador.update(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/roles/{id}:
@@ -160,6 +164,7 @@ module.exports = {
    *       - Roles
    *     summary: Eliminar rol
    *     description: Elimina un rol
+   *     x-roles: ['root']
    *     parameters:
    *       - in: path
    *         name: id
@@ -174,10 +179,10 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/roles/:id')
-	//@method(['delete'])
-	//@roles(['root'])
-	delete: async function(req,res){
-		controlador.delete(req, res);
-	}
-}
+  //@route('/api/admin/roles/:id')
+  //@method(['delete'])
+  //@roles(['root'])
+  delete: async function (req, res) {
+    controlador.delete(req, res);
+  },
+};

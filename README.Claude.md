@@ -184,3 +184,218 @@ Token versioning para invalidación instantánea
 Cache de validaciones (30s) para reducir carga
 Métricas de anomalías (cambios de IP, patrones sospechosos)
 Refresh tokens para sesiones largas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Arquitectura de Autenticación: Hybrid JWT + Sesión Server-Side
+
+## Descripción general
+
+Sistema de autenticación por capas que combina tokens JWT con validación de sesión server-side. Diseñado para ecosistemas multi-aplicación (SSO) donde la seguridad y la revocación instantánea son requisitos críticos.
+
+```
+┌──────────────────────────────────────────────────────────┐
+│ CLIENTE                                                   │
+│ Cookie JWT: { sub: "user-id-123" }  ← Solo ID, sin claims│
+└────────────────┬─────────────────────────────────────────┘
+                 │
+                 ▼
+┌──────────────────────────────────────────────────────────┐
+│ CADA REQUEST                                              │
+│ 1. Valida JWT (firma + expiración)                       │
+│ 2. req.session verifica: email, loginTime, IP, userAgent │
+│ 3. Llama servicio: "¿user-id-123 aún válido?"           │
+│ 4. Servicio chequea: permisos, roles, banned, etc.      │
+└──────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Capas de seguridad
+
+### Capa 1 — Cookie JWT
+- Contiene únicamente el `user_id` (sin roles, sin permisos)
+- Entregada vía cookie `httpOnly`, `secure`, `sameSite`
+- TTL corto (ej. 60 minutos)
+
+### Capa 2 — Sesión Express
+- Registra: `email`, `loginTime`, `IP`, `userAgent`
+- Detecta secuestro de sesión mediante cambios de huella digital
+- Almacenada en Redis o store persistente equivalente
+
+### Capa 3 — Servicio de validación
+- Se invoca en cada request
+- Verifica: usuario activo, roles, permisos, estado de baneo
+- Permite revocación instantánea
+
+---
+
+## Fingerprinting de sesión
+
+```javascript
+const tracking = function(req, email) {
+  req.session.email = email;
+  req.session.loginTime = new Date().toISOString();
+  req.session.userAgent = req.headers['user-agent'];
+  req.session.ip = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.ip;
+};
+```
+
+> **Nota:** Si el servidor corre detrás de un proxy o load balancer, configurar Express:
+> ```javascript
+> app.set('trust proxy', true);
+> ```
+
+---
+
+## Vectores de ataque mitigados
+
+| Vector de ataque | Mitigación |
+|---|---|
+| Robo de token por XSS | `httpOnly` impide acceso desde JavaScript |
+| CSRF | `sameSite: Strict` en la cookie |
+| Secuestro de sesión | Fingerprinting por IP + UserAgent |
+| Replay de token | El servicio de validación verifica el estado actual |
+| Escalada de privilegios | Los permisos NO se almacenan en el token |
+| Token en URL | El token vive solo en la cookie, nunca en query params |
+| Logout sin efecto | `session.destroy()` limpia sesión + invalida cookie |
+
+---
+
+## Logout
+
+El cierre de sesión completo requiere tres pasos:
+
+1. Destruir la sesión server-side (`session.destroy()`)
+2. Limpiar la cookie JWT
+3. Notificar al servicio de validación para invalidar el token del usuario
+
+---
+
+## Optimizaciones
+
+### Caché de validación (reducir llamadas al servicio)
+
+```javascript
+// Cachear resultado de validación por 30 segundos
+if (Date.now() - req.session.lastValidation < 30000) {
+  // Usar resultado cacheado
+} else {
+  // Llamar al servicio de validación
+  req.session.lastValidation = Date.now();
+  req.session.validationResult = await validateUser(userId);
+}
+```
+
+### Detección de anomalías
+
+```javascript
+if (req.session.ip && req.session.ip !== currentIp) {
+  logger.warn('Cambio de IP detectado', {
+    email: req.session.email,
+    ipAnterior: req.session.ip,
+    ipActual: currentIp
+  });
+  // Opcional: forzar re-autenticación
+}
+```
+
+---
+
+## Decisiones de diseño
+
+- **Tokens zero-trust:** El JWT es una llave, no una credencial. Todos los privilegios residen en el servidor.
+- **Cookie compartida para SSO:** Un único JWT puede autenticar en múltiples aplicaciones del mismo dominio.
+- **Revocación instantánea:** Los permisos se resuelven por request desde el servicio de validación, por lo que cualquier cambio (baneo, actualización de roles, logout) tiene efecto inmediato.
+
+---
+
+## Mejoras futuras
+
+- **Token versioning** para invalidación instantánea sin llamadas al servicio
+- **Refresh tokens** para sesiones de larga duración sin comprometer seguridad
+- **Métricas de anomalías** (frecuencia de cambio de IP, patrones de acceso inusuales)
+- **Ajuste del TTL de caché** según la sensibilidad del recurso al que se accede

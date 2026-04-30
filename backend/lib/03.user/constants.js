@@ -1,6 +1,6 @@
 'use strict';
 
-const constants  = require('../constants');
+const constants = require('../constants');
 
 constants.error.rest.create = 'Error al crear usuario';
 constants.error.rest.createEmailExiste = 'El email ingresado ya existe';

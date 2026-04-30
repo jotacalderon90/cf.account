@@ -1,6 +1,6 @@
 'use strict';
 
-const constants  = require('../constants');
+const constants = require('../constants');
 
 constants.error.rest.tracking = 'Error al generar tracking';
 constants.error.rest.count = 'Error al obtener total de usuarios';
@@ -14,7 +14,7 @@ constants.error.rest.deletebyadmin = 'Error al eliminar usuario';
 
 constants.messages.createadmin = {
   h1: 'Cuenta administrador',
-  p: 'Se ha creado el usuario administrador de manera correcta'
-}
+  p: 'Se ha creado el usuario administrador de manera correcta',
+};
 
 module.exports = constants;

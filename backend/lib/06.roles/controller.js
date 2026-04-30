@@ -8,10 +8,8 @@ const validator = require('./validator');
 const service = require('./service');
 
 module.exports = {
-
   create: async function (req, res) {
     try {
-
       const parseResult = validator.create.safeParse(req.body);
 
       if (!parseResult.success) {
@@ -30,7 +28,11 @@ module.exports = {
       }
     } catch (error) {
       logger.error(error);
-      response.APIError(req, res, constants.error.rest.rolesCreate + ' ' + constants.error.controlador);
+      response.APIError(
+        req,
+        res,
+        constants.error.rest.rolesCreate + ' ' + constants.error.controlador
+      );
     }
   },
 
@@ -40,7 +42,11 @@ module.exports = {
       res.send({ data: respuesta });
     } catch (error) {
       logger.error(error);
-      response.APIError(req, res, constants.error.rest.rolesRead + ' ' + constants.error.controlador);
+      response.APIError(
+        req,
+        res,
+        constants.error.rest.rolesRead + ' ' + constants.error.controlador
+      );
     }
   },
 
@@ -64,7 +70,11 @@ module.exports = {
       }
     } catch (error) {
       logger.error(error);
-      response.APIError(req, res, constants.error.rest.rolesUpdate + ' ' + constants.error.controlador);
+      response.APIError(
+        req,
+        res,
+        constants.error.rest.rolesUpdate + ' ' + constants.error.controlador
+      );
     }
   },
 
@@ -74,7 +84,11 @@ module.exports = {
       response.APISuccess(res);
     } catch (error) {
       logger.error(error);
-      response.APIError(req, res, constants.error.rest.rolesDelete + ' ' + constants.error.controlador);
+      response.APIError(
+        req,
+        res,
+        constants.error.rest.rolesDelete + ' ' + constants.error.controlador
+      );
     }
   },
 
@@ -84,7 +98,11 @@ module.exports = {
       res.send({ data: data });
     } catch (error) {
       logger.error(error);
-      response.APIError(req, res, constants.error.rest.rolesFind + ' ' + constants.error.controlador);
+      response.APIError(
+        req,
+        res,
+        constants.error.rest.rolesFind + ' ' + constants.error.controlador
+      );
     }
   },
 
@@ -94,8 +112,11 @@ module.exports = {
       res.send({ data: data });
     } catch (error) {
       logger.error(error);
-      response.APIError(req, res, constants.error.rest.rolesTotal + ' ' + constants.error.controlador);
+      response.APIError(
+        req,
+        res,
+        constants.error.rest.rolesTotal + ' ' + constants.error.controlador
+      );
     }
-  }
-
+  },
 };

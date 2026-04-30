@@ -3,11 +3,7 @@
 const { z } = require('zod');
 
 module.exports = {
-  
   renderRecovery: z.object({
-    hash: z
-      .string()
-      .trim()
-  })
-  
-}
+    hash: z.string().trim(),
+  }),
+};

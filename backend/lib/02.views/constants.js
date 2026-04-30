@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const constants  = require('../constants');
+const constants = require('../constants');
 
 constants.error.rest.renderIndex = 'Error al renderizar inicio';
 constants.error.rest.renderForm = 'Error al renderizar formulario';

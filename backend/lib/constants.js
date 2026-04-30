@@ -8,7 +8,7 @@ module.exports = {
     controlador: 'desde el controlador',
     servicio: 'desde el servicio',
     repositorio: 'desde el repositorio',
-    rest: {}
+    rest: {},
   },
-  messages: {}
-}
+  messages: {},
+};

@@ -3,7 +3,6 @@
 const controlador = require('./lib/01.default/controller');
 
 module.exports = {
-
   /**
    * @swagger
    * /favicon.ico:
@@ -47,6 +46,5 @@ module.exports = {
   //@method(['get'])
   robots: function (req, res) {
     controlador.robots(req, res);
-  }
-
+  },
 };

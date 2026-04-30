@@ -11,23 +11,23 @@ const session = require('../session');
 const jwt = require('../jwt');
 
 module.exports = {
-
   googleoauth: async function (req, res) {
     try {
-
       const respuesta = await service.googleoauth();
 
       res.send({ data: respuesta });
-
     } catch (error) {
       logger.error(error);
-      response.renderError(req, res, constants.error.rest.googleoauth + ' ' + constants.error.controlador);
+      response.renderError(
+        req,
+        res,
+        constants.error.rest.googleoauth + ' ' + constants.error.controlador
+      );
     }
   },
 
   googleoauthcallback: async function (req, res) {
     try {
-
       const parseResult = validator.googleoauthcallback.safeParse(req.query);
 
       if (!parseResult.success) {
@@ -43,16 +43,18 @@ module.exports = {
       session.create(req, res, token, userLogged.email);
 
       res.redirect('/');
-
     } catch (error) {
       logger.error(error);
-      response.renderError(req, res, constants.error.rest.googleoauthcallback + ' ' + constants.error.controlador);
+      response.renderError(
+        req,
+        res,
+        constants.error.rest.googleoauthcallback + ' ' + constants.error.controlador
+      );
     }
   },
 
   send: async function (req, res) {
     try {
-
       const parseResult = validator.send.safeParse(req.query);
 
       if (!parseResult.success) {
@@ -63,15 +65,13 @@ module.exports = {
 
       const respuesta = await service.send({
         ...parseResult.data,
-        tokens: req.user.google.tokens
+        tokens: req.user.google.tokens,
       });
 
       res.send({ data: respuesta });
-
     } catch (error) {
       logger.error(error);
       response.APIError(req, res, constants.error.rest.send + ' ' + constants.error.controlador);
     }
-  }
-
-}
+  },
+};

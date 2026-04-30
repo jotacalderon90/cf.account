@@ -3,7 +3,6 @@
 const controlador = require('./lib/03.user/controller');
 
 module.exports = {
-	
   /**
    * @swagger
    * /api/account:
@@ -36,12 +35,12 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/account')
-	//@method(['post'])
-	create: async function(req,res){
-    controlador.create(req,res);//internamente update+delete
-	},
-	
+  //@route('/api/account')
+  //@method(['post'])
+  create: async function (req, res) {
+    controlador.create(req, res); //internamente update+delete
+  },
+
   /**
    * @swagger
    * /api/account:
@@ -58,12 +57,12 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/account')
-	//@method(['get'])
-	read: async function(req,res){
-    controlador.read(req,res);
-	},
-		
+  //@route('/api/account')
+  //@method(['get'])
+  read: async function (req, res) {
+    controlador.read(req, res);
+  },
+
   /**
    * @swagger
    * /api/account/activate/{hash}:
@@ -86,12 +85,12 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/account/activate/:hash')
-	//@method(['get'])
-	activate: function(req,res){
-		controlador.activate(req,res);
-	},
-  
+  //@route('/api/account/activate/:hash')
+  //@method(['get'])
+  activate: function (req, res) {
+    controlador.activate(req, res);
+  },
+
   /**
    * @swagger
    * /api/account/forget:
@@ -117,12 +116,12 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/account/forget')
-	//@method(['post'])
-	forget: async function(req,res){
-		controlador.forget(req, res);
-	},
-	
+  //@route('/api/account/forget')
+  //@method(['post'])
+  forget: async function (req, res) {
+    controlador.forget(req, res);
+  },
+
   /**
    * @swagger
    * /api/account/recovery:
@@ -152,12 +151,12 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/account/recovery')
-	//@method(['post'])
-	recovery: async function(req,res){
+  //@route('/api/account/recovery')
+  //@method(['post'])
+  recovery: async function (req, res) {
     controlador.recovery(req, res);
-	},
-  
+  },
+
   /**
    * @swagger
    * /api/account/login:
@@ -165,7 +164,7 @@ module.exports = {
    *     tags:
    *       - Usuarios
    *     summary: Iniciar sesión
-   *     description: Autentica a un usuario y crea una sesión     
+   *     description: Autentica a un usuario y crea una sesión
    *     requestBody:
    *       required: true
    *       content:
@@ -187,12 +186,12 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/account/login')
-	//@method(['post'])
-	login: async function(req,res){
-		controlador.login(req,res);
-	},
-	
+  //@route('/api/account/login')
+  //@method(['post'])
+  login: async function (req, res) {
+    controlador.login(req, res);
+  },
+
   /**
    * @swagger
    * /api/account/logout:
@@ -209,10 +208,9 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/account/logout')
-	//@method(['get'])
-	logout: async function(req,res){
-		controlador.logout(req,res);
-	},
-
-}
+  //@route('/api/account/logout')
+  //@method(['get'])
+  logout: async function (req, res) {
+    controlador.logout(req, res);
+  },
+};

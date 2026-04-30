@@ -3,7 +3,6 @@
 const controlador = require('./lib/05.google/controller');
 
 module.exports = {
-	
   /**
    * @swagger
    * /api/account/googleoauth:
@@ -20,12 +19,12 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/account/googleoauth')
-	//@method(['get'])
-	googleoauth: async function(req,res){
-		controlador.googleoauth(req,res);
-	},
-  
+  //@route('/api/account/googleoauth')
+  //@method(['get'])
+  googleoauth: async function (req, res) {
+    controlador.googleoauth(req, res);
+  },
+
   /**
    * @swagger
    * /api/account/googleoauth/callback:
@@ -48,12 +47,12 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/account/googleoauth/callback')
-	//@method(['get'])
-  googleoauthcallback: async function(req,res){
-		controlador.googleoauthcallback(req,res);
-	},
-	
+  //@route('/api/account/googleoauth/callback')
+  //@method(['get'])
+  googleoauthcallback: async function (req, res) {
+    controlador.googleoauthcallback(req, res);
+  },
+
   /**
    * @swagger
    * /api/google/send:
@@ -62,6 +61,7 @@ module.exports = {
    *       - Google
    *     summary: Servicio de prueba para enviar correo
    *     description: Servicio de prueba para enviar correo
+   *     x-roles: ['root']
    *     parameters:
    *       - in: query
    *         name: raw
@@ -76,11 +76,10 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/google/send')
-	//@method(['get'])
-	//@roles(['root'])
-	send: async function(req,res){
-    controlador.send(req,res);
-	}
-	
-}
+  //@route('/api/google/send')
+  //@method(['get'])
+  //@roles(['root'])
+  send: async function (req, res) {
+    controlador.send(req, res);
+  },
+};

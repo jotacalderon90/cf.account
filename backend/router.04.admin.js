@@ -3,7 +3,6 @@
 const controlador = require('./lib/04.admin/controller');
 
 module.exports = {
-	
   /**
    * @swagger
    * /api/admin/account/tracking:
@@ -12,6 +11,7 @@ module.exports = {
    *       - Administrador
    *     summary: Obtener seguimiento de usuarios
    *     description: Obtiene información de seguimiento y actividad de usuarios (solo root)
+   *     x-roles: ['root']
    *     responses:
    *       200:
    *         description: OK
@@ -20,13 +20,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/account/tracking')
-	//@method(['get'])
-	//@roles(['root'])
-  tracking: async function(req, res) {
+  //@route('/api/admin/account/tracking')
+  //@method(['get'])
+  //@roles(['root'])
+  tracking: async function (req, res) {
     controlador.tracking(req, res);
   },
-  
+
   /**
    * @swagger
    * /api/admin/account/total:
@@ -35,6 +35,7 @@ module.exports = {
    *       - Administrador
    *     summary: Contar total de usuarios
    *     description: Obtiene el número total de usuarios registrados
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: query
    *         name: roles
@@ -48,13 +49,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/account/total')
-	//@method(['get'])
-	//@roles(['root','admin'])
-	count: async function(req,res){
-    controlador.count(req,res);
-	},
-	
+  //@route('/api/admin/account/total')
+  //@method(['get'])
+  //@roles(['root','admin'])
+  count: async function (req, res) {
+    controlador.count(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/account/collection:
@@ -63,6 +64,7 @@ module.exports = {
    *       - Administrador
    *     summary: Obtener colección de usuarios
    *     description: Obtiene la lista completa de usuarios con sus datos
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: query
    *         name: roles
@@ -80,13 +82,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/account/collection')
-	//@method(['get'])
-	//@roles(['root','admin'])
-	collection: async function(req,res){
-		controlador.collection(req,res);
-	},
-	
+  //@route('/api/admin/account/collection')
+  //@method(['get'])
+  //@roles(['root','admin'])
+  collection: async function (req, res) {
+    controlador.collection(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/account/tag/collection:
@@ -95,6 +97,7 @@ module.exports = {
    *       - Administrador
    *     summary: Obtener colección de etiquetas
    *     description: Obtiene la lista de etiquetas asociadas a usuarios
+   *     x-roles: ['root','admin']
    *     responses:
    *       200:
    *         description: OK
@@ -103,13 +106,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/account/tag/collection')
-	//@method(['get'])
-	//@roles(['root','admin'])
-	tag: async function(req,res){
-		controlador.tag(req,res);
-	},
-	
+  //@route('/api/admin/account/tag/collection')
+  //@method(['get'])
+  //@roles(['root','admin'])
+  tag: async function (req, res) {
+    controlador.tag(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/account/createadmin:
@@ -137,12 +140,12 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/account/createadmin')
-	//@method(['post'])
-	createadmin: async function(req,res){
-		controlador.createadmin(req,res);
-	},
-	
+  //@route('/api/admin/account/createadmin')
+  //@method(['post'])
+  createadmin: async function (req, res) {
+    controlador.createadmin(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/account:
@@ -151,6 +154,7 @@ module.exports = {
    *       - Administrador
    *     summary: Crear usuario por administrador
    *     description: Permite a un administrador crear una nueva cuenta de usuario
+   *     x-roles: ['root','admin']
    *     requestBody:
    *       required: true
    *       content:
@@ -170,13 +174,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/account')
-	//@method(['post'])
-	//@roles(['root','admin'])
-	createbyadmin: async function(req,res){
-		controlador.createbyadmin(req,res);
-	},
-	
+  //@route('/api/admin/account')
+  //@method(['post'])
+  //@roles(['root','admin'])
+  createbyadmin: async function (req, res) {
+    controlador.createbyadmin(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/account/{id}:
@@ -185,6 +189,7 @@ module.exports = {
    *       - Administrador
    *     summary: Actualizar usuario por administrador
    *     description: Permite a un administrador actualizar los datos de un usuario existente
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -213,13 +218,13 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/account/:id')
-	//@method(['put'])
-	//@roles(['root','admin'])
-	updatebyadmin: async function(req,res){
-		controlador.updatebyadmin(req,res);
-	},
-	
+  //@route('/api/admin/account/:id')
+  //@method(['put'])
+  //@roles(['root','admin'])
+  updatebyadmin: async function (req, res) {
+    controlador.updatebyadmin(req, res);
+  },
+
   /**
    * @swagger
    * /api/admin/account/{id}:
@@ -228,6 +233,7 @@ module.exports = {
    *       - Administrador
    *     summary: Eliminar usuario por administrador
    *     description: Permite a un administrador eliminar una cuenta de usuario
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -242,11 +248,10 @@ module.exports = {
    *             schema:
    *               type: object
    */
-	//@route('/api/admin/account/:id')
-	//@method(['delete'])
-	//@roles(['root','admin'])
-	deletebyadmin: async function(req,res){
-		controlador.deletebyadmin(req, res);
-	}
-	
-}
+  //@route('/api/admin/account/:id')
+  //@method(['delete'])
+  //@roles(['root','admin'])
+  deletebyadmin: async function (req, res) {
+    controlador.deletebyadmin(req, res);
+  },
+};
