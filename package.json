@@ -20,7 +20,7 @@
     ]
   },
   "dependencies": {
-    "cl.jotacalderon.cf.framework": "0.0.81",
+    "cl.jotacalderon.cf.framework": "0.0.82",
     "zod": "4.1.12",
     "jsonwebtoken": "9.0.2",
     "argon2": "0.44.0",

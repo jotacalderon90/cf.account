@@ -1,14 +1,14 @@
 'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-
 const redis = require('cl.jotacalderon.cf.framework/lib/redis');
 
 const constants = require('./constants');
 
-const repositorio = require('../03.user/repository');
 const hooks = require('../hooks');
 const password = require('../password');
+
+const { user } = require('../_repository/_');
 
 module.exports = {
   tracking: async function () {
@@ -45,7 +45,7 @@ module.exports = {
         query.roles = input.roles;
       }
 
-      const respuesta = await repositorio.count(query);
+      const respuesta = await user.count(query);
 
       return respuesta;
     } catch (error) {
@@ -79,7 +79,7 @@ module.exports = {
         skip: input.skip,
       };
 
-      const respuesta = await repositorio.find(query, options);
+      const respuesta = await user.find(query, options);
 
       return respuesta;
     } catch (error) {
@@ -94,7 +94,7 @@ module.exports = {
 
   tag: async function () {
     try {
-      const respuesta = await repositorio.tag();
+      const respuesta = await user.tag();
 
       return respuesta;
     } catch (error) {
@@ -109,7 +109,7 @@ module.exports = {
 
   createadmin: async function (input) {
     try {
-      const users = await repositorio.find({ email: input.email });
+      const users = await user.find({ email: input.email });
 
       if (users.length > 0) {
         return 'email ingresado ya existe';
@@ -123,7 +123,7 @@ module.exports = {
       nuevoUsuario.activate = true;
       nuevoUsuario.roles = ['root'];
 
-      const respuesta = await repositorio.create(nuevoUsuario);
+      const respuesta = await user.create(nuevoUsuario);
       logger.info(respuesta);
 
       if (!respuesta.acknowledged) {
@@ -143,7 +143,7 @@ module.exports = {
 
   createbyadmin: async function (input) {
     try {
-      const users = await repositorio.find({ email: input.email });
+      const users = await user.find({ email: input.email });
 
       if (users.length > 0) {
         return 'email ingresado ya existe';
@@ -157,7 +157,7 @@ module.exports = {
       nuevoUsuario.activate = true;
       nuevoUsuario.roles = ['user'];
 
-      const respuesta = await repositorio.create(nuevoUsuario);
+      const respuesta = await user.create(nuevoUsuario);
       logger.info(respuesta);
 
       if (!respuesta.acknowledged) {
@@ -177,7 +177,7 @@ module.exports = {
 
   updatebyadmin_roles: async function (input, id) {
     try {
-      const respuesta = await repositorio.update(input, id);
+      const respuesta = await user.update(input, id);
       logger.info(respuesta);
 
       return true;
@@ -193,7 +193,7 @@ module.exports = {
 
   updatebyadmin_activate: async function (input, id) {
     try {
-      const respuesta = await repositorio.update(input, id);
+      const respuesta = await user.update(input, id);
       logger.info(respuesta);
 
       return true;
@@ -209,10 +209,7 @@ module.exports = {
 
   updatebyadmin_password: async function (input, id) {
     try {
-      const respuesta = await repositorio.update(
-        { password: await password.hash(input.password) },
-        id
-      );
+      const respuesta = await user.update({ password: await password.hash(input.password) }, id);
       logger.info(respuesta);
 
       return true;
@@ -228,10 +225,10 @@ module.exports = {
 
   updatebyadmin_notify: async function (input, id) {
     try {
-      const user = await repositorio.read(id);
-      const hash = Buffer.from(user.password, 'utf8').toString('base64');
+      const registro = await user.read(id);
+      const hash = Buffer.from(registro.password, 'utf8').toString('base64');
 
-      hooks.mailingOnForget(user.email, hash);
+      hooks.mailingOnForget(registro.email, hash);
 
       return true;
     } catch (error) {
@@ -246,7 +243,7 @@ module.exports = {
 
   deletebyadmin: async function (input) {
     try {
-      const respuesta = await repositorio.delete(input.id);
+      const respuesta = await user.delete(input.id);
       logger.info(respuesta);
 
       if (!respuesta.acknowledged) {

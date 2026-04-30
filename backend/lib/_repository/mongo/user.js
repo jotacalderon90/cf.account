@@ -4,7 +4,7 @@ const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 
-const constants = require('./constants');
+const constants = require('../../constants');
 
 module.exports = {
   create: async function (input) {

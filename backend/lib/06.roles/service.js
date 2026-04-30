@@ -1,13 +1,15 @@
 'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
+
 const constants = require('./constants');
-const repository = require('./repository');
+
+const { role } = require('../_repository/_');
 
 module.exports = {
   create: async function (input) {
     try {
-      const result = await repository.create(input);
+      const result = await role.create(input);
       logger.info(result);
       return true;
     } catch (error) {
@@ -22,7 +24,7 @@ module.exports = {
 
   read: async function (id) {
     try {
-      const rol = await repository.read(id);
+      const rol = await role.read(id);
       return rol;
     } catch (error) {
       logger.error(error);
@@ -36,7 +38,7 @@ module.exports = {
 
   update: async function (input, id) {
     try {
-      const updated = await repository.update(input, id);
+      const updated = await role.update(input, id);
       logger.info(updated);
       return true;
     } catch (error) {
@@ -51,7 +53,7 @@ module.exports = {
 
   delete: async function (id) {
     try {
-      const deleted = await repository.delete(id);
+      const deleted = await role.delete(id);
       logger.info(deleted);
       return true;
     } catch (error) {
@@ -66,7 +68,7 @@ module.exports = {
 
   collection: async function () {
     try {
-      const roles = await repository.find({});
+      const roles = await role.find({});
       return roles;
     } catch (error) {
       logger.error(error);
@@ -80,7 +82,7 @@ module.exports = {
 
   total: async function () {
     try {
-      const roles = await repository.total({});
+      const roles = await role.total({});
       return roles;
     } catch (error) {
       logger.error(error);

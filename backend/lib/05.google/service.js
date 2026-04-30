@@ -3,10 +3,11 @@
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const constants = require('./constants');
-const googleapis = require('../googleapis');
-const hooks = require('../hooks');
 
-const repositorio = require('../03.user/repository');
+const hooks = require('../hooks');
+const googleapis = require('../googleapis');
+
+const { user } = require('../_repository/_');
 
 module.exports = {
   googleoauth: async function () {
@@ -24,11 +25,11 @@ module.exports = {
 
   googleoauthcallback: async function (input) {
     try {
-      const user = await googleapis.getUserInfo(input.code);
+      const registro = await googleapis.getUserInfo(input.code);
 
-      const email = user.emails[0].value;
+      const email = registro.emails[0].value;
 
-      const users = await repositorio.find({ email: email });
+      const users = await user.find({ email: email });
 
       let respuesta;
 
@@ -38,11 +39,11 @@ module.exports = {
         const nuevoUsuario = {};
         nuevoUsuario.email = email;
         nuevoUsuario.nickname = email;
-        nuevoUsuario.thumb = user.image.url;
+        nuevoUsuario.thumb = registro.image.url;
         nuevoUsuario.activate = true;
         nuevoUsuario.roles = ['user'];
 
-        respuesta = await repositorio.create(nuevoUsuario);
+        respuesta = await user.create(nuevoUsuario);
         logger.info(respuesta);
 
         if (!respuesta.acknowledged) {
@@ -52,9 +53,9 @@ module.exports = {
         id = respuesta.insertedId.toString();
       } else {
         const usuarioActualizar = {};
-        ((usuarioActualizar.thumb = user.image.url), (usuarioActualizar.google = user));
+        ((usuarioActualizar.thumb = registro.image.url), (usuarioActualizar.google = registro));
 
-        respuesta = await repositorio.update(usuarioActualizar, users[0]._id);
+        respuesta = await user.update(usuarioActualizar, users[0]._id);
         logger.info(respuesta);
 
         id = users[0]._id.toString();

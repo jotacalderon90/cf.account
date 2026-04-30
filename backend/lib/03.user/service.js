@@ -3,10 +3,11 @@
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const constants = require('./constants');
-const repository = require('./repository');
 
 const password = require('../password');
 const hooks = require('../hooks');
+
+const { user } = require('../_repository/_');
 
 module.exports = {
   create: async function (input) {
@@ -19,7 +20,7 @@ module.exports = {
       nuevoUsuario.activate = process.env.HOST_MAILING ? false : true;
       nuevoUsuario.roles = ['user'];
 
-      const created = await repository.create(nuevoUsuario);
+      const created = await user.create(nuevoUsuario);
       logger.info(created);
 
       if (created === constants.error.rest.createEmailExiste) {
@@ -46,14 +47,14 @@ module.exports = {
 
   read: async function (id) {
     try {
-      const user = await repository.read(id);
+      const registro = await user.read(id);
 
-      if (!user.activate) {
-        logger.error(constants.error.rest.login_desactivate + ' - ' + user.email);
+      if (!registro.activate) {
+        logger.error(constants.error.rest.login_desactivate + ' - ' + registro.email);
         return null;
       }
 
-      return user;
+      return registro;
     } catch (error) {
       logger.error(error);
       throw new Error(
@@ -64,16 +65,16 @@ module.exports = {
     }
   },
 
-  update: async function (input, user) {
+  update: async function (input, registro) {
     try {
       //validaciones de negocio para password
       let redirect = '/';
-      if (input.password != user.password) {
+      if (input.password != registro.password) {
         input.password = await password.hash(input.password);
         redirect = '/api/account/logout';
       }
 
-      const updated = await repository.update(input, user._id);
+      const updated = await user.update(input, registro._id);
       logger.info(updated);
 
       return redirect;
@@ -89,7 +90,7 @@ module.exports = {
 
   delete: async function (id) {
     try {
-      const deleted = await repository.delete(id);
+      const deleted = await user.delete(id);
       logger.info(deleted);
 
       return true;
@@ -107,13 +108,13 @@ module.exports = {
     try {
       const hash = Buffer.from(input.hash, 'base64').toString('utf8');
 
-      const users = await repository.find({ password: hash });
+      const users = await user.find({ password: hash });
 
       if (users.length != 1) {
         return 'No se encontró usuario';
       }
 
-      const respuesta = await repository.update({ activate: true }, users[0]._id);
+      const respuesta = await user.update({ activate: true }, users[0]._id);
       logger.info(respuesta);
 
       return true;
@@ -129,7 +130,7 @@ module.exports = {
 
   forget: async function (input) {
     try {
-      const users = await repository.find({ email: input.email });
+      const users = await user.find({ email: input.email });
 
       if (users.length != 1) {
         return 'No se encontró usuario';
@@ -154,7 +155,7 @@ module.exports = {
 
   recovery: async function (input) {
     try {
-      const users = await repository.find({
+      const users = await user.find({
         password: Buffer.from(input.hash, 'base64').toString('utf8'),
       });
 
@@ -162,14 +163,14 @@ module.exports = {
         throw new Error(constants.error.rest.forgetNoUser);
       }
 
-      const user = users[0];
+      const registro = users[0];
 
       const nuevosDatos = {
         password: await password.hash(input.password),
-        nickname: user.nickname,
+        nickname: registro.nickname,
       };
 
-      const respuesta = await repository.update(nuevosDatos, user._id);
+      const respuesta = await user.update(nuevosDatos, registro._id);
 
       logger.info(respuesta);
 
@@ -186,7 +187,7 @@ module.exports = {
 
   login: async function (input) {
     try {
-      const users = await repository.find({ email: input.email, activate: true });
+      const users = await user.find({ email: input.email, activate: true });
 
       if (users.length != 1) {
         return 'No se encontró usuario';
