@@ -187,7 +187,7 @@ module.exports = {
 
   login: async function (input) {
     try {
-      const users = await user.find({ email: input.email, activate: true });
+      const users = await user.find({ email: input.email });
 
       if (users.length != 1) {
         return 'No se encontró usuario';

@@ -4,7 +4,7 @@ const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 
-const constants = require('../../constants');
+const constants = require('../constants');
 
 module.exports = {
   create: async function (input) {
@@ -31,6 +31,10 @@ module.exports = {
       nuevoUsuario.created = new Date();
 
       const created = await mongodb.insertOne('user', nuevoUsuario);
+
+      if (!created.acknowledged) {
+        throw new Error(created);
+      }
 
       return created;
     } catch (error) {
@@ -64,6 +68,10 @@ module.exports = {
   delete: async function (id) {
     try {
       const deleted = await mongodb.deleteOne('user', id);
+
+      if (!deleted.acknowledged) {
+        throw new Error(deleted);
+      }
 
       return deleted;
     } catch (error) {

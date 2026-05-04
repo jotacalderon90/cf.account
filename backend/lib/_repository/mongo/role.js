@@ -4,7 +4,7 @@ const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 
-const constants = require('../../constants');
+const constants = require('../constants');
 
 module.exports = {
   create: async function (input) {
@@ -13,7 +13,7 @@ module.exports = {
       return created;
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.rolesCreate + ' ' + constants.error.repositorio);
+      throw new Error(constants.error.rest.create + ' ' + constants.error.repositorio);
     }
   },
 
@@ -23,7 +23,7 @@ module.exports = {
       return rol;
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.rolesRead + ' ' + constants.error.repositorio);
+      throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
     }
   },
 
@@ -33,7 +33,7 @@ module.exports = {
       return updated;
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.rolesUpdate + ' ' + constants.error.repositorio);
+      throw new Error(constants.error.rest.update + ' ' + constants.error.repositorio);
     }
   },
 
@@ -43,7 +43,7 @@ module.exports = {
       return deleted;
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.rolesDelete + ' ' + constants.error.repositorio);
+      throw new Error(constants.error.rest.delete + ' ' + constants.error.repositorio);
     }
   },
 
@@ -53,7 +53,7 @@ module.exports = {
       return roles;
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.rolesFind + ' ' + constants.error.repositorio);
+      throw new Error(constants.error.rest.find + ' ' + constants.error.repositorio);
     }
   },
 
@@ -63,7 +63,7 @@ module.exports = {
       return total;
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.rolesTotal + ' ' + constants.error.repositorio);
+      throw new Error(constants.error.rest.count + ' ' + constants.error.repositorio);
     }
   },
 };

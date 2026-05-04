@@ -124,7 +124,8 @@ module.exports = {
         return;
       }
 
-      await service.createbyadmin(parseResult.data);
+      const created = await service.createbyadmin(parseResult.data);
+      logger.info(created);
 
       response.APISuccess(res);
     } catch (error) {

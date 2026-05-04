@@ -17,6 +17,11 @@ module.exports = {
     password: z.string(),
   }),
 
+  createbyadmin: z.object({
+    email: z.string().trim().toLowerCase(),
+    password: z.string(),
+  }),
+
   updatebyadmin_roles: z.object({
     roles: z.array(z.string()).nonempty('El array no puede estar vacío'),
   }),
