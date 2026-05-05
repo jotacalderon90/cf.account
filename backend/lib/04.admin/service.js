@@ -69,13 +69,17 @@ module.exports = {
 
       const nuevoUsuario = {};
       nuevoUsuario.email = input.email;
-      nuevoUsuario.nickname = input.email;
       nuevoUsuario.password = await password.hash(input.password);
-      nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
-      nuevoUsuario.activate = true;
       nuevoUsuario.roles = ['root'];
+      nuevoUsuario.hash = password.random(24);
+      nuevoUsuario.activate = true;
+      nuevoUsuario.notification = true;
+      nuevoUsuario.nickname = input.email;
+      nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
 
-      return await user.create(nuevoUsuario);
+      await user.create(nuevoUsuario);
+
+      return true;
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.createadmin + ' ' + constants.error.servicio);
@@ -92,11 +96,13 @@ module.exports = {
 
       const nuevoUsuario = {};
       nuevoUsuario.email = input.email;
-      nuevoUsuario.nickname = input.email;
       nuevoUsuario.password = await password.hash(input.password);
-      nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
-      nuevoUsuario.activate = true;
       nuevoUsuario.roles = ['user'];
+      nuevoUsuario.hash = password.random(24);
+      nuevoUsuario.activate = true;
+      nuevoUsuario.notification = true;
+      nuevoUsuario.nickname = input.email;
+      nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
 
       return await user.create(nuevoUsuario);
     } catch (error) {

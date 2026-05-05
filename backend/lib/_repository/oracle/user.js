@@ -53,13 +53,22 @@ module.exports = {
     try {
       let sql = `
         SELECT
+          
           ID,
+          
           EMAIL,
-          HASH,
           PASSWORD,
-          NICKNAME,
+          ROLES,
+          
+          HASH,
+          
           ACTIVATE,
-          ROLES
+          NOTIFICATION,
+          NICKNAME,
+          THUMB,
+          
+          CREATED
+          
         FROM USUARIOS
         WHERE
           1 = 1
@@ -86,9 +95,11 @@ module.exports = {
     try {
       // Verificar si el email ya existe
       const sqlCheck = `
-        SELECT COUNT(*) AS TOTAL
+        SELECT 
+          COUNT(*) AS TOTAL
         FROM USUARIOS
-        WHERE EMAIL = :email
+        WHERE 
+          EMAIL = :email
       `;
       const check = await oracle.select(sqlCheck, { email: input.email });
 
@@ -98,17 +109,33 @@ module.exports = {
 
       const sql = `
         INSERT INTO USUARIOS (
+          
           EMAIL,
           PASSWORD,
-          NICKNAME,
+          ROLES,
+          
+          HASH,
+          
           ACTIVATE,
-          ROLES
+          NOTIFICATION,
+          NICKNAME,
+          THUMB,
+          
+          CREATED
+          
+          
         ) VALUES (
           :email,
           :password,
-          :nickname,
+          :roles,
+          
+          :hash,
+          
           :activate,
-          :roles
+          :notification,
+          :nickname,
+          :thumb,
+          SYSDATE
         )
         RETURNING ID INTO :id
       `;
@@ -116,9 +143,12 @@ module.exports = {
       const created = await oracle.execute(sql, {
         email: input.email,
         password: input.password,
-        nickname: input.nickname,
-        activate: input.activate ? 1 : 0,
         roles: input.roles.join(','),
+        hash: input.hash,
+        activate: input.activate ? 1 : 0,
+        notification: input.notification ? 1 : 0,
+        nickname: input.nickname,
+        thumb: input.thumb,
         id: {
           dir: oracledb.BIND_OUT,
           type: oracledb.NUMBER,
@@ -141,12 +171,20 @@ module.exports = {
       const sql = `
         SELECT
           ID,
+          
           EMAIL,
-          HASH,
           PASSWORD,
-          NICKNAME,
+          ROLES,
+          
+          HASH,
+          
           ACTIVATE,
-          ROLES
+          NOTIFICATION,
+          NICKNAME,
+          THUMB,
+          
+          CREATED
+          
         FROM USUARIOS
         WHERE ID = :id
       `;
@@ -168,13 +206,12 @@ module.exports = {
     try {
       let sql;
       let params;
+      let set = [];
+
+      sql = `UPDATE USUARIOS SET `;
 
       if (input.roles != undefined) {
-        sql = `
-          UPDATE USUARIOS SET
-            ROLES    = :roles
-          WHERE ID = :id
-        `;
+        set.push(`ROLES = :roles`);
 
         params = {
           roles: input.roles.join(','),
@@ -182,11 +219,7 @@ module.exports = {
       }
 
       if (input.activate != undefined) {
-        sql = `
-          UPDATE USUARIOS SET
-            ACTIVATE = :activate
-          WHERE ID = :id
-        `;
+        set.push(`ACTIVATE = :activate`);
 
         params = {
           activate: input.activate ? 1 : 0,
@@ -194,16 +227,13 @@ module.exports = {
       }
 
       if (input.password != undefined) {
-        sql = `
-          UPDATE USUARIOS SET
-            PASSWORD = :password
-          WHERE ID = :id
-        `;
+        set.push(`PASSWORD = :password`);
 
         params = {
           password: input.password,
         };
       }
+      sql += set.join(',') + ' WHERE ID = :id';
 
       const updated = await oracle.execute(sql, { ...params, id });
 
@@ -264,10 +294,21 @@ module.exports = {
     try {
       const sql = `
         SELECT
+          
           ID,
+          
           EMAIL,
+          PASSWORD,
+          ROLES,
+          
+          HASH,
+          
           ACTIVATE,
-          ROLES
+          NOTIFICATION,
+          NICKNAME,
+          THUMB,
+          CREATED
+          
         FROM USUARIOS
         OFFSET :skip ROWS FETCH NEXT ${constants.paginator} ROWS ONLY
       `;

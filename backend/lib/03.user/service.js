@@ -14,11 +14,13 @@ module.exports = {
     try {
       const nuevoUsuario = {};
       nuevoUsuario.email = input.email;
-      nuevoUsuario.nickname = input.email;
       nuevoUsuario.password = await password.hash(input.password);
-      nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
-      nuevoUsuario.activate = process.env.HOST_MAILING ? false : true;
       nuevoUsuario.roles = ['user'];
+      nuevoUsuario.hash = password.random(24);
+      nuevoUsuario.activate = process.env.HOST_MAILING ? false : true;
+      nuevoUsuario.notification = true;
+      nuevoUsuario.nickname = input.email;
+      nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
 
       const created = await user.create(nuevoUsuario);
 
@@ -30,7 +32,7 @@ module.exports = {
 
       hooks.mailingOnCreate(
         nuevoUsuario.email,
-        Buffer.from(nuevoUsuario.password, 'utf8').toString('base64')
+        Buffer.from(nuevoUsuario.hash, 'utf8').toString('base64')
       );
 
       return true;
@@ -88,7 +90,7 @@ module.exports = {
   activate: async function (input) {
     try {
       const users = await user.collection({
-        password: Buffer.from(input.hash, 'base64').toString('utf8'),
+        hash: Buffer.from(input.hash, 'base64').toString('utf8'),
       });
 
       if (users.length != 1) {
@@ -112,9 +114,10 @@ module.exports = {
         return 'No se encontró usuario';
       }
 
-      const hash = Buffer.from(userByEmail.password, 'utf8').toString('base64');
+      const newhash = password.random(24);
+      await user.update({ hash: newhash }, userByEmail.id);
 
-      hooks.mailingOnForget(userByEmail.email, hash);
+      hooks.mailingOnForget(userByEmail.email, Buffer.from(newhash, 'utf8').toString('base64'));
 
       return true;
     } catch (error) {
@@ -126,7 +129,7 @@ module.exports = {
   recovery: async function (input) {
     try {
       const users = await user.collection({
-        password: Buffer.from(input.hash, 'base64').toString('utf8'),
+        hash: Buffer.from(input.hash, 'base64').toString('utf8'),
       });
 
       if (users.length != 1) {
@@ -137,7 +140,6 @@ module.exports = {
 
       const nuevosDatos = {
         password: await password.hash(input.password),
-        nickname: registro.nickname,
       };
 
       await user.update(nuevosDatos, registro.id);
@@ -162,6 +164,7 @@ module.exports = {
       }
 
       const isValidPassword = await password.verify(input.password, userByEmail.password);
+
       if (!isValidPassword) {
         return 'Los datos ingresados no corresponden .2';
       }

@@ -5,6 +5,7 @@ const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const constants = require('./constants');
 
 const hooks = require('../hooks');
+const password = require('../password');
 const googleapis = require('../googleapis');
 
 const { user } = require('../_repository/_');
@@ -34,10 +35,13 @@ module.exports = {
       if (userByEmail === null) {
         const nuevoUsuario = {};
         nuevoUsuario.email = email;
+        nuevoUsuario.password = '';
+        nuevoUsuario.roles = ['user'];
+        nuevoUsuario.hash = password.random(24);
+        nuevoUsuario.activate = true;
+        nuevoUsuario.notification = true;
         nuevoUsuario.nickname = email;
         nuevoUsuario.thumb = registro.image.url;
-        nuevoUsuario.activate = true;
-        nuevoUsuario.roles = ['user'];
 
         respuesta = await user.create(nuevoUsuario);
 

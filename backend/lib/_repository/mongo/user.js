@@ -58,8 +58,7 @@ module.exports = {
       nuevoUsuario.thumb = input.thumb;
       nuevoUsuario.activate = input.activate;
       nuevoUsuario.roles = input.roles;
-
-      nuevoUsuario.notification = true;
+      nuevoUsuario.notification = input.notification;
       nuevoUsuario.created = new Date();
 
       const created = await mongodb.insertOne('user', nuevoUsuario);
