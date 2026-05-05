@@ -102,7 +102,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.create + ' ' + constants.error.servicio);
+      throw new Error(constants.error.rest.activate + ' ' + constants.error.servicio);
     }
   },
 
@@ -122,7 +122,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.create + ' ' + constants.error.servicio);
+      throw new Error(constants.error.rest.forget + ' ' + constants.error.servicio);
     }
   },
 
@@ -147,7 +147,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.create + ' ' + constants.error.servicio);
+      throw new Error(constants.error.rest.recovery + ' ' + constants.error.servicio);
     }
   },
 
