@@ -3,7 +3,7 @@
 const { z } = require('zod');
 
 module.exports = {
-  count: z.object({
+  total: z.object({
     roles: z.string().trim().optional(),
   }),
 

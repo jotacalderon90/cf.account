@@ -8,6 +8,32 @@ const validator = require('./validator');
 const service = require('./service');
 
 module.exports = {
+  total: async function (req, res) {
+    try {
+      const data = await service.total();
+
+      res.send({ data: data });
+    } catch (error) {
+      logger.error(error);
+      response.APIError(req, res, constants.error.rest.total + ' ' + constants.error.controlador);
+    }
+  },
+
+  collection: async function (req, res) {
+    try {
+      const data = await service.collection();
+
+      res.send({ data: data });
+    } catch (error) {
+      logger.error(error);
+      response.APIError(
+        req,
+        res,
+        constants.error.rest.collection + ' ' + constants.error.controlador
+      );
+    }
+  },
+
   create: async function (req, res) {
     try {
       const parseResult = validator.create.safeParse(req.body);
@@ -18,35 +44,23 @@ module.exports = {
         return;
       }
 
-      const respuesta = await service.create(parseResult.data);
+      await service.create(parseResult.data);
 
-      if (respuesta === true) {
-        response.APISuccess(res);
-      } else {
-        logger.error(respuesta);
-        response.APIError(req, res, respuesta);
-      }
+      response.APISuccess(res);
     } catch (error) {
       logger.error(error);
-      response.APIError(
-        req,
-        res,
-        constants.error.rest.rolesCreate + ' ' + constants.error.controlador
-      );
+      response.APIError(req, res, constants.error.rest.create + ' ' + constants.error.controlador);
     }
   },
 
   read: async function (req, res) {
     try {
       const respuesta = await service.read(req.params.id);
+
       res.send({ data: respuesta });
     } catch (error) {
       logger.error(error);
-      response.APIError(
-        req,
-        res,
-        constants.error.rest.rolesRead + ' ' + constants.error.controlador
-      );
+      response.APIError(req, res, constants.error.rest.read + ' ' + constants.error.controlador);
     }
   },
 
@@ -60,63 +74,23 @@ module.exports = {
         return;
       }
 
-      const respuesta = await service.update(parseResult.data, req.params.id);
+      await service.update(parseResult.data, req.params.id);
 
-      if (respuesta === true) {
-        response.APISuccess(res);
-      } else {
-        logger.error(respuesta);
-        response.APIError(req, res, respuesta);
-      }
+      response.APISuccess(res);
     } catch (error) {
       logger.error(error);
-      response.APIError(
-        req,
-        res,
-        constants.error.rest.rolesUpdate + ' ' + constants.error.controlador
-      );
+      response.APIError(req, res, constants.error.rest.update + ' ' + constants.error.controlador);
     }
   },
 
   delete: async function (req, res) {
     try {
       await service.delete(req.params.id);
+
       response.APISuccess(res);
     } catch (error) {
       logger.error(error);
-      response.APIError(
-        req,
-        res,
-        constants.error.rest.rolesDelete + ' ' + constants.error.controlador
-      );
-    }
-  },
-
-  collection: async function (req, res) {
-    try {
-      const data = await service.collection();
-      res.send({ data: data });
-    } catch (error) {
-      logger.error(error);
-      response.APIError(
-        req,
-        res,
-        constants.error.rest.rolesFind + ' ' + constants.error.controlador
-      );
-    }
-  },
-
-  total: async function (req, res) {
-    try {
-      const data = await service.total();
-      res.send({ data: data });
-    } catch (error) {
-      logger.error(error);
-      response.APIError(
-        req,
-        res,
-        constants.error.rest.rolesTotal + ' ' + constants.error.controlador
-      );
+      response.APIError(req, res, constants.error.rest.delete + ' ' + constants.error.controlador);
     }
   },
 };

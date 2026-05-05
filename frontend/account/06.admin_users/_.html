@@ -47,7 +47,7 @@
                 <li><a class="dropdown-item" href="#" v-on:click.prevent="object.refresh()">Todos</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li v-for="tag in object.tags">
-                  <a class="dropdown-item" href="#" v-on:click.prevent="object.refresh(tag)">{{tag}}</a>
+                  <a class="dropdown-item" href="#" v-on:click.prevent="object.refresh(tag.nombre)">{{tag.nombre}}</a>
                 </li>
               </ul>
             </div>
@@ -69,11 +69,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(row,index) in object.filteredColl" :key="row._id">
+                <tr v-for="(row,index) in object.filteredColl" :key="row.id">
                   <td class="text-muted small">{{index+1}}</td>
                   <td>
                     <div class="fw-bold">{{row.email}}</div>
-                    <div class="text-muted x-small" style="font-size: 0.75rem;">ID: {{row._id}}</div>
+                    <div class="text-muted x-small" style="font-size: 0.75rem;">ID: {{row.id}}</div>
                   </td>
                   <td v-on:dblclick="object.changeRoles(row)" title="Doble click para gestionar roles" style="cursor: pointer;">
                     <template v-if="row.roles && row.roles.length">
@@ -108,13 +108,13 @@
                   </td>
                   <!--if:process.env.HOST_DATABASE-->
                   <td class="text-center">
-                    <a target="_blank" class="btn btn-sm btn-outline-primary" :href="object.host_database() + row._id">
+                    <a target="_blank" class="btn btn-sm btn-outline-primary" :href="object.host_database() + row.id">
                       <i class="fa fa-database"></i>
                     </a>
                   </td>
                   <!--/if-->
                   <td class="text-center">
-                    <button class="btn btn-sm btn-outline-danger" v-on:click="object.delete(row._id)">
+                    <button class="btn btn-sm btn-outline-danger" v-on:click="object.delete(row.id)">
                       <i class="fa fa-trash"></i>
                     </button>
                   </td>
@@ -156,7 +156,7 @@
           </p>
           
           <div class="row g-3">
-            <div v-for="rol in object.allRoles" :key="rol._id" class="col-6">
+            <div v-for="rol in object.allRoles" :key="rol.id" class="col-6">
               <div class="form-check p-2 border rounded-3 bg-light hover-shadow transition-all">
                 <input class="form-check-input ms-0 me-2" type="checkbox" :id="'rol_' + rol.nombre" :value="rol.nombre" v-model="object.userRoles">
                 <label class="form-check-label d-block cursor-pointer" :for="'rol_' + rol.nombre">

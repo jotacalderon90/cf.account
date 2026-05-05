@@ -7,10 +7,50 @@ const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 const constants = require('../constants');
 
 module.exports = {
+  total: async function (query, options) {
+    try {
+      const total = await mongodb.count('roles', query, options);
+
+      if (isNaN(total)) {
+        throw new Error(total);
+      }
+
+      return total;
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.total + ' ' + constants.error.repositorio);
+    }
+  },
+
+  collection: async function (query, options) {
+    try {
+      const collection = await mongodb.find('roles', query, options);
+
+      if (!Array.isArray(collection)) {
+        throw new Error(collection);
+      }
+
+      return collection.map((r) => ({ ...r, id: r._id.toString() }));
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.collection + ' ' + constants.error.repositorio);
+    }
+  },
+
   create: async function (input) {
     try {
-      const created = await mongodb.insertOne('roles', input);
-      return created;
+      const newdoc = {
+        nombre: input.nombre,
+        descripcion: input.descripcion,
+      };
+
+      const created = await mongodb.insertOne('roles', newdoc);
+
+      if (!created.acknowledged) {
+        throw new Error(created);
+      }
+
+      return created.insertedId.toString();
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.create + ' ' + constants.error.repositorio);
@@ -19,8 +59,15 @@ module.exports = {
 
   read: async function (id) {
     try {
-      const rol = await mongodb.findOne('roles', id);
-      return rol;
+      const doc = await mongodb.findOne('roles', id);
+
+      if (!doc._id) {
+        throw new Error(doc);
+      }
+
+      doc.id = doc._id.toString();
+
+      return doc;
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
@@ -30,7 +77,12 @@ module.exports = {
   update: async function (input, id) {
     try {
       const updated = await mongodb.updateOne('roles', id, { $set: input });
-      return updated;
+
+      if (!updated.acknowledged) {
+        throw new Error(updated);
+      }
+
+      return true;
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.update + ' ' + constants.error.repositorio);
@@ -40,30 +92,15 @@ module.exports = {
   delete: async function (id) {
     try {
       const deleted = await mongodb.deleteOne('roles', id);
-      return deleted;
+
+      if (!deleted.acknowledged) {
+        throw new Error(deleted);
+      }
+
+      return true;
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.delete + ' ' + constants.error.repositorio);
-    }
-  },
-
-  find: async function (query, options) {
-    try {
-      const roles = await mongodb.find('roles', query, options);
-      return roles;
-    } catch (error) {
-      logger.error(error);
-      throw new Error(constants.error.rest.find + ' ' + constants.error.repositorio);
-    }
-  },
-
-  total: async function (query, options) {
-    try {
-      const total = await mongodb.count('roles', query, options);
-      return total;
-    } catch (error) {
-      logger.error(error);
-      throw new Error(constants.error.rest.count + ' ' + constants.error.repositorio);
     }
   },
 };

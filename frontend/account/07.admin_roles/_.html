@@ -52,7 +52,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(row,index) in object.filteredColl" :key="row._id">
+                <tr v-for="(row,index) in object.getCollectionView()" :key="row.id">
                   <td class="text-muted small">{{index+1}}</td>
                   <td>
                     <span class="badge rounded-pill bg-info text-dark px-3">{{row.nombre}}</span>
@@ -62,21 +62,21 @@
                   </td>
                   <td class="text-center">
                     <div class="btn-group btn-group-sm">
-                      <button class="btn btn-outline-secondary" v-on:click="object.edit(row)" title="Editar rol">
+                      <button class="btn btn-outline-secondary" v-on:click="object.update(row)" title="Editar rol">
                         <i class="fa fa-edit"></i>
                       </button>
                       <!--if:process.env.HOST_DATABASE-->
-                      <a target="_blank" class="btn btn-outline-primary" :href="object.host_database() + row._id" title="Ver JSON en DB">
+                      <a target="_blank" class="btn btn-outline-primary" :href="object.host_database() + row.id" title="Ver JSON en DB">
                         <i class="fa fa-database"></i>
                       </a>
                       <!--/if-->
-                      <button class="btn btn-outline-danger" v-on:click="object.delete(row._id)" title="Eliminar rol">
+                      <button class="btn btn-outline-danger" v-on:click="object.delete(row.id)" title="Eliminar rol">
                         <i class="fa fa-trash"></i>
                       </button>
                     </div>
                   </td>
                 </tr>
-                <tr v-if="object.filteredColl.length === 0">
+                <tr v-if="object.getCollectionView().length === 0">
                   <td colspan="4" class="text-center py-5 text-muted">
                     <i class="fa fa-info-circle me-1"></i> No se encontraron roles que coincidan con la búsqueda.
                   </td>
@@ -86,7 +86,7 @@
           </div>
           
           <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-            <span class="small text-muted">Mostrando {{object.filteredColl.length}} de {{object.cant}} roles</span>
+            <span class="small text-muted">Mostrando {{object.getCollectionView().length}} de {{object.cant}} roles</span>
             <button v-if="object.coll.length < object.cant" class="btn btn-sm btn-link text-decoration-none" v-on:click="object.getCollection()">
               Cargar más <i class="fa fa-chevron-down ms-1"></i>
             </button>

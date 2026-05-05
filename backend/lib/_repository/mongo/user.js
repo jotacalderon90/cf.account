@@ -7,13 +7,39 @@ const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 const constants = require('../constants');
 
 module.exports = {
+  total: async function (query) {
+    try {
+      const total = await mongodb.count('user', query);
+
+      if (isNaN(total)) {
+        throw new Error(total);
+      }
+
+      return total;
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.total + ' ' + constants.error.repositorio);
+    }
+  },
+
+  collection: async function (query, options) {
+    try {
+      const collection = await mongodb.find('user', query, options);
+
+      if (!Array.isArray(collection)) {
+        throw new Error(collection);
+      }
+
+      return collection.map((r) => ({ ...r, id: r._id.toString() }));
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.collection + ' ' + constants.error.repositorio);
+    }
+  },
+
   create: async function (input) {
     try {
-      const cantXEmail = await mongodb.count('user', {
-        email: input.email,
-      });
-
-      if (cantXEmail != 0) {
+      if ((await this.total({ email: input.email })) != 0) {
         return constants.error.rest.createEmailExiste;
       }
 
@@ -36,7 +62,7 @@ module.exports = {
         throw new Error(created);
       }
 
-      return created;
+      return created.insertedId.toString();
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.create + ' ' + constants.error.repositorio);
@@ -45,9 +71,15 @@ module.exports = {
 
   read: async function (id) {
     try {
-      const user = await mongodb.findOne('user', id);
+      const doc = await mongodb.findOne('user', id);
 
-      return user;
+      if (!doc._id) {
+        throw new Error(doc);
+      }
+
+      doc.id = doc._id.toString();
+
+      return doc;
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
@@ -58,7 +90,11 @@ module.exports = {
     try {
       const updated = await mongodb.updateOne('user', id, { $set: input });
 
-      return updated;
+      if (!updated.acknowledged) {
+        throw new Error(updated);
+      }
+
+      return true;
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.update + ' ' + constants.error.repositorio);
@@ -73,43 +109,55 @@ module.exports = {
         throw new Error(deleted);
       }
 
-      return deleted;
+      return true;
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.delete + ' ' + constants.error.repositorio);
     }
   },
 
-  find: async function (query, options) {
+  findByEmail: async function (email) {
     try {
-      const users = await mongodb.find('user', query, options);
+      const collection = await this.collection({ email: email });
 
-      return users;
+      if (collection.length == 0) {
+        return null;
+      }
+
+      return collection[0];
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.find + ' ' + constants.error.repositorio);
+      throw new Error(constants.error.rest.findByEmail + ' ' + constants.error.repositorio);
     }
   },
 
-  count: async function (query) {
+  findToTablePaginator: async function (input) {
     try {
-      const total = await mongodb.count('user', query);
+      const query = {};
 
-      return total;
+      if (input.roles) {
+        query.roles = input.roles;
+      }
+
+      const options = {
+        projection: {
+          email: 1,
+          roles: 1,
+          activate: 1,
+        },
+        sort: {
+          created: -1,
+        },
+        limit: 50,
+        skip: input.skip,
+      };
+
+      return await this.collection(query, options);
     } catch (error) {
       logger.error(error);
-      throw new Error(constants.error.rest.count + ' ' + constants.error.repositorio);
-    }
-  },
-
-  tag: async function () {
-    try {
-      const tag = await mongodb.distinct('user', 'roles');
-
-      return tag;
-    } catch (error) {
-      logger.error(error);
-      throw new Error(constants.error.rest.tag + ' ' + constants.error.repositorio);
+      throw new Error(
+        constants.error.rest.findToTablePaginator + ' ' + constants.error.repositorio
+      );
     }
   },
 };

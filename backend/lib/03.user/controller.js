@@ -113,7 +113,7 @@ module.exports = {
 
   delete: async function (req, res) {
     try {
-      await service.delete(req.user._id);
+      await service.delete(req.user.id);
 
       session.destroy(req, res);
 
@@ -279,7 +279,7 @@ module.exports = {
           throw new Error(JSON.stringify(userLogged) + ' ' + constants.error.servicio);
         }
 
-        const token = jwt.encode(userLogged._id);
+        const token = jwt.encode(userLogged.id);
 
         session.create(req, res, token, userLogged.email);
 

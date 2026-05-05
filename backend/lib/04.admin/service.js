@@ -29,15 +29,11 @@ module.exports = {
       return sessions;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.tracking + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.tracking + ' ' + constants.error.servicio);
     }
   },
 
-  count: async function (input) {
+  total: async function (input) {
     try {
       const query = {};
 
@@ -45,73 +41,29 @@ module.exports = {
         query.roles = input.roles;
       }
 
-      const respuesta = await user.count(query);
+      const respuesta = await user.total(query);
 
       return respuesta;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.count + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.total + ' ' + constants.error.servicio);
     }
   },
 
   collection: async function (input) {
     try {
-      const query = {};
-
-      if (input.roles) {
-        query.roles = input.roles;
-      }
-
-      const options = {
-        projection: {
-          email: 1,
-          roles: 1,
-          activate: 1,
-        },
-        sort: {
-          created: -1,
-        },
-        limit: 50,
-        skip: input.skip,
-      };
-
-      const respuesta = await user.find(query, options);
-
-      return respuesta;
+      return await user.findToTablePaginator(input);
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.collection + ' ' + constants.error.servicio
-      );
-    }
-  },
-
-  tag: async function () {
-    try {
-      const respuesta = await user.tag();
-
-      return respuesta;
-    } catch (error) {
-      logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.tag + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.collection + ' ' + constants.error.servicio);
     }
   },
 
   createadmin: async function (input) {
     try {
-      const users = await user.find({ email: input.email });
+      const userByEmail = await user.findByEmail(input.email);
 
-      if (users.length > 0) {
+      if (userByEmail != null) {
         return 'email ingresado ya existe';
       }
 
@@ -133,19 +85,15 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.createadmin + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.createadmin + ' ' + constants.error.servicio);
     }
   },
 
   createbyadmin: async function (input) {
     try {
-      const users = await user.find({ email: input.email });
+      const userByEmail = await user.findByEmail(input.email);
 
-      if (users.length > 0) {
+      if (userByEmail != null) {
         return 'email ingresado ya existe';
       }
 
@@ -167,11 +115,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.createbyadmin + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.createbyadmin + ' ' + constants.error.servicio);
     }
   },
 
@@ -183,11 +127,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.updatebyadmin + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.updatebyadmin + ' ' + constants.error.servicio);
     }
   },
 
@@ -199,11 +139,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.updatebyadmin + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.updatebyadmin + ' ' + constants.error.servicio);
     }
   },
 
@@ -215,11 +151,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.updatebyadmin + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.updatebyadmin + ' ' + constants.error.servicio);
     }
   },
 
@@ -233,11 +165,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.updatebyadmin + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.updatebyadmin + ' ' + constants.error.servicio);
     }
   },
 
@@ -253,11 +181,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.deletebyadmin + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.deletebyadmin + ' ' + constants.error.servicio);
     }
   },
 };

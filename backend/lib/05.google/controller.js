@@ -38,7 +38,7 @@ module.exports = {
 
       const userLogged = await service.googleoauthcallback(parseResult.data);
 
-      const token = jwt.encode(userLogged._id);
+      const token = jwt.encode(userLogged.id);
 
       session.create(req, res, token, userLogged.email);
 

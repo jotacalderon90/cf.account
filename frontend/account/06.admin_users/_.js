@@ -19,7 +19,7 @@ const object = function () {
 		create: createService('POST', '/api/admin/' + this.name),
 		update: createService('PUT', '/api/admin/' + this.name + '/:id'),
 		delete: createService('DELETE', '/api/admin/' + this.name + '/:id'),
-		tag: createService('GET', '/api/admin/' + this.name + '/tag/collection'),
+		tag: createService('GET', '/api/admin/roles/collection'),
 		roles: createService('GET', '/api/admin/roles/collection')
 	}
 
@@ -167,7 +167,7 @@ object.prototype.saveRoles = async function () {
 	try {
 		this.parent.loader.active = true;
 		const update = await this.services.update({
-			id: this.selectedUser._id
+			id: this.selectedUser.id
 		}, {
 			type: 'roles',
 			roles: this.userRoles
@@ -194,7 +194,7 @@ object.prototype.activate = async function (row) {
 		}
 		this.parent.loader.active = true;
 		const update = await this.services.update({
-			id: row._id
+			id: row.id
 		}, {
 			type: 'activate',
 			activate: !row.activate
@@ -222,7 +222,7 @@ object.prototype.changePassword = async function (row) {
 		}
 		this.parent.loader.active = true;
 		const update = await this.services.update({
-			id: row._id
+			id: row.id
 		}, {
 			type: 'password',
 			password: newpassword
@@ -246,7 +246,7 @@ object.prototype.enableRecovery = async function (row) {
 		}
 		this.parent.loader.active = true;
 		const update = await this.services.update({
-			id: row._id
+			id: row.id
 		}, {
 			type: 'notify'
 		});
@@ -268,7 +268,7 @@ object.prototype.delete = async function (id) {
 		}
 		this.parent.loader.active = true;
 		const del = await this.services.delete({
-			id: id || this.doc._id
+			id: id || this.doc.id
 		});
 		if (del.error) {
 			throw (del.error);

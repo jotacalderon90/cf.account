@@ -7,90 +7,57 @@ const constants = require('./constants');
 const { role } = require('../_repository/_');
 
 module.exports = {
-  create: async function (input) {
+  total: async function () {
     try {
-      const result = await role.create(input);
-      logger.info(result);
-      return true;
+      return await role.total();
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.rolesCreate + ' ' + constants.error.servicio
-      );
-    }
-  },
-
-  read: async function (id) {
-    try {
-      const rol = await role.read(id);
-      return rol;
-    } catch (error) {
-      logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.rolesRead + ' ' + constants.error.servicio
-      );
-    }
-  },
-
-  update: async function (input, id) {
-    try {
-      const updated = await role.update(input, id);
-      logger.info(updated);
-      return true;
-    } catch (error) {
-      logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.rolesUpdate + ' ' + constants.error.servicio
-      );
-    }
-  },
-
-  delete: async function (id) {
-    try {
-      const deleted = await role.delete(id);
-      logger.info(deleted);
-      return true;
-    } catch (error) {
-      logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.rolesDelete + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.total + ' ' + constants.error.servicio);
     }
   },
 
   collection: async function () {
     try {
-      const roles = await role.find({});
-      return roles;
+      return await role.collection({});
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.rolesFind + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.collection + ' ' + constants.error.servicio);
     }
   },
 
-  total: async function () {
+  create: async function (input) {
     try {
-      const roles = await role.total({});
-      return roles;
+      return await role.create(input);
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.rolesTotal + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.create + ' ' + constants.error.servicio);
+    }
+  },
+
+  read: async function (id) {
+    try {
+      return await role.read(id);
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.read + ' ' + constants.error.servicio);
+    }
+  },
+
+  update: async function (input, id) {
+    try {
+      return await role.update(input, id);
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.update + ' ' + constants.error.servicio);
+    }
+  },
+
+  delete: async function (id) {
+    try {
+      return await role.delete(id);
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.delete + ' ' + constants.error.servicio);
     }
   },
 };

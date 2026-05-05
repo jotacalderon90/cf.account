@@ -50,7 +50,7 @@ module.exports = {
   //@route('/api/admin/account/total')
   //@method(['get'])
   //@roles(['root','admin'])
-  count: controlador.count,
+  total: controlador.total,
 
   /**
    * @swagger
@@ -82,28 +82,6 @@ module.exports = {
   //@method(['get'])
   //@roles(['root','admin'])
   collection: controlador.collection,
-
-  /**
-   * @swagger
-   * /api/admin/account/tag/collection:
-   *   get:
-   *     tags:
-   *       - Administrador
-   *     summary: Obtener colección de etiquetas
-   *     description: Obtiene la lista de etiquetas asociadas a usuarios
-   *     x-roles: ['root','admin']
-   *     responses:
-   *       200:
-   *         description: OK
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   */
-  //@route('/api/admin/account/tag/collection')
-  //@method(['get'])
-  //@roles(['root','admin'])
-  tag: controlador.tag,
 
   /**
    * @swagger

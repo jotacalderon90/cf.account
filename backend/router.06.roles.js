@@ -5,28 +5,6 @@ const controlador = require('./lib/06.roles/controller');
 module.exports = {
   /**
    * @swagger
-   * /api/admin/roles/collection:
-   *   get:
-   *     tags:
-   *       - Roles
-   *     summary: Obtener colección de roles
-   *     description: Obtiene la lista completa de roles
-   *     x-roles: ['root']
-   *     responses:
-   *       200:
-   *         description: OK
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   */
-  //@route('/api/admin/roles/collection')
-  //@method(['get'])
-  //@roles(['root'])
-  collection: controlador.collection,
-
-  /**
-   * @swagger
    * /api/admin/roles/total:
    *   get:
    *     tags:
@@ -46,6 +24,28 @@ module.exports = {
   //@method(['get'])
   //@roles(['root'])
   total: controlador.total,
+
+  /**
+   * @swagger
+   * /api/admin/roles/collection:
+   *   get:
+   *     tags:
+   *       - Roles
+   *     summary: Obtener colección de roles
+   *     description: Obtiene la lista completa de roles
+   *     x-roles: ['root']
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   */
+  //@route('/api/admin/roles/collection')
+  //@method(['get'])
+  //@roles(['root'])
+  collection: controlador.collection,
 
   /**
    * @swagger

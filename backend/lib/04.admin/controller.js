@@ -23,9 +23,9 @@ module.exports = {
     }
   },
 
-  count: async function (req, res) {
+  total: async function (req, res) {
     try {
-      const parseResult = validator.count.safeParse(req.query);
+      const parseResult = validator.total.safeParse(req.query);
 
       if (!parseResult.success) {
         logger.error(parseResult);
@@ -33,12 +33,12 @@ module.exports = {
         return;
       }
 
-      const respuesta = await service.count(parseResult.data);
+      const respuesta = await service.total(parseResult.data);
 
       res.send({ data: respuesta });
     } catch (error) {
       logger.error(error);
-      response.APIError(req, res, constants.error.rest.count + ' ' + constants.error.controlador);
+      response.APIError(req, res, constants.error.rest.total + ' ' + constants.error.controlador);
     }
   },
 
@@ -62,17 +62,6 @@ module.exports = {
         res,
         constants.error.rest.collection + ' ' + constants.error.controlador
       );
-    }
-  },
-
-  tag: async function (req, res) {
-    try {
-      const respuesta = await service.tag();
-
-      res.send({ data: respuesta });
-    } catch (error) {
-      logger.error(error);
-      response.APIError(req, res, constants.error.rest.tag + ' ' + constants.error.controlador);
     }
   },
 

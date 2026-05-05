@@ -3,9 +3,8 @@
 const constants = require('../constants');
 
 constants.error.rest.tracking = 'Error al generar tracking';
-constants.error.rest.count = 'Error al obtener total de usuarios';
+constants.error.rest.total = 'Error al obtener total de usuarios';
 constants.error.rest.collection = 'Error al obtener lista de usuarios';
-constants.error.rest.tag = 'Error al obtener tags de usuarios';
 constants.error.rest.createadmin = 'Error al crear usuario administrador';
 constants.error.rest.createadminexists = 'email ingresado ya existe';
 constants.error.rest.createbyadmin = 'Error al crear usuario';
