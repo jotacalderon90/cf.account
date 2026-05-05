@@ -6,6 +6,12 @@ const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 
 const constants = require('../constants');
 
+//20260505:formateo registro mongo para normalizacion
+const mapRow = function (row) {
+  row.id = row._id.toString();
+  return row;
+};
+
 module.exports = {
   total: async function (query) {
     try {
@@ -30,7 +36,7 @@ module.exports = {
         throw new Error(collection);
       }
 
-      return collection.map((r) => ({ ...r, id: r._id.toString() }));
+      return collection.map(mapRow);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.collection + ' ' + constants.error.repositorio);
@@ -77,9 +83,7 @@ module.exports = {
         throw new Error(doc);
       }
 
-      doc.id = doc._id.toString();
-
-      return doc;
+      return mapRow(doc);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
@@ -148,7 +152,7 @@ module.exports = {
         sort: {
           created: -1,
         },
-        limit: 50,
+        limit: constants.paginator,
         skip: input.skip,
       };
 

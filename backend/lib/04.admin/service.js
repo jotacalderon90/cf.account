@@ -75,14 +75,7 @@ module.exports = {
       nuevoUsuario.activate = true;
       nuevoUsuario.roles = ['root'];
 
-      const respuesta = await user.create(nuevoUsuario);
-      logger.info(respuesta);
-
-      if (!respuesta.acknowledged) {
-        throw new Error(respuesta);
-      }
-
-      return true;
+      return await user.create(nuevoUsuario);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.createadmin + ' ' + constants.error.servicio);
@@ -105,14 +98,7 @@ module.exports = {
       nuevoUsuario.activate = true;
       nuevoUsuario.roles = ['user'];
 
-      const respuesta = await user.create(nuevoUsuario);
-      logger.info(respuesta);
-
-      if (!respuesta.acknowledged) {
-        throw new Error(respuesta);
-      }
-
-      return true;
+      return await user.create(nuevoUsuario);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.createbyadmin + ' ' + constants.error.servicio);
@@ -171,14 +157,7 @@ module.exports = {
 
   deletebyadmin: async function (input) {
     try {
-      const respuesta = await user.delete(input.id);
-      logger.info(respuesta);
-
-      if (!respuesta.acknowledged) {
-        throw new Error(respuesta);
-      }
-
-      return true;
+      return await user.delete(input.id);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.deletebyadmin + ' ' + constants.error.servicio);

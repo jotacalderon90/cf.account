@@ -16,4 +16,6 @@ constants.error.rest.findByEmail = 'Error al obtener usuario por email';
 constants.error.rest.manyUsersByEmail = 'Usuarios con mismo email';
 constants.error.rest.findToTablePaginator = 'Error al obtener usuarios para paginador';
 
+constants.paginator = 50;
+
 module.exports = constants;
