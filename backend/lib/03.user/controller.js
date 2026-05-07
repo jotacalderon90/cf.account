@@ -17,7 +17,7 @@ module.exports = {
     try {
       req.user = await accesscontrol.getUser(req);
 
-      if (req.user == null) {
+      if (req.user == null || req.body.button === '' || req.body.button === undefined) {
         //POST!
 
         if (process.env.CANCREATE != '1') {
