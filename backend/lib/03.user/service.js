@@ -16,7 +16,7 @@ module.exports = {
       nuevoUsuario.email = input.email;
       nuevoUsuario.password = await password.hash(input.password);
       nuevoUsuario.roles = ['user'];
-      nuevoUsuario.hash = password.random(24);
+      nuevoUsuario.hash = password.random();
       nuevoUsuario.activate = process.env.HOST_MAILING ? false : true;
       nuevoUsuario.notification = true;
       nuevoUsuario.nickname = input.email;
@@ -44,7 +44,11 @@ module.exports = {
 
   read: async function (id) {
     try {
-      const registro = await user.read(id);
+      console.log(id);
+      const registro = await user.findByHash(id);
+      console.log(registro);
+      if (registro == null) {
+      }
 
       if (!registro.activate) {
         logger.error(constants.error.rest.login_desactivate + ' - ' + registro.email);
@@ -114,7 +118,7 @@ module.exports = {
         return 'No se encontró usuario';
       }
 
-      const newhash = password.random(24);
+      const newhash = password.random();
       await user.update({ hash: newhash }, userByEmail.id);
 
       hooks.mailingOnForget(userByEmail.email, Buffer.from(newhash, 'utf8').toString('base64'));
@@ -139,6 +143,7 @@ module.exports = {
       const registro = users[0];
 
       const nuevosDatos = {
+        hash: '',
         password: await password.hash(input.password),
       };
 
@@ -169,9 +174,29 @@ module.exports = {
         return 'Los datos ingresados no corresponden .2';
       }
 
+      const nuevosDatos = {
+        hash: await password.random(),
+      };
+
+      await user.update(nuevosDatos, userByEmail.id);
+      userByEmail.hash = nuevosDatos.hash;
+
       hooks.pushOnLogin(input.email);
 
       return userByEmail;
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.login + ' ' + constants.error.servicio);
+    }
+  },
+
+  logout: async function (input) {
+    try {
+      const nuevosDatos = {
+        hash: '',
+      };
+
+      await user.update(nuevosDatos, input.id);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.login + ' ' + constants.error.servicio);

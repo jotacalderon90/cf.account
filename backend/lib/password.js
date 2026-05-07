@@ -3,6 +3,7 @@
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const argon2 = require('argon2');
+const crypto = require('crypto');
 
 module.exports = {
   isValid: function (plainPassword) {
@@ -39,12 +40,7 @@ module.exports = {
     }
   },
 
-  random: function (length) {
-    const possibleChar = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let text = '';
-    for (let i = 0; i < length; i++) {
-      text += possibleChar.charAt(Math.floor(Math.random() * possibleChar.length));
-    }
-    return text;
+  random: function () {
+    return crypto.randomBytes(18).toString('base64url');
   },
 };

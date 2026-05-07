@@ -92,8 +92,8 @@ module.exports = {
   update: async function (input, id) {
     try {
       const updated = await mongodb.updateOne('user', id, { $set: input });
-
-      if (!updated.acknowledged) {
+      console.log(input, id, updated);
+      if (!updated.acknowledged || updated.modifiedCount != 1) {
         throw new Error(updated);
       }
 
@@ -122,6 +122,21 @@ module.exports = {
   findByEmail: async function (email) {
     try {
       const collection = await this.collection({ email: email });
+
+      if (collection.length == 0) {
+        return null;
+      }
+
+      return collection[0];
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.findByEmail + ' ' + constants.error.repositorio);
+    }
+  },
+
+  findByHash: async function (hash) {
+    try {
+      const collection = await this.collection({ hash: hash });
 
       if (collection.length == 0) {
         return null;

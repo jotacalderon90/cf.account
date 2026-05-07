@@ -233,6 +233,15 @@ module.exports = {
           password: input.password,
         };
       }
+
+      if (input.hash != undefined) {
+        set.push(`HASH = :hash`);
+
+        params = {
+          hash: input.hash,
+        };
+      }
+
       sql += set.join(',') + ' WHERE ID = :id';
 
       const updated = await oracle.execute(sql, { ...params, id });
@@ -278,6 +287,28 @@ module.exports = {
       `;
 
       const collection = await oracle.select(sql, { email: email });
+
+      if (collection.length == 0) {
+        return null;
+      }
+
+      return mapRow(collection[0]);
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.findByEmail + ' ' + constants.error.repositorio);
+    }
+  },
+
+  findByHash: async function (hash) {
+    try {
+      const sql = `
+        SELECT * 
+        FROM USUARIOS
+        WHERE
+          HASH = :hash
+      `;
+
+      const collection = await oracle.select(sql, { hash: hash });
 
       if (collection.length == 0) {
         return null;

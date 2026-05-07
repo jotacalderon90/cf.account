@@ -278,8 +278,7 @@ module.exports = {
         if (!userLogged.email) {
           throw new Error(JSON.stringify(userLogged) + ' ' + constants.error.servicio);
         }
-
-        const token = jwt.encode(userLogged.id);
+        const token = jwt.encode(userLogged.hash);
 
         session.create(req, res, token, userLogged.email);
 
@@ -309,8 +308,10 @@ module.exports = {
 
   logout: async function (req, res) {
     try {
+      if (req.user) {
+        service.logout(req.user.id);
+      }
       session.destroy(req, res);
-
       if (req.query.jwt) {
         res.send({ data: true });
       } else {
