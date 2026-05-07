@@ -44,11 +44,7 @@ module.exports = {
 
   read: async function (id) {
     try {
-      console.log(id);
       const registro = await user.findByHash(id);
-      console.log(registro);
-      if (registro == null) {
-      }
 
       if (!registro.activate) {
         logger.error(constants.error.rest.login_desactivate + ' - ' + registro.email);
