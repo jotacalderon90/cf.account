@@ -18,6 +18,7 @@ describe('backend/lib/session', () => {
       headers: {
         'user-agent': 'jest-test-agent',
         'x-forwarded-for': '10.0.0.1',
+        host: 'usuarios.jotace.cl',
       },
       ip: '127.0.0.1',
     };
