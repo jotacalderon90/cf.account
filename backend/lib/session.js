@@ -10,20 +10,26 @@ const tracking = function (req, email, host) {
   req.session.ip = req.ip + '||' + req.headers['x-forwarded-for'];
 };
 
-const cookieOptions = {
-  path: '/',
-  httpOnly: true, // SIEMPRE
-  maxAge: 1000 * 60 * 60, // SIEMPRE 1 hora
-  secure: process.env.COOKIE_SECURE === '1', // POR PARAMETRO
-  sameSite: process.env.COOKIE_SAMESITE || 'Strict', // SIEMPRE
-  ...(process.env.COOKIE_DOMAIN && { domain: process.env.COOKIE_DOMAIN }),
+const getCookie = function (domain) {
+  return {
+    path: '/',
+    httpOnly: true, // SIEMPRE
+    maxAge: 1000 * 60 * 60, // SIEMPRE 1 hora
+    secure: process.env.COOKIE_SECURE === '1', // POR PARAMETRO
+    sameSite: process.env.COOKIE_SAMESITE || 'Strict', // SIEMPRE
+    ...(process.env.COOKIE_DOMAIN == 1 && { domain: domain }),
+  };
+};
+
+const getHost = function (host) {
+  return '.' + host.split(':')[0].match(/([^.]+\.[^.]+)$/)[1];
 };
 
 module.exports = {
   create: function (req, res, cookie, email, host) {
     logger.info('creando sesion');
 
-    res.cookie('Authorization', cookie, cookieOptions);
+    res.cookie('Authorization', cookie, getCookie(getHost(req.headers.host)));
 
     if (cookie && email) {
       tracking(req, email, host);
@@ -40,6 +46,6 @@ module.exports = {
       }
     });
 
-    res.clearCookie('Authorization', cookieOptions);
+    res.clearCookie('Authorization', getCookie(getHost(req.headers.host)));
   },
 };
