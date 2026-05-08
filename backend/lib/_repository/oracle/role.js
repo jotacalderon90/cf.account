@@ -24,11 +24,20 @@ module.exports = {
           1 = 1
       `;
 
-      for (let attr in query) {
-        sql += ` AND ${attr} = ${query[attr]}`;
+      const clauses = [];
+      const params = {};
+
+      for (const [column, rawValue] of Object.entries(query)) {
+        if (!['number', 'string', 'boolean'].includes(typeof rawValue)) {
+          throw new TypeError(`Columna "${column}": tipo "${typeof rawValue}" no soportado`);
+        }
+        clauses.push(`${column} = :${column}`);
+        params[column] = rawValue;
       }
 
-      const total = await oracle.select(sql);
+      if (clauses.length) sql += ` AND ${clauses.join(' AND ')}`;
+
+      const total = await oracle.select(sql, params);
 
       if (isNaN(total[0].TOTAL)) {
         throw new Error(total);
@@ -41,7 +50,7 @@ module.exports = {
     }
   },
 
-  collection: async function (query) {
+  collection: async function (query, options) {
     try {
       let sql = `
         SELECT 
@@ -53,11 +62,24 @@ module.exports = {
           1 = 1
       `;
 
-      for (let attr in query) {
-        sql += ` AND ${attr} = ${query[attr]}`;
+      const clauses = [];
+      const params = {};
+
+      for (const [column, rawValue] of Object.entries(query)) {
+        if (!['number', 'string', 'boolean'].includes(typeof rawValue)) {
+          throw new TypeError(`Columna "${column}": tipo "${typeof rawValue}" no soportado`);
+        }
+        clauses.push(`${column} = :${column}`);
+        params[column] = rawValue;
       }
 
-      const collection = await oracle.select(sql);
+      if (clauses.length) sql += ` AND ${clauses.join(' AND ')}`;
+
+      if (options) {
+        sql += ` ${options} `;
+      }
+
+      const collection = await oracle.select(sql, params);
 
       if (!Array.isArray(collection)) {
         throw new Error(collection);

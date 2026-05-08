@@ -32,11 +32,20 @@ module.exports = {
           1 = 1
       `;
 
-      for (let attr in query) {
-        sql += ` AND ${attr} = ${query[attr]}`;
+      const clauses = [];
+      const params = {};
+
+      for (const [column, rawValue] of Object.entries(query)) {
+        if (!['number', 'string', 'boolean'].includes(typeof rawValue)) {
+          throw new TypeError(`Columna "${column}": tipo "${typeof rawValue}" no soportado`);
+        }
+        clauses.push(`${column} = :${column}`);
+        params[column] = rawValue;
       }
 
-      const total = await oracle.select(sql);
+      if (clauses.length) sql += ` AND ${clauses.join(' AND ')}`;
+
+      const total = await oracle.select(sql, params);
 
       if (isNaN(total[0].TOTAL)) {
         throw new Error(total);
@@ -74,15 +83,24 @@ module.exports = {
           1 = 1
       `;
 
-      for (let attr in query) {
-        sql += ` AND ${attr} = ${query[attr]}`;
+      const clauses = [];
+      const params = {};
+
+      for (const [column, rawValue] of Object.entries(query)) {
+        if (!['number', 'string', 'boolean'].includes(typeof rawValue)) {
+          throw new TypeError(`Columna "${column}": tipo "${typeof rawValue}" no soportado`);
+        }
+        clauses.push(`${column} = :${column}`);
+        params[column] = rawValue;
       }
+
+      if (clauses.length) sql += ` AND ${clauses.join(' AND ')}`;
 
       if (options) {
-        sql += ` options `;
+        sql += ` ${options} `;
       }
 
-      const collection = await oracle.select(sql);
+      const collection = await oracle.select(sql, params);
 
       if (!Array.isArray(collection)) {
         throw new Error(collection);
@@ -289,7 +307,7 @@ module.exports = {
 
   inHost: async function (id, host) {
     try {
-      const docById = this.read(id);
+      const docById = await this.read(id);
       if (docById.host === host) {
         return true;
       }
@@ -332,11 +350,10 @@ module.exports = {
 
   findToTablePaginator: async function (input) {
     try {
-      const options = ` OFFSET :skip ROWS FETCH NEXT ${constants.paginator} ROWS ONLY `;
+      const options = ` OFFSET ${input.skip} ROWS FETCH NEXT ${constants.paginator} ROWS ONLY `;
 
-      const collection = await oracle.select(
+      const collection = await this.collection(
         {
-          skip: input.skip,
           host: input.host,
         },
         options
@@ -346,7 +363,7 @@ module.exports = {
         throw new Error(collection);
       }
 
-      return collection.map(mapRow);
+      return collection;
     } catch (error) {
       logger.error(error);
       throw new Error(
