@@ -6,3 +6,6 @@ node_modules/*
 
 # Cobertura de tests
 coverage/
+
+# Front multidomains
+frontend/assets/domains

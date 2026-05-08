@@ -9,6 +9,8 @@ services:
     container_name: account
     env_file:
       - .env.production
+    volumes:
+      - ./frontend/assets/domains/:/srv/cf.account/frontend/assets/domains
     environment:
       NODE_ENV: "production"
       PORT: ${PORT:-2202}
