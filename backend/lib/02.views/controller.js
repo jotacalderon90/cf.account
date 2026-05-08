@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 
@@ -8,10 +10,21 @@ const validator = require('./validator');
 
 const googleapis = require('../googleapis');
 
+const viewName = function (view_path, host) {
+  const view_path_host = 'assets/domains/' + host + '/' + view_path;
+  const view_path_full =
+    process.cwd() + '/' + (process.env.FRONTEND || 'frontend') + '/' + view_path_host + '.html';
+
+  if (fs.existsSync(view_path_full)) {
+    return view_path_host;
+  }
+  return view_path;
+};
+
 module.exports = {
   renderIndex: async function (req, res) {
     try {
-      res.render('account/01.perfil/_', {
+      res.render(viewName('account/01.perfil/_', req.headers.host), {
         user: req.user,
       });
     } catch (error) {
@@ -27,7 +40,7 @@ module.exports = {
   renderForm: async function (req, res) {
     try {
       if (process.env.CANCREATE == '1') {
-        res.render('account/02.form/_', {
+        res.render(viewName('account/02.form/_', req.headers.host), {
           action: '/api/account',
         });
       } else {
@@ -45,7 +58,7 @@ module.exports = {
 
   renderLogin: async function (req, res) {
     try {
-      res.render('account/03.login/_', {
+      res.render(viewName('account/03.login/_', req.headers.host), {
         redirectTo: req.query.redirectoTo,
         google_auth: googleapis.getURL(),
       });
@@ -62,7 +75,7 @@ module.exports = {
   renderForget: async function (req, res) {
     try {
       if (process.env.CANRECOVERY == '1') {
-        res.render('account/04.forget/_');
+        res.render(viewName('account/04.forget/_', req.headers.host));
       } else {
         res.redirect('/');
       }
@@ -85,7 +98,7 @@ module.exports = {
           return;
         }
 
-        res.render('account/05.recovery/_', parseResult.data);
+        res.render(viewName('account/05.recovery/_', req.headers.host), parseResult.data);
       } else {
         res.redirect('/');
       }
@@ -101,7 +114,7 @@ module.exports = {
 
   renderPoliticasPrivacidad: async function (req, res) {
     try {
-      res.render('account/politicas');
+      res.render(viewName('account/politicas', req.headers.host));
     } catch (error) {
       logger.error(error);
       response.renderError(
@@ -114,7 +127,7 @@ module.exports = {
 
   renderCondicionesServicio: async function (req, res) {
     try {
-      res.render('account/condiciones');
+      res.render(viewName('account/condiciones', req.headers.host));
     } catch (error) {
       logger.error(error);
       response.renderError(
@@ -127,7 +140,7 @@ module.exports = {
 
   renderAdminUsers: async function (req, res) {
     try {
-      res.render('account/06.admin_users/_', {
+      res.render(viewName('account/06.admin_users/_', req.headers.host), {
         user: req.user,
       });
     } catch (error) {
@@ -142,7 +155,7 @@ module.exports = {
 
   renderAdminRoles: async function (req, res) {
     try {
-      res.render('account/07.admin_roles/_', {
+      res.render(viewName('account/07.admin_roles/_', req.headers.host), {
         user: req.user,
       });
     } catch (error) {
@@ -158,7 +171,7 @@ module.exports = {
   renderFormAdmin: async function (req, res) {
     try {
       if (process.env.CANCREATEADMIN == '1') {
-        res.render('account/02.form/_', {
+        res.render(viewName('account/02.form/_', req.headers.host), {
           action: '/api/admin/account/createadmin',
         });
       } else {
