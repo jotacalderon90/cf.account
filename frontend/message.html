@@ -8,11 +8,8 @@
 		<div class="text-center p-5 bg-white rounded shadow">
 			<h1 class="mb-3">{{data:doc.title}}</h1>
 			<p class="{{data:doc.class}}">{{data:doc.msg}}.</p>
-			<!--if:data:doc.status==401 && process.env.FRONT_MULTIDOMAIN === '1'-->
-				<a href="{{data:doc.__sitename}}/login?redirectoTo={{data:doc.redirectTo}}">Ir al login</a>
-			<!--/if-->
-			<!--if:data:doc.status==401 && process.env.FRONT_MULTIDOMAIN !== '1'-->
-				<a href="{{data:process.env.HOST_ACCOUNT}}/login?redirectoTo={{data:doc.redirectTo}}">Ir al login</a>
+			<!--if:data:doc.status==401-->
+				<a href="https://{{data:doc.__hostAccount}}/login?redirectoTo={{data:doc.redirectTo}}">Ir al login</a>
 			<!--/if-->
 		</div>
 	</div>

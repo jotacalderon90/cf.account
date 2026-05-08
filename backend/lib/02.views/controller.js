@@ -21,11 +21,22 @@ const viewName = function (view_path, host) {
   return view_path;
 };
 
+const getHostAccount = function (host) {
+  let hostAccount = '';
+  if (process.env.NODE_ENV === 'production' && process.env.FRONT_MULTIDOMAIN === '1') {
+    hostAccount = host.replace(/^([^.:]+)/, 'account');
+  } else {
+    hostAccount = process.env.HOST_ACCOUNT;
+  }
+  return hostAccount;
+};
+
 module.exports = {
   renderIndex: async function (req, res) {
     try {
       res.render(viewName('account/01.perfil/_', req.headers.host), {
         user: req.user,
+        __hostAccount: getHostAccount(req.headers.host),
       });
     } catch (error) {
       logger.error(error);
@@ -142,6 +153,7 @@ module.exports = {
     try {
       res.render(viewName('account/06.admin_users/_', req.headers.host), {
         user: req.user,
+        __hostAccount: getHostAccount(req.headers.host),
       });
     } catch (error) {
       logger.error(error);
@@ -157,6 +169,7 @@ module.exports = {
     try {
       res.render(viewName('account/07.admin_roles/_', req.headers.host), {
         user: req.user,
+        __hostAccount: getHostAccount(req.headers.host),
       });
     } catch (error) {
       logger.error(error);
