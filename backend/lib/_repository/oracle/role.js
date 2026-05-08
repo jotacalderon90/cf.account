@@ -77,10 +77,12 @@ module.exports = {
       const sql = `
         INSERT INTO ROLES ( 
           NOMBRE, 
-          DESCRIPCION
+          DESCRIPCION,
+          HOST
         ) VALUES (
           :nombre, 
-          :descripcion
+          :descripcion,
+          :host
         )
         RETURNING ID INTO :id
       `;
@@ -88,6 +90,7 @@ module.exports = {
       const created = await oracle.execute(sql, {
         nombre: input.nombre,
         descripcion: input.descripcion,
+        host: input.host,
         id: {
           dir: oracledb.BIND_OUT,
           type: oracledb.NUMBER,
@@ -111,7 +114,8 @@ module.exports = {
         SELECT  
           ID,
           NOMBRE, 
-          DESCRIPCION
+          DESCRIPCION,
+          HOST
         FROM ROLES
         WHERE 
           ID = :id

@@ -13,6 +13,7 @@ module.exports = {
   create: async function (input) {
     try {
       const nuevoUsuario = {};
+      nuevoUsuario.host = input.host;
       nuevoUsuario.email = input.email;
       nuevoUsuario.password = await password.hash(input.password);
       nuevoUsuario.roles = ['user'];
@@ -42,9 +43,9 @@ module.exports = {
     }
   },
 
-  read: async function (id) {
+  read: async function (input) {
     try {
-      const registro = await user.findByHash(id);
+      const registro = await user.findByHash(input.id, input.host);
 
       if (!registro.activate) {
         logger.error(constants.error.rest.login_desactivate + ' - ' + registro.email);
@@ -91,6 +92,7 @@ module.exports = {
     try {
       const users = await user.collection({
         hash: Buffer.from(input.hash, 'base64').toString('utf8'),
+        host: input.host,
       });
 
       if (users.length != 1) {
@@ -108,7 +110,7 @@ module.exports = {
 
   forget: async function (input) {
     try {
-      const userByEmail = await user.findByEmail(input.email);
+      const userByEmail = await user.findByEmail(input.email, input.host);
 
       if (userByEmail === null) {
         return 'No se encontró usuario';
@@ -130,6 +132,7 @@ module.exports = {
     try {
       const users = await user.collection({
         hash: Buffer.from(input.hash, 'base64').toString('utf8'),
+        host: input.host,
       });
 
       if (users.length != 1) {
@@ -154,7 +157,7 @@ module.exports = {
 
   login: async function (input) {
     try {
-      const userByEmail = await user.findByEmail(input.email);
+      const userByEmail = await user.findByEmail(input.email, input.host);
 
       if (userByEmail === null) {
         return 'No se encontró usuario';
@@ -186,13 +189,13 @@ module.exports = {
     }
   },
 
-  logout: async function (input) {
+  logout: async function (id) {
     try {
       const nuevosDatos = {
         hash: '',
       };
 
-      await user.update(nuevosDatos, input.id);
+      await user.update(nuevosDatos, id);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.login + ' ' + constants.error.servicio);

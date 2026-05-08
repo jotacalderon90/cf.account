@@ -9,6 +9,7 @@ constants.error.rest.createadmin = 'Error al crear usuario administrador';
 constants.error.rest.createadminexists = 'email ingresado ya existe';
 constants.error.rest.createbyadmin = 'Error al crear usuario';
 constants.error.rest.updatebyadmin = 'Error al actualizar usuario';
+constants.error.rest.updatebyadmin_userinhost = 'El usuario no pertenece al host :|';
 constants.error.rest.deletebyadmin = 'Error al eliminar usuario';
 
 constants.messages.createadmin = {

@@ -51,6 +51,7 @@ module.exports = {
 
       const nuevoUsuario = {};
 
+      nuevoUsuario.host = input.host;
       nuevoUsuario.email = input.email;
       nuevoUsuario.hash = input.hash;
       nuevoUsuario.password = input.password;
@@ -92,7 +93,7 @@ module.exports = {
   update: async function (input, id) {
     try {
       const updated = await mongodb.updateOne('user', id, { $set: input });
-      console.log(input, id, updated);
+
       if (!updated.acknowledged || updated.modifiedCount != 1) {
         throw new Error(updated);
       }
@@ -119,9 +120,23 @@ module.exports = {
     }
   },
 
-  findByEmail: async function (email) {
+  inHost: async function (id, host) {
     try {
-      const collection = await this.collection({ email: email });
+      const docById = await this.read(id);
+
+      if (docById.host === host) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.inHost + ' ' + constants.error.repositorio);
+    }
+  },
+
+  findByEmail: async function (email, host) {
+    try {
+      const collection = await this.collection({ email: email, host: host });
 
       if (collection.length == 0) {
         return null;
@@ -134,9 +149,9 @@ module.exports = {
     }
   },
 
-  findByHash: async function (hash) {
+  findByHash: async function (hash, host) {
     try {
-      const collection = await this.collection({ hash: hash });
+      const collection = await this.collection({ hash: hash, host: host });
 
       if (collection.length == 0) {
         return null;
@@ -151,7 +166,9 @@ module.exports = {
 
   findToTablePaginator: async function (input) {
     try {
-      const query = {};
+      const query = {
+        host: input.host,
+      };
 
       if (input.roles) {
         query.roles = input.roles;

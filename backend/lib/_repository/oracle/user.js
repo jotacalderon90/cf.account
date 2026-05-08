@@ -49,7 +49,7 @@ module.exports = {
     }
   },
 
-  collection: async function (query) {
+  collection: async function (query, options) {
     try {
       let sql = `
         SELECT
@@ -76,6 +76,10 @@ module.exports = {
 
       for (let attr in query) {
         sql += ` AND ${attr} = ${query[attr]}`;
+      }
+
+      if (options) {
+        sql += ` options `;
       }
 
       const collection = await oracle.select(sql);
@@ -121,6 +125,8 @@ module.exports = {
           NICKNAME,
           THUMB,
           
+          HOST,
+          
           CREATED
           
           
@@ -135,6 +141,7 @@ module.exports = {
           :notification,
           :nickname,
           :thumb,
+          :host,
           SYSDATE
         )
         RETURNING ID INTO :id
@@ -149,6 +156,7 @@ module.exports = {
         notification: input.notification ? 1 : 0,
         nickname: input.nickname,
         thumb: input.thumb,
+        host: input.host,
         id: {
           dir: oracledb.BIND_OUT,
           type: oracledb.NUMBER,
@@ -182,6 +190,8 @@ module.exports = {
           NOTIFICATION,
           NICKNAME,
           THUMB,
+          
+          HOST,
           
           CREATED
           
@@ -277,44 +287,43 @@ module.exports = {
     }
   },
 
-  findByEmail: async function (email) {
+  inHost: async function (id, host) {
     try {
-      const sql = `
-        SELECT * 
-        FROM USUARIOS
-        WHERE
-          EMAIL = :email
-      `;
+      const docById = this.read(id);
+      if (docById.host === host) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.inHost + ' ' + constants.error.repositorio);
+    }
+  },
 
-      const collection = await oracle.select(sql, { email: email });
+  findByEmail: async function (email, host) {
+    try {
+      const collection = await this.collection({ email: email, host: host });
 
       if (collection.length == 0) {
         return null;
       }
 
-      return mapRow(collection[0]);
+      return collection[0];
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.findByEmail + ' ' + constants.error.repositorio);
     }
   },
 
-  findByHash: async function (hash) {
+  findByHash: async function (hash, host) {
     try {
-      const sql = `
-        SELECT * 
-        FROM USUARIOS
-        WHERE
-          HASH = :hash
-      `;
-
-      const collection = await oracle.select(sql, { hash: hash });
+      const collection = await this.collection({ hash: hash, host: host });
 
       if (collection.length == 0) {
         return null;
       }
 
-      return mapRow(collection[0]);
+      return collection[0];
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.findByEmail + ' ' + constants.error.repositorio);
@@ -323,28 +332,15 @@ module.exports = {
 
   findToTablePaginator: async function (input) {
     try {
-      const sql = `
-        SELECT
-          
-          ID,
-          
-          EMAIL,
-          PASSWORD,
-          ROLES,
-          
-          HASH,
-          
-          ACTIVATE,
-          NOTIFICATION,
-          NICKNAME,
-          THUMB,
-          CREATED
-          
-        FROM USUARIOS
-        OFFSET :skip ROWS FETCH NEXT ${constants.paginator} ROWS ONLY
-      `;
+      const options = ` OFFSET :skip ROWS FETCH NEXT ${constants.paginator} ROWS ONLY `;
 
-      const collection = await oracle.select(sql, { skip: input.skip });
+      const collection = await oracle.select(
+        {
+          skip: input.skip,
+          host: input.host,
+        },
+        options
+      );
 
       if (!Array.isArray(collection)) {
         throw new Error(collection);

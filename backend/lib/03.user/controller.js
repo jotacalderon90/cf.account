@@ -11,6 +11,7 @@ const service = require('./service');
 
 const session = require('../session');
 const jwt = require('../jwt');
+const domain = require('../domain');
 
 module.exports = {
   create: async function (req, res) {
@@ -39,6 +40,7 @@ module.exports = {
         //EJECUTO SERVICIO
         const respuesta = await service.create({
           ...parseResult.data,
+          host: domain(req.headers.host),
         });
 
         if (respuesta === true) {
@@ -77,7 +79,10 @@ module.exports = {
       const token = jwt.getToken(req);
 
       if (token != null && token.sub) {
-        const respuesta = await service.read(token.sub);
+        const respuesta = await service.read({
+          id: token.sub,
+          host: domain(req.headers.host),
+        });
 
         res.send({ data: respuesta });
       } else {
@@ -144,7 +149,10 @@ module.exports = {
         return;
       }
 
-      const respuesta = await service.activate(parseResult.data);
+      const respuesta = await service.activate({
+        ...parseResult.data,
+        host: domain(req.headers.host),
+      });
 
       if (respuesta === true) {
         response.renderMessage(
@@ -182,7 +190,10 @@ module.exports = {
           return;
         }
 
-        const respuesta = await service.forget(parseResult.data);
+        const respuesta = await service.forget({
+          ...parseResult.data,
+          host: domain(req.headers.host),
+        });
 
         if (respuesta === true) {
           response.renderMessage(
@@ -224,7 +235,10 @@ module.exports = {
           return;
         }
 
-        const respuesta = await service.recovery(parseResult.data);
+        const respuesta = await service.recovery({
+          ...parseResult.data,
+          host: domain(req.headers.host),
+        });
 
         if (respuesta === true) {
           response.renderMessage(
@@ -265,7 +279,12 @@ module.exports = {
         return;
       }
 
-      const userLogged = await service.login(parseResult.data);
+      const _domain = domain(req.headers.host);
+
+      const userLogged = await service.login({
+        ...parseResult.data,
+        host: _domain,
+      });
 
       if (typeof userLogged === 'string') {
         if (parseResult.data.jwt === true) {
@@ -280,7 +299,7 @@ module.exports = {
         }
         const token = jwt.encode(userLogged.hash);
 
-        session.create(req, res, token, userLogged.email);
+        session.create(req, res, token, userLogged.email, _domain);
 
         if (parseResult.data.token === true) {
           res.send({ data: token });

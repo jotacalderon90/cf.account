@@ -42,6 +42,7 @@ module.exports = {
       const newdoc = {
         nombre: input.nombre,
         descripcion: input.descripcion,
+        host: input.host,
       };
 
       const created = await mongodb.insertOne('roles', newdoc);

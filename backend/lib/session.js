@@ -2,9 +2,9 @@
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
-const tracking = function (req, email) {
+const tracking = function (req, email, host) {
   logger.info('generando tracking');
-  req.session.email = email;
+  ((req.session.host = host), (req.session.email = email));
   req.session.loginTime = new Date().toISOString();
   req.session.userAgent = req.headers['user-agent'];
   req.session.ip = req.ip + '||' + req.headers['x-forwarded-for'];
@@ -20,13 +20,13 @@ const cookieOptions = {
 };
 
 module.exports = {
-  create: function (req, res, cookie, email) {
+  create: function (req, res, cookie, email, host) {
     logger.info('creando sesion');
 
     res.cookie('Authorization', cookie, cookieOptions);
 
     if (cookie && email) {
-      tracking(req, email);
+      tracking(req, email, host);
     }
   },
 

@@ -7,18 +7,18 @@ const constants = require('./constants');
 const { role } = require('../_repository/_');
 
 module.exports = {
-  total: async function () {
+  total: async function (host) {
     try {
-      return await role.total();
+      return await role.total({ host: host });
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.total + ' ' + constants.error.servicio);
     }
   },
 
-  collection: async function () {
+  collection: async function (host) {
     try {
-      return await role.collection({});
+      return await role.collection({ host: host });
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.collection + ' ' + constants.error.servicio);
@@ -34,9 +34,13 @@ module.exports = {
     }
   },
 
-  read: async function (id) {
+  read: async function (input) {
     try {
-      return await role.read(id);
+      const doc = await role.read(input.id);
+      if (doc && doc.host === input.host) {
+        return doc;
+      }
+      throw new Error(constants.error.rest.read_inhost);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.read + ' ' + constants.error.servicio);
@@ -45,16 +49,24 @@ module.exports = {
 
   update: async function (input, id) {
     try {
-      return await role.update(input, id);
+      const doc = await role.read(id);
+      if (doc && doc.host === input.host) {
+        return await role.update(input, id);
+      }
+      throw new Error(constants.error.rest.read_inhost);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.update + ' ' + constants.error.servicio);
     }
   },
 
-  delete: async function (id) {
+  delete: async function (input) {
     try {
-      return await role.delete(id);
+      const doc = await role.read(input.id);
+      if (doc && doc.host === input.host) {
+        return await role.delete(input.id);
+      }
+      throw new Error(constants.error.rest.read_inhost);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.delete + ' ' + constants.error.servicio);

@@ -16,7 +16,7 @@ module.exports = {
       });
     } catch (error) {
       logger.error(error);
-      response.APIError(
+      response.renderError(
         req,
         res,
         constants.error.rest.renderIndex + ' ' + constants.error.controlador
@@ -35,7 +35,7 @@ module.exports = {
       }
     } catch (error) {
       logger.error(error);
-      response.APIError(
+      response.renderError(
         req,
         res,
         constants.error.rest.renderForm + ' ' + constants.error.controlador
@@ -51,7 +51,7 @@ module.exports = {
       });
     } catch (error) {
       logger.error(error);
-      response.APIError(
+      response.renderError(
         req,
         res,
         constants.error.rest.renderLogin + ' ' + constants.error.controlador
@@ -68,7 +68,7 @@ module.exports = {
       }
     } catch (error) {
       logger.error(error);
-      response.APIError(
+      response.renderError(
         req,
         res,
         constants.error.rest.renderForget + ' ' + constants.error.controlador
@@ -91,7 +91,7 @@ module.exports = {
       }
     } catch (error) {
       logger.error(error);
-      response.APIError(
+      response.renderError(
         req,
         res,
         constants.error.rest.renderRecovery + ' ' + constants.error.controlador
@@ -104,7 +104,7 @@ module.exports = {
       res.render('account/politicas');
     } catch (error) {
       logger.error(error);
-      response.APIError(
+      response.renderError(
         req,
         res,
         constants.error.rest.renderPoliticasPrivacidad + ' ' + constants.error.controlador
@@ -117,7 +117,7 @@ module.exports = {
       res.render('account/condiciones');
     } catch (error) {
       logger.error(error);
-      response.APIError(
+      response.renderError(
         req,
         res,
         constants.error.rest.renderCondicionesServicio + ' ' + constants.error.controlador
@@ -132,7 +132,7 @@ module.exports = {
       });
     } catch (error) {
       logger.error(error);
-      response.APIError(
+      response.renderError(
         req,
         res,
         constants.error.rest.renderAdminUsers + ' ' + constants.error.controlador
@@ -147,7 +147,7 @@ module.exports = {
       });
     } catch (error) {
       logger.error(error);
-      response.APIError(
+      response.renderError(
         req,
         res,
         constants.error.rest.renderAdminRoles + ' ' + constants.error.controlador
@@ -166,7 +166,7 @@ module.exports = {
       }
     } catch (error) {
       logger.error(error);
-      response.APIError(
+      response.renderError(
         req,
         res,
         constants.error.rest.renderFormAdmin + ' ' + constants.error.controlador

@@ -7,10 +7,12 @@ const constants = require('./constants');
 const validator = require('./validator');
 const service = require('./service');
 
+const domain = require('../domain');
+
 module.exports = {
   tracking: async function (req, res) {
     try {
-      const respuesta = await service.tracking();
+      const respuesta = await service.tracking(domain(req.headers.host));
 
       res.send({ data: respuesta });
     } catch (error) {
@@ -33,7 +35,10 @@ module.exports = {
         return;
       }
 
-      const respuesta = await service.total(parseResult.data);
+      const respuesta = await service.total({
+        ...parseResult.data,
+        host: domain(req.headers.host),
+      });
 
       res.send({ data: respuesta });
     } catch (error) {
@@ -52,7 +57,10 @@ module.exports = {
         return;
       }
 
-      const respuesta = await service.collection(parseResult.data);
+      const respuesta = await service.collection({
+        ...parseResult.data,
+        host: domain(req.headers.host),
+      });
 
       res.send({ data: respuesta });
     } catch (error) {
@@ -76,7 +84,10 @@ module.exports = {
           return;
         }
 
-        const respuesta = await service.createadmin(parseResult.data);
+        const respuesta = await service.createadmin({
+          ...parseResult.data,
+          host: domain(req.headers.host),
+        });
 
         if (respuesta === true) {
           response.renderMessage(
@@ -113,7 +124,10 @@ module.exports = {
         return;
       }
 
-      const created = await service.createbyadmin(parseResult.data);
+      const created = await service.createbyadmin({
+        ...parseResult.data,
+        host: domain(req.headers.host),
+      });
       logger.info(created);
 
       response.APISuccess(res);
@@ -161,7 +175,13 @@ module.exports = {
         }
       }
 
-      const respuesta = await service[aux](parseResult.data, req.params.id);
+      const respuesta = await service[aux](
+        {
+          ...parseResult.data,
+          host: domain(req.headers.host),
+        },
+        req.params.id
+      );
 
       if (respuesta === true) {
         response.APISuccess(res);
@@ -189,7 +209,10 @@ module.exports = {
         return;
       }
 
-      const respuesta = await service.deletebyadmin(parseResult.data);
+      const respuesta = await service.deletebyadmin({
+        ...parseResult.data,
+        host: domain(req.headers.host),
+      });
 
       if (respuesta === true) {
         response.APISuccess(res);

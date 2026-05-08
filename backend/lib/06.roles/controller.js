@@ -7,10 +7,12 @@ const constants = require('./constants');
 const validator = require('./validator');
 const service = require('./service');
 
+const domain = require('../domain');
+
 module.exports = {
   total: async function (req, res) {
     try {
-      const data = await service.total();
+      const data = await service.total(domain(req.headers.host));
 
       res.send({ data: data });
     } catch (error) {
@@ -21,7 +23,7 @@ module.exports = {
 
   collection: async function (req, res) {
     try {
-      const data = await service.collection();
+      const data = await service.collection(domain(req.headers.host));
 
       res.send({ data: data });
     } catch (error) {
@@ -44,7 +46,10 @@ module.exports = {
         return;
       }
 
-      await service.create(parseResult.data);
+      await service.create({
+        ...parseResult.data,
+        host: domain(req.headers.host),
+      });
 
       response.APISuccess(res);
     } catch (error) {
@@ -55,7 +60,10 @@ module.exports = {
 
   read: async function (req, res) {
     try {
-      const respuesta = await service.read(req.params.id);
+      const respuesta = await service.read({
+        id: req.params.id,
+        host: domain(req.headers.host),
+      });
 
       res.send({ data: respuesta });
     } catch (error) {
@@ -74,7 +82,13 @@ module.exports = {
         return;
       }
 
-      await service.update(parseResult.data, req.params.id);
+      await service.update(
+        {
+          ...parseResult.data,
+          host: domain(req.headers.host),
+        },
+        req.params.id
+      );
 
       response.APISuccess(res);
     } catch (error) {
@@ -85,7 +99,10 @@ module.exports = {
 
   delete: async function (req, res) {
     try {
-      await service.delete(req.params.id);
+      await service.delete({
+        id: req.params.id,
+        host: domain(req.headers.host),
+      });
 
       response.APISuccess(res);
     } catch (error) {
