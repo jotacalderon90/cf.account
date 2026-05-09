@@ -11,7 +11,7 @@ module.exports = {
    *       - Administrador
    *     summary: Obtener seguimiento de usuarios
    *     description: Obtiene información de seguimiento y actividad de usuarios (solo root)
-   *     x-roles: ['root']
+   *     x-roles: ['admin']
    *     responses:
    *       200:
    *         description: OK
@@ -22,7 +22,7 @@ module.exports = {
    */
   //@route('/api/admin/account/tracking')
   //@method(['get'])
-  //@roles(['root'])
+  //@roles(['admin'])
   tracking: controlador.tracking,
 
   /**
@@ -33,7 +33,7 @@ module.exports = {
    *       - Administrador
    *     summary: Contar total de usuarios
    *     description: Obtiene el número total de usuarios registrados
-   *     x-roles: ['root','admin']
+   *     x-roles: ['admin']
    *     parameters:
    *       - in: query
    *         name: roles
@@ -49,7 +49,7 @@ module.exports = {
    */
   //@route('/api/admin/account/total')
   //@method(['get'])
-  //@roles(['root','admin'])
+  //@roles(['admin'])
   total: controlador.total,
 
   /**
@@ -60,7 +60,7 @@ module.exports = {
    *       - Administrador
    *     summary: Obtener colección de usuarios
    *     description: Obtiene la lista completa de usuarios con sus datos
-   *     x-roles: ['root','admin']
+   *     x-roles: ['admin']
    *     parameters:
    *       - in: query
    *         name: roles
@@ -80,7 +80,7 @@ module.exports = {
    */
   //@route('/api/admin/account/collection')
   //@method(['get'])
-  //@roles(['root','admin'])
+  //@roles(['admin'])
   collection: controlador.collection,
 
   /**
@@ -122,7 +122,7 @@ module.exports = {
    *       - Administrador
    *     summary: Crear usuario por administrador
    *     description: Permite a un administrador crear una nueva cuenta de usuario
-   *     x-roles: ['root','admin']
+   *     x-roles: ['admin']
    *     requestBody:
    *       required: true
    *       content:
@@ -144,7 +144,7 @@ module.exports = {
    */
   //@route('/api/admin/account')
   //@method(['post'])
-  //@roles(['root','admin'])
+  //@roles(['admin'])
   createbyadmin: controlador.createbyadmin,
 
   /**
@@ -155,7 +155,7 @@ module.exports = {
    *       - Administrador
    *     summary: Actualizar usuario por administrador
    *     description: Permite a un administrador actualizar los datos de un usuario existente
-   *     x-roles: ['root','admin']
+   *     x-roles: ['admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -186,7 +186,7 @@ module.exports = {
    */
   //@route('/api/admin/account/:id')
   //@method(['put'])
-  //@roles(['root','admin'])
+  //@roles(['admin'])
   updatebyadmin: controlador.updatebyadmin,
 
   /**
@@ -197,7 +197,7 @@ module.exports = {
    *       - Administrador
    *     summary: Eliminar usuario por administrador
    *     description: Permite a un administrador eliminar una cuenta de usuario
-   *     x-roles: ['root','admin']
+   *     x-roles: ['admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -214,6 +214,6 @@ module.exports = {
    */
   //@route('/api/admin/account/:id')
   //@method(['delete'])
-  //@roles(['root','admin'])
+  //@roles(['admin'])
   deletebyadmin: controlador.deletebyadmin,
 };

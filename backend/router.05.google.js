@@ -57,7 +57,7 @@ module.exports = {
    *       - Google
    *     summary: Servicio de prueba para enviar correo
    *     description: Servicio de prueba para enviar correo
-   *     x-roles: ['root']
+   *     x-roles: ['admin']
    *     parameters:
    *       - in: query
    *         name: raw
@@ -74,6 +74,6 @@ module.exports = {
    */
   //@route('/api/google/send')
   //@method(['get'])
-  //@roles(['root'])
+  //@roles(['admin'])
   send: controlador.send,
 };
