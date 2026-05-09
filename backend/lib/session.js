@@ -14,11 +14,11 @@ const getCookie = function (domain) {
   console.log('domain in getCookie', domain);
   return {
     path: '/',
-    httpOnly: true, // SIEMPRE
+    httpOnly: process.env.NODE_ENV === 'production', // SIEMPRE
     maxAge: 1000 * 60 * 60, // SIEMPRE 1 hora
     secure: process.env.COOKIE_SECURE === '1', // POR PARAMETRO
     sameSite: process.env.COOKIE_SAMESITE || 'Strict', // SIEMPRE
-    ...(process.env.COOKIE_DOMAIN == 1 && { domain: domain }),
+    domain: domain,
   };
 };
 
