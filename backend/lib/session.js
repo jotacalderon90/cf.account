@@ -11,6 +11,7 @@ const tracking = function (req, email, host) {
 };
 
 const getCookie = function (domain) {
+  console.log('domain in getCookie', domain);
   return {
     path: '/',
     httpOnly: true, // SIEMPRE
