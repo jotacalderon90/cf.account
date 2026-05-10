@@ -299,7 +299,6 @@ module.exports = {
         }
         const token = jwt.encode(userLogged.hash);
 
-        console.log('domain in controller', _domain);
         session.create(req, res, token, userLogged.email, _domain);
 
         if (parseResult.data.token === true) {
