@@ -33,6 +33,7 @@ module.exports = {
 
       hooks.mailingOnCreate(
         nuevoUsuario.email,
+        'account.' + input.host,
         Buffer.from(nuevoUsuario.hash, 'utf8').toString('base64')
       );
 
@@ -119,7 +120,11 @@ module.exports = {
       const newhash = password.random();
       await user.update({ hash: newhash }, userByEmail.id);
 
-      hooks.mailingOnForget(userByEmail.email, Buffer.from(newhash, 'utf8').toString('base64'));
+      hooks.mailingOnForget(
+        userByEmail.email,
+        'account.' + input.host,
+        Buffer.from(newhash, 'utf8').toString('base64')
+      );
 
       return true;
     } catch (error) {

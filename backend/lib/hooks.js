@@ -49,7 +49,7 @@ module.exports = {
     }
   },
 
-  mailingOnCreate: async function (email, hash) {
+  mailingOnCreate: async function (email, host, hash) {
     try {
       if (process.env.HOST_MAILING) {
         request.post(
@@ -61,11 +61,11 @@ module.exports = {
             },
           },
           {
-            host: process.env.HOST.split('//')[1],
+            host: host,
             to: email,
             subject: 'Activación de cuenta',
             template: 'accountActivate.html',
-            hash: process.env.HOST + '/api/account/activate/' + hash,
+            hash: 'https://' + host + '/api/account/activate/' + hash,
             message: 'Este dato no se usa pero se valida en mailing :S',
           }
         );
@@ -75,7 +75,7 @@ module.exports = {
     }
   },
 
-  mailingOnForget: async function (email, hash) {
+  mailingOnForget: async function (email, host, hash) {
     try {
       if (process.env.HOST_MAILING) {
         request.post(
@@ -87,11 +87,11 @@ module.exports = {
             },
           },
           {
-            host: process.env.HOST.split('//')[1],
+            host: host,
             to: email,
             subject: 'Reestablecer contraseña',
             template: 'accountRecovery.html',
-            hash: process.env.HOST + '/recovery?hash=' + hash,
+            hash: 'https://' + host + '/recovery?hash=' + hash,
             message: 'Este dato no se usa pero se valida en mailing :S',
           }
         );

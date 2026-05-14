@@ -187,9 +187,12 @@ module.exports = {
       }
 
       const registro = await user.read(id);
-      const hash = Buffer.from(registro.password, 'utf8').toString('base64');
 
-      hooks.mailingOnForget(registro.email, hash);
+      hooks.mailingOnForget(
+        registro.email,
+        'account.' + input.host,
+        Buffer.from(registro.password, 'utf8').toString('base64')
+      );
 
       return true;
     } catch (error) {
