@@ -4,10 +4,12 @@
 
 <!--define:script-->
   <script>
-    const roles = {{data:JSON.stringify(doc.user.roles)}};
+    const env = '{{data:process.env.NODE_ENV}}';
+    const user_roles = {{data:JSON.stringify(doc.user.roles)}};
     const host_database = "{{data:process.env.HOST_DATABASE}}";
   </script>
-	<script src="/account/06.admin_users/_.js"></script>
+	<script type="text/javascript" src="/account/perfil.js"></script>
+	<script type="text/javascript" src="/account/06.admin_users/_.js"></script>
 <!--/define:script-->
 
 <!--define:main-->
@@ -22,10 +24,10 @@
 		<main class="flex-grow-1 px-md-4 mb-4" style="min-width: 0;">
       
       <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
-        <h4 class="m-0" v-on:dblclick="object.refresh()" title="Doble click para refrescar">
+        <h4 class="m-0" v-on:dblclick="users.refresh()" title="Doble click para refrescar">
           <i class="fas fa-users-cog me-2 text-primary"></i>Lista de Usuarios
         </h4>
-        <button class="btn btn-primary d-flex align-items-center" v-on:click="object.create()">
+        <button class="btn btn-primary d-flex align-items-center" v-on:click="users.create()">
           <i class="fa fa-user-plus me-2"></i><span>Nuevo Usuario</span>
         </button>
       </div>
@@ -37,17 +39,17 @@
               <span class="input-group-text bg-white border-end-0">
                 <i class="fa fa-search text-muted"></i>
               </span>
-              <input type="text" class="form-control border-start-0" placeholder="Buscar por email o rol..." v-model="object.filterText">
+              <input type="text" class="form-control border-start-0" placeholder="Buscar por email o rol..." v-model="users.filterText">
             </div>
             <div class="dropdown">
               <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-filter me-1"></i> Filtrar por Rol
               </button>
               <ul class="dropdown-menu shadow">
-                <li><a class="dropdown-item" href="#" v-on:click.prevent="object.refresh()">Todos</a></li>
+                <li><a class="dropdown-item" href="#" v-on:click.prevent="users.refresh()">Todos</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li v-for="tag in object.tags">
-                  <a class="dropdown-item" href="#" v-on:click.prevent="object.refresh(tag.nombre)">{{tag.nombre}}</a>
+                <li v-for="tag in users.tags">
+                  <a class="dropdown-item" href="#" v-on:click.prevent="users.refresh(tag.nombre)">{{tag.nombre}}</a>
                 </li>
               </ul>
             </div>
@@ -69,26 +71,26 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(row,index) in object.filteredColl" :key="row.id">
+                <tr v-for="(row,index) in users.filteredColl" :key="row.id">
                   <td class="text-muted small">{{index+1}}</td>
                   <td>
                     <div class="fw-bold">{{row.email}}</div>
                     <div class="text-muted x-small" style="font-size: 0.75rem;">ID: {{row.id}}</div>
                   </td>
-                  <td v-on:dblclick="object.changeRoles(row)" title="Doble click para gestionar roles" style="cursor: pointer;">
+                  <td v-on:dblclick="users.changeRoles(row)" title="Doble click para gestionar roles" style="cursor: pointer;">
                     <template v-if="row.roles && row.roles.length">
                       <span v-for="rol in row.roles" class="badge rounded-pill bg-soft-primary text-primary border border-primary border-opacity-25 me-1">
                         {{rol}}
                       </span>
                     </template>
                     <span v-else class="text-muted small italic">Sin roles</span>
-                    <button class="btn btn-link btn-sm p-0 ms-1 text-muted" v-on:click="object.changeRoles(row)">
+                    <button class="btn btn-link btn-sm p-0 ms-1 text-muted" v-on:click="users.changeRoles(row)">
                       <i class="fa fa-edit x-small"></i>
                     </button>
                   </td>
                   <td class="text-center">
                     <div class="form-check form-switch d-inline-block">
-                      <input class="form-check-input" type="checkbox" role="switch" :checked="row.activate" v-on:change="object.activate(row)" style="cursor: pointer;">
+                      <input class="form-check-input" type="checkbox" role="switch" :checked="row.activate" v-on:change="users.activate(row)" style="cursor: pointer;">
                     </div>
                     <span :class="row.activate ? 'text-success' : 'text-warning'" class="small ms-1">
                       {{row.activate ? 'Activo' : 'Inactivo'}}
@@ -96,11 +98,11 @@
                   </td>
                   <td class="text-center">
                     <div class="btn-group btn-group-sm">
-                      <button class="btn btn-outline-info" v-on:click="object.changePassword(row)" title="Cambiar contraseña">
+                      <button class="btn btn-outline-info" v-on:click="users.changePassword(row)" title="Cambiar contraseña">
                         <i class="fa fa-key me-1"></i> Pass
                       </button>
                       <!--if:process.env.HOST_MAILING-->
-                      <button class="btn btn-outline-secondary" v-on:click="object.enableRecovery(row)" title="Enviar correo de recuperación">
+                      <button class="btn btn-outline-secondary" v-on:click="users.enableRecovery(row)" title="Enviar correo de recuperación">
                         <i class="fa fa-envelope"></i>
                       </button>
                       <!--/if-->
@@ -108,18 +110,18 @@
                   </td>
                   <!--if:process.env.HOST_DATABASE-->
                   <td class="text-center">
-                    <a target="_blank" class="btn btn-sm btn-outline-primary" :href="object.host_database() + row.id">
+                    <a target="_blank" class="btn btn-sm btn-outline-primary" :href="users.host_database() + row.id">
                       <i class="fa fa-database"></i>
                     </a>
                   </td>
                   <!--/if-->
                   <td class="text-center">
-                    <button class="btn btn-sm btn-outline-danger" v-on:click="object.delete(row.id)">
+                    <button class="btn btn-sm btn-outline-danger" v-on:click="users.delete(row.id)">
                       <i class="fa fa-trash"></i>
                     </button>
                   </td>
                 </tr>
-                <tr v-if="object.filteredColl.length === 0">
+                <tr v-if="users.filteredColl.length === 0">
                   <td colspan="7" class="text-center py-5 text-muted">
                     <i class="fa fa-search me-1"></i> No se encontraron usuarios.
                   </td>
@@ -129,8 +131,8 @@
           </div>
           
           <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-            <span class="small text-muted">Mostrando {{object.obtained}} de {{object.cant}} usuarios</span>
-            <button v-if="object.obtained < object.cant" class="btn btn-sm btn-primary" v-on:click="object.getCollection()">
+            <span class="small text-muted">Mostrando {{users.obtained}} de {{users.cant}} usuarios</span>
+            <button v-if="users.obtained < users.cant" class="btn btn-sm btn-primary" v-on:click="users.getCollection()">
               Cargar más <i class="fa fa-chevron-down ms-1"></i>
             </button>
           </div>
@@ -151,14 +153,14 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body p-4">
-          <p class="text-muted mb-3" v-if="object.selectedUser">
-            Asignar roles para: <strong class="text-dark">{{object.selectedUser.email}}</strong>
+          <p class="text-muted mb-3" v-if="users.selectedUser">
+            Asignar roles para: <strong class="text-dark">{{users.selectedUser.email}}</strong>
           </p>
           
           <div class="row g-3">
-            <div v-for="rol in object.allRoles" :key="rol.id" class="col-6">
+            <div v-for="rol in users.allRoles" :key="rol.id" class="col-6">
               <div class="form-check p-2 border rounded-3 bg-light hover-shadow transition-all">
-                <input class="form-check-input ms-0 me-2" type="checkbox" :id="'rol_' + rol.nombre" :value="rol.nombre" v-model="object.userRoles">
+                <input class="form-check-input ms-0 me-2" type="checkbox" :id="'rol_' + rol.nombre" :value="rol.nombre" v-model="users.userRoles">
                 <label class="form-check-label d-block cursor-pointer" :for="'rol_' + rol.nombre">
                   <div class="fw-bold">{{rol.nombre}}</div>
                   <div class="x-small text-muted">{{rol.descripcion}}</div>
@@ -167,14 +169,14 @@
             </div>
           </div>
 
-          <div v-if="object.allRoles.length === 0" class="text-center py-3">
+          <div v-if="users.allRoles.length === 0" class="text-center py-3">
             <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
             <span class="text-muted">Cargando roles disponibles...</span>
           </div>
         </div>
         <div class="modal-footer border-0 p-4 pt-0">
           <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary px-4" v-on:click="object.saveRoles()">
+          <button type="button" class="btn btn-primary px-4" v-on:click="users.saveRoles()">
             <i class="fa fa-save me-2"></i>Guardar Cambios
           </button>
         </div>

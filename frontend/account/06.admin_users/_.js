@@ -1,4 +1,4 @@
-const object = function () {
+const users = function () {
 	this.name = 'account';
 	this.query = {};
 	this.options = {
@@ -41,7 +41,7 @@ const object = function () {
 }
 
 // Propiedad computada simulada para filtrado local
-Object.defineProperty(object.prototype, 'filteredColl', {
+Object.defineProperty(users.prototype, 'filteredColl', {
 	get: function () {
 		if (!this.filterText) return this.coll;
 		const filter = this.filterText.toLowerCase();
@@ -52,7 +52,7 @@ Object.defineProperty(object.prototype, 'filteredColl', {
 	}
 });
 
-object.prototype.start = async function (parent) {
+users.prototype.start = async function (parent) {
 	this.parent = parent;
 	try {
 		const tags = await this.services.tag();
@@ -68,7 +68,7 @@ object.prototype.start = async function (parent) {
 	}
 }
 
-object.prototype.getRoles = async function () {
+users.prototype.getRoles = async function () {
 	try {
 		const res = await this.services.roles({ skip: 0 }); // Assuming small enough for now, or fetch all
 		if (res.error) throw res.error;
@@ -78,11 +78,7 @@ object.prototype.getRoles = async function () {
 	}
 }
 
-object.prototype.hasRole = function (role) {
-	return roles.indexOf(role) > -1;
-}
-
-object.prototype.refresh = async function (roles) {
+users.prototype.refresh = async function (roles) {
 	if (roles) {
 		this.query.roles = roles;
 	} else {
@@ -94,7 +90,7 @@ object.prototype.refresh = async function (roles) {
 	await this.getTotal();
 }
 
-object.prototype.getTotal = async function () {
+users.prototype.getTotal = async function () {
 	try {
 		const cant = await this.services.total(this.paramsToGetTotal());
 		if (cant.error) {
@@ -108,7 +104,7 @@ object.prototype.getTotal = async function () {
 	}
 }
 
-object.prototype.paramsToGetTotal = function () {
+users.prototype.paramsToGetTotal = function () {
 	/*return {
 		query: JSON.stringify(this.query)
 	};*/
@@ -117,7 +113,7 @@ object.prototype.paramsToGetTotal = function () {
 	};
 }
 
-object.prototype.getCollection = async function () {
+users.prototype.getCollection = async function () {
 	this.parent.loader.active = true;
 	try {
 		this.obtaining = true;
@@ -136,7 +132,7 @@ object.prototype.getCollection = async function () {
 	this.parent.loader.active = false;
 }
 
-object.prototype.paramsToGetCollection = function () {
+users.prototype.paramsToGetCollection = function () {
 	return {
 		roles: this.query.roles || '',
 		skip: this.obtained
@@ -148,7 +144,7 @@ object.prototype.paramsToGetCollection = function () {
 	  };*/
 }
 
-object.prototype.getOptions = function () {
+users.prototype.getOptions = function () {
 	return {
 		...this.options,
 		skip: this.obtained,
@@ -156,14 +152,14 @@ object.prototype.getOptions = function () {
 	};
 }
 
-object.prototype.changeRoles = async function (row) {
+users.prototype.changeRoles = async function (row) {
 	this.selectedUser = row;
 	this.userRoles = [...(row.roles || [])];
 	const modal = new bootstrap.Modal(document.getElementById('rolesModal'));
 	modal.show();
 }
 
-object.prototype.saveRoles = async function () {
+users.prototype.saveRoles = async function () {
 	try {
 		this.parent.loader.active = true;
 		const update = await this.services.update({
@@ -186,7 +182,7 @@ object.prototype.saveRoles = async function () {
 	this.parent.loader.active = false;
 }
 
-object.prototype.activate = async function (row) {
+users.prototype.activate = async function (row) {
 	try {
 		const q = (row.activate) ? "Deshabilitar" : "Habilitar";
 		if (!confirm('Confirma ' + q)) {
@@ -211,7 +207,7 @@ object.prototype.activate = async function (row) {
 	this.parent.loader.active = false;
 }
 
-object.prototype.changePassword = async function (row) {
+users.prototype.changePassword = async function (row) {
 	try {
 		if (!confirm('Confirma querer cambiar contraseña')) {
 			return;
@@ -239,7 +235,7 @@ object.prototype.changePassword = async function (row) {
 	this.parent.loader.active = false;
 }
 
-object.prototype.enableRecovery = async function (row) {
+users.prototype.enableRecovery = async function (row) {
 	try {
 		if (!confirm('Confirma enviar correo de recuperación')) {
 			return;
@@ -261,7 +257,7 @@ object.prototype.enableRecovery = async function (row) {
 	this.parent.loader.active = false;
 }
 
-object.prototype.delete = async function (id) {
+users.prototype.delete = async function (id) {
 	try {
 		if (!confirm("Confirme eliminación del documento")) {
 			return;
@@ -282,7 +278,7 @@ object.prototype.delete = async function (id) {
 	this.parent.loader.active = false;
 }
 
-object.prototype.create = async function (id) {
+users.prototype.create = async function (id) {
 	try {
 
 		const email = await this.parent.prompt.execute('Nuevo usuario', 'text', 'Ingrese email', "");
@@ -321,8 +317,8 @@ object.prototype.create = async function (id) {
 	}
 }
 
-object.prototype.host_database = function () {
+users.prototype.host_database = function () {
 	return host_database + '/objetos/user/';
 }
 
-app.modules.object = object;
+app.modules.users = users;

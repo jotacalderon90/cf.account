@@ -1,4 +1,4 @@
-const object = function() {
+const roles = function() {
   
 	this.name = 'roles';
 	
@@ -13,7 +13,7 @@ const object = function() {
   this.filterText = '';
 }
 
-object.prototype.start = async function(parent){
+roles.prototype.start = async function(parent){
 	this.parent = parent;
 	try {
 		await this.refresh();
@@ -23,17 +23,13 @@ object.prototype.start = async function(parent){
 	}
 }
 
-object.prototype.hasRole = function(role){
-	return roles.indexOf(role) > -1;
-}
-
-object.prototype.refresh = async function() {
+roles.prototype.refresh = async function() {
 	this.cant = 0;
 	this.coll = [];
 	await this.getCollection();
 }
 
-object.prototype.getCollection = async function() {
+roles.prototype.getCollection = async function() {
 	this.parent.loader.active = true;
 	try {
 		const coll = await this.services.collection();
@@ -49,7 +45,7 @@ object.prototype.getCollection = async function() {
 	this.parent.loader.active = false;
 }
 
-object.prototype.getCollectionView = function() {
+roles.prototype.getCollectionView = function() {
 	if (!this.filterText) return this.coll;
   const filter = this.filterText.toLowerCase();
   return this.coll.filter(row => 
@@ -58,7 +54,7 @@ object.prototype.getCollectionView = function() {
   );
 }
 
-object.prototype.create = async function() {
+roles.prototype.create = async function() {
 	try {
     const nombre = await this.parent.prompt.execute('Nuevo Rol', 'text', 'Ingrese el nombre del rol (identificador)', "");
     if (!nombre || nombre.trim() === '') return;
@@ -83,7 +79,7 @@ object.prototype.create = async function() {
   this.parent.loader.active = false;
 }
 
-object.prototype.update = async function(row) {
+roles.prototype.update = async function(row) {
 	try {
     
     const nombre = await this.parent.prompt.execute('Editar Nombre', 'text', 'Actualice el nombre del rol', row.nombre);
@@ -111,7 +107,7 @@ object.prototype.update = async function(row) {
   this.parent.loader.active = false;
 }
 
-object.prototype.delete = async function(id) {
+roles.prototype.delete = async function(id) {
 	try {
 		if (!confirm("¿Estás seguro de que deseas eliminar este rol? Esta acción no se puede deshacer.")) {
 			return;
@@ -129,8 +125,8 @@ object.prototype.delete = async function(id) {
 	this.parent.loader.active = false;
 }
 
-object.prototype.host_database = function() {
+roles.prototype.host_database = function() {
   return host_database + '/objetos/roles/';
 }
 
-app.modules.object = object;
+app.modules.roles = roles;

@@ -4,10 +4,12 @@
 
 <!--define:script-->
   <script>
-    const roles = {{data:JSON.stringify(doc.user.roles)}};
+    const env = '{{data:process.env.NODE_ENV}}';
+    const user_roles = {{data:JSON.stringify(doc.user.roles)}};
     const host_database = "{{data:process.env.HOST_DATABASE}}";
   </script>
-	<script src="/account/07.admin_roles/_.js"></script>
+	<script type="text/javascript" src="/account/perfil.js"></script>
+	<script type="text/javascript" src="/account/07.admin_roles/_.js"></script>
 <!--/define:script-->
 
 <!--define:main-->
@@ -22,10 +24,10 @@
 		<main class="flex-grow-1 px-md-4 mb-4" style="min-width: 0;">
       
       <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
-        <h4 class="m-0" v-on:dblclick="object.refresh()" title="Doble click para refrescar">
+        <h4 class="m-0" v-on:dblclick="roles.refresh()" title="Doble click para refrescar">
           <i class="fas fa-user-shield me-2 text-primary"></i>Gestión de Roles
         </h4>
-        <button class="btn btn-primary d-flex align-items-center" v-on:click="object.create()">
+        <button class="btn btn-primary d-flex align-items-center" v-on:click="roles.create()">
           <i class="fa fa-plus me-2"></i><span>Nuevo Rol</span>
         </button>
       </div>
@@ -37,7 +39,7 @@
               <span class="input-group-text bg-white border-end-0">
                 <i class="fa fa-search text-muted"></i>
               </span>
-              <input type="text" class="form-control border-start-0" placeholder="Buscar por nombre o descripción..." v-model="object.filterText">
+              <input type="text" class="form-control border-start-0" placeholder="Buscar por nombre o descripción..." v-model="roles.filterText">
             </div>
           </div>
           
@@ -52,7 +54,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(row,index) in object.getCollectionView()" :key="row.id">
+                <tr v-for="(row,index) in roles.getCollectionView()" :key="row.id">
                   <td class="text-muted small">{{index+1}}</td>
                   <td>
                     <span class="badge rounded-pill bg-info text-dark px-3">{{row.nombre}}</span>
@@ -62,21 +64,21 @@
                   </td>
                   <td class="text-center">
                     <div class="btn-group btn-group-sm">
-                      <button class="btn btn-outline-secondary" v-on:click="object.update(row)" title="Editar rol">
+                      <button class="btn btn-outline-secondary" v-on:click="roles.update(row)" title="Editar rol">
                         <i class="fa fa-edit"></i>
                       </button>
                       <!--if:process.env.HOST_DATABASE-->
-                      <a target="_blank" class="btn btn-outline-primary" :href="object.host_database() + row.id" title="Ver JSON en DB">
+                      <a target="_blank" class="btn btn-outline-primary" :href="roles.host_database() + row.id" title="Ver JSON en DB">
                         <i class="fa fa-database"></i>
                       </a>
                       <!--/if-->
-                      <button class="btn btn-outline-danger" v-on:click="object.delete(row.id)" title="Eliminar rol">
+                      <button class="btn btn-outline-danger" v-on:click="roles.delete(row.id)" title="Eliminar rol">
                         <i class="fa fa-trash"></i>
                       </button>
                     </div>
                   </td>
                 </tr>
-                <tr v-if="object.getCollectionView().length === 0">
+                <tr v-if="roles.getCollectionView().length === 0">
                   <td colspan="4" class="text-center py-5 text-muted">
                     <i class="fa fa-info-circle me-1"></i> No se encontraron roles que coincidan con la búsqueda.
                   </td>
@@ -86,8 +88,8 @@
           </div>
           
           <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-            <span class="small text-muted">Mostrando {{object.getCollectionView().length}} de {{object.cant}} roles</span>
-            <button v-if="object.coll.length < object.cant" class="btn btn-sm btn-link text-decoration-none" v-on:click="object.getCollection()">
+            <span class="small text-muted">Mostrando {{roles.getCollectionView().length}} de {{roles.cant}} roles</span>
+            <button v-if="roles.coll.length < roles.cant" class="btn btn-sm btn-link text-decoration-none" v-on:click="roles.getCollection()">
               Cargar más <i class="fa fa-chevron-down ms-1"></i>
             </button>
           </div>
