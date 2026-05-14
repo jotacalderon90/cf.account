@@ -66,7 +66,8 @@ module.exports = {
       const userByEmail = await user.findByEmail(input.email, input.host);
 
       if (userByEmail != null) {
-        return 'email ingresado ya existe';
+        logger.info(input.email, input.host);
+        return constants.error.rest.createadminexists;
       }
 
       const nuevoUsuario = {};
@@ -94,7 +95,8 @@ module.exports = {
       const userByEmail = await user.findByEmail(input.email, input.host);
 
       if (userByEmail != null) {
-        return 'email ingresado ya existe';
+        logger.info(input.email, input.host);
+        return constants.error.rest.createadminexists;
       }
 
       const nuevoUsuario = {};
@@ -140,7 +142,7 @@ module.exports = {
       //validar usuario a modificar por dominio y revalidar id obtenido
       //sin esto, un root de un dominio podria modificar usuarios de otro dominio
       const userInHost = await user.inHost(id, input.host);
-      console.log(userInHost);
+
       if (!userInHost) {
         throw new Error(constants.error.rest.updatebyadmin_userinhost);
       }
