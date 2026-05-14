@@ -11,7 +11,7 @@ module.exports = {
    *       - Vistas
    *     summary: obtener vista index
    *     description: obtiene vista index
-   *     x-roles: ['admin','user']
+   *     x-roles: ['root', 'admin','user']
    *     responses:
    *       200:
    *         description: Respuesta en HTML
@@ -22,7 +22,7 @@ module.exports = {
    */
   //@route('/')
   //@method(['get'])
-  //@roles(['admin','user'])
+  //@roles(['root', 'admin','user'])
   renderIndex: controlador.renderIndex,
 
   /**
@@ -159,7 +159,7 @@ module.exports = {
    *       - Vistas
    *     summary: obtener vista de administración de roles
    *     description: obtiene vista de administración de roles
-   *     x-roles: ['admin']
+   *     x-roles: ['root', 'admin']
    *     responses:
    *       200:
    *         description: Respuesta en HTML
@@ -170,7 +170,7 @@ module.exports = {
    */
   //@route('/admin/roles')
   //@method(['get'])
-  //@roles(['admin'])
+  //@roles(['root', 'admin'])
   renderAdminRoles: controlador.renderAdminRoles,
 
   /**
@@ -181,7 +181,7 @@ module.exports = {
    *       - Vistas
    *     summary: obtener vista de administración de usuarios
    *     description: obtiene vista de administración de usuarios
-   *     x-roles: ['admin']
+   *     x-roles: ['root', 'admin']
    *     responses:
    *       200:
    *         description: Respuesta en HTML
@@ -192,7 +192,7 @@ module.exports = {
    */
   //@route('/admin/users')
   //@method(['get'])
-  //@roles(['admin'])
+  //@roles(['root', 'admin'])
   renderAdminUsers: controlador.renderAdminUsers,
 
   /**

@@ -11,7 +11,7 @@ module.exports = {
    *       - Roles
    *     summary: Obtener total de roles
    *     description: Obtiene total de roles
-   *     x-roles: ['admin']
+   *     x-roles: ['root', 'admin']
    *     responses:
    *       200:
    *         description: OK
@@ -22,7 +22,7 @@ module.exports = {
    */
   //@route('/api/admin/roles/total')
   //@method(['get'])
-  //@roles(['admin'])
+  //@roles(['root', 'admin'])
   total: controlador.total,
 
   /**
@@ -33,7 +33,7 @@ module.exports = {
    *       - Roles
    *     summary: Obtener colección de roles
    *     description: Obtiene la lista completa de roles
-   *     x-roles: ['admin']
+   *     x-roles: ['root', 'admin']
    *     responses:
    *       200:
    *         description: OK
@@ -44,7 +44,7 @@ module.exports = {
    */
   //@route('/api/admin/roles/collection')
   //@method(['get'])
-  //@roles(['admin'])
+  //@roles(['root', 'admin'])
   collection: controlador.collection,
 
   /**
@@ -55,7 +55,7 @@ module.exports = {
    *       - Roles
    *     summary: Crear rol
    *     description: Crea un nuevo rol
-   *     x-roles: ['admin']
+   *     x-roles: ['root', 'admin']
    *     requestBody:
    *       required: true
    *       content:
@@ -77,7 +77,7 @@ module.exports = {
    */
   //@route('/api/admin/roles')
   //@method(['post'])
-  //@roles(['admin'])
+  //@roles(['root', 'admin'])
   create: controlador.create,
 
   /**
@@ -88,7 +88,7 @@ module.exports = {
    *       - Roles
    *     summary: Obtener rol
    *     description: Obtiene la información de un rol
-   *     x-roles: ['admin']
+   *     x-roles: ['root', 'admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -105,7 +105,7 @@ module.exports = {
    */
   //@route('/api/admin/roles/:id')
   //@method(['get'])
-  //@roles(['admin'])
+  //@roles(['root', 'admin'])
   read: controlador.read,
 
   /**
@@ -116,7 +116,7 @@ module.exports = {
    *       - Roles
    *     summary: Actualizar rol
    *     description: Actualiza un rol
-   *     x-roles: ['admin']
+   *     x-roles: ['root', 'admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -143,7 +143,7 @@ module.exports = {
    */
   //@route('/api/admin/roles/:id')
   //@method(['put'])
-  //@roles(['admin'])
+  //@roles(['root', 'admin'])
   update: controlador.update,
 
   /**
@@ -154,7 +154,7 @@ module.exports = {
    *       - Roles
    *     summary: Eliminar rol
    *     description: Elimina un rol
-   *     x-roles: ['admin']
+   *     x-roles: ['root', 'admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -171,6 +171,6 @@ module.exports = {
    */
   //@route('/api/admin/roles/:id')
   //@method(['delete'])
-  //@roles(['admin'])
+  //@roles(['root', 'admin'])
   delete: controlador.delete,
 };
