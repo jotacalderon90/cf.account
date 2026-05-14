@@ -45,7 +45,7 @@ module.exports = {
 
   create: async function (input) {
     try {
-      if ((await this.total({ email: input.email })) != 0) {
+      if ((await this.total({ email: input.email, host: input.host })) != 0) {
         return constants.error.rest.createEmailExiste;
       }
 

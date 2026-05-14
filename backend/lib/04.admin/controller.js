@@ -128,7 +128,6 @@ module.exports = {
         ...parseResult.data,
         host: domain(req.headers.host),
       });
-      logger.info(created);
 
       if (typeof created === 'string') {
         throw new Error(created);

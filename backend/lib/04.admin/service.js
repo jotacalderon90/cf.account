@@ -66,7 +66,6 @@ module.exports = {
       const userByEmail = await user.findByEmail(input.email, input.host);
 
       if (userByEmail != null) {
-        logger.info(input.email, input.host);
         return constants.error.rest.createadminexists;
       }
 
@@ -95,7 +94,6 @@ module.exports = {
       const userByEmail = await user.findByEmail(input.email, input.host);
 
       if (userByEmail != null) {
-        logger.info(input.email, input.host);
         return constants.error.rest.createadminexists;
       }
 

@@ -122,8 +122,9 @@ module.exports = {
         FROM USUARIOS
         WHERE 
           EMAIL = :email
+          AND HOST = :host
       `;
-      const check = await oracle.select(sqlCheck, { email: input.email });
+      const check = await oracle.select(sqlCheck, { email: input.email, host: input.host });
 
       if (check[0].TOTAL != 0) {
         return constants.error.rest.createEmailExiste;
