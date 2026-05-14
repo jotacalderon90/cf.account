@@ -130,6 +130,10 @@ module.exports = {
       });
       logger.info(created);
 
+      if (typeof created === 'string') {
+        throw new Error(created);
+      }
+
       response.APISuccess(res);
     } catch (error) {
       logger.error(error);
