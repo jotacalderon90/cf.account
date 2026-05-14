@@ -108,7 +108,10 @@ module.exports = {
       nuevoUsuario.nickname = input.email;
       nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
 
-      return await user.create(nuevoUsuario);
+      const created = await user.create(nuevoUsuario);
+      logger.info(created);
+
+      return true;
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.createbyadmin + ' ' + constants.error.servicio);
