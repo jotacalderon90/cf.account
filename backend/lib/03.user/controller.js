@@ -60,9 +60,49 @@ module.exports = {
 
         //DELEGO OTROS METODOS BAJO FORMULARIO DE PERFIL!
       } else if (req.body.button && req.body.button === 'UPDATE') {
-        this.update(req, res);
+        //this.update(req, res);
+        try {
+          const parseResult = validator.update.safeParse(req.body);
+
+          if (!parseResult.success) {
+            response.renderError(req, res, constants.error.validacion);
+            return;
+          }
+
+          const respuesta = await service.update(parseResult.data, req.user);
+
+          res.redirect(respuesta);
+        } catch (error) {
+          logger.error(error);
+          response.renderError(
+            req,
+            res,
+            constants.error.rest.update + ' ' + constants.error.controlador
+          );
+        }
       } else if (req.body.button && req.body.button === 'DELETE') {
-        this.delete(req, res);
+        //this.delete(req, res);
+        try {
+          await service.delete(req.user.id);
+
+          session.destroy(req, res);
+
+          response.renderMessage(
+            req,
+            res,
+            200,
+            'Usuario eliminado',
+            'Se ha eliminado su cuenta satisfactoriamente',
+            'success'
+          );
+        } catch (error) {
+          logger.error(error);
+          response.renderError(
+            req,
+            res,
+            constants.error.rest.delete + ' ' + constants.error.controlador
+          );
+        }
       }
     } catch (error) {
       logger.error(error);
