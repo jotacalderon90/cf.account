@@ -141,6 +141,8 @@ module.exports = {
       });
 
       if (users.length != 1) {
+        logger.error(input);
+        logger.error(users);
         throw new Error(constants.error.rest.forgetNoUser);
       }
 
