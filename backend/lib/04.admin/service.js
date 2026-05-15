@@ -191,7 +191,7 @@ module.exports = {
       hooks.mailingOnForget(
         registro.email,
         'account.' + input.host,
-        Buffer.from(registro.password, 'utf8').toString('base64')
+        Buffer.from(registro.hash, 'utf8').toString('base64')
       );
 
       return true;
