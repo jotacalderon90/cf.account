@@ -9,6 +9,7 @@ const constants = require('./constants');
 const validator = require('./validator');
 
 const googleapis = require('../googleapis');
+const domain = require('../domain');
 
 const viewName = function (view_path, host) {
   const view_path_host = 'assets/domains/' + host + '/' + view_path;
@@ -21,22 +22,12 @@ const viewName = function (view_path, host) {
   return view_path;
 };
 
-const getHostAccount = function (req) {
-  let hostAccount = '';
-  if (process.env.NODE_ENV === 'production' && process.env.FRONT_MULTIDOMAIN === '1') {
-    hostAccount = req.protocol + '://' + req.headers.host.replace(/^([^.:]+)/, 'account');
-  } else {
-    hostAccount = process.env.HOST_ACCOUNT;
-  }
-  return hostAccount;
-};
-
 module.exports = {
   renderIndex: async function (req, res) {
     try {
       res.render(viewName('account/01.perfil/_', req.headers.host), {
         user: req.user,
-        __hostAccount: getHostAccount(req),
+        __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
       logger.error(error);
@@ -153,7 +144,7 @@ module.exports = {
     try {
       res.render(viewName('account/06.admin_users/_', req.headers.host), {
         user: req.user,
-        __hostAccount: getHostAccount(req),
+        __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
       logger.error(error);
@@ -169,7 +160,7 @@ module.exports = {
     try {
       res.render(viewName('account/07.admin_roles/_', req.headers.host), {
         user: req.user,
-        __hostAccount: getHostAccount(req),
+        __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
       logger.error(error);
