@@ -5,9 +5,9 @@
 	</button>
 	<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
 		<li><a class="dropdown-item" href="{{data:doc.__hostAccount}}">Perfil</a></li>
-    <li v-for="menu in perfil.menu">
-      <a class="dropdown-item" :href="menu.hostname">
-        {{menu.label}}
+    <li v-for="row in menu.collection">
+      <a class="dropdown-item" :href="row.hostname">
+        {{row.label}}
       </a>
     </li>
 		<li><hr class="dropdown-divider"></li>
