@@ -40,7 +40,7 @@ module.exports = {
         //EJECUTO SERVICIO
         const respuesta = await service.create({
           ...parseResult.data,
-          host: domain(req.headers.host),
+          host: domain.getParentDomain(req.headers.host),
         });
 
         if (respuesta === true) {
@@ -121,7 +121,7 @@ module.exports = {
       if (token != null && token.sub) {
         const respuesta = await service.read({
           id: token.sub,
-          host: domain(req.headers.host),
+          host: domain.getParentDomain(req.headers.host),
         });
 
         res.send({ data: respuesta });
@@ -191,7 +191,7 @@ module.exports = {
 
       const respuesta = await service.activate({
         ...parseResult.data,
-        host: domain(req.headers.host),
+        host: domain.getParentDomain(req.headers.host),
       });
 
       if (respuesta === true) {
@@ -232,7 +232,7 @@ module.exports = {
 
         const respuesta = await service.forget({
           ...parseResult.data,
-          host: domain(req.headers.host),
+          host: domain.getParentDomain(req.headers.host),
         });
 
         if (respuesta === true) {
@@ -277,7 +277,7 @@ module.exports = {
 
         const respuesta = await service.recovery({
           ...parseResult.data,
-          host: domain(req.headers.host),
+          host: domain.getParentDomain(req.headers.host),
         });
 
         if (respuesta === true) {
@@ -319,7 +319,7 @@ module.exports = {
         return;
       }
 
-      const _domain = domain(req.headers.host);
+      const _domain = domain.getParentDomain(req.headers.host);
 
       const userLogged = await service.login({
         ...parseResult.data,

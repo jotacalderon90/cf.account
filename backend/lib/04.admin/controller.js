@@ -12,7 +12,7 @@ const domain = require('../domain');
 module.exports = {
   tracking: async function (req, res) {
     try {
-      const respuesta = await service.tracking(domain(req.headers.host));
+      const respuesta = await service.tracking(domain.getParentDomain(req.headers.host));
 
       res.send({ data: respuesta });
     } catch (error) {
@@ -37,7 +37,7 @@ module.exports = {
 
       const respuesta = await service.total({
         ...parseResult.data,
-        host: domain(req.headers.host),
+        host: domain.getParentDomain(req.headers.host),
       });
 
       res.send({ data: respuesta });
@@ -59,7 +59,7 @@ module.exports = {
 
       const respuesta = await service.collection({
         ...parseResult.data,
-        host: domain(req.headers.host),
+        host: domain.getParentDomain(req.headers.host),
       });
 
       res.send({ data: respuesta });
@@ -86,7 +86,7 @@ module.exports = {
 
         const respuesta = await service.createadmin({
           ...parseResult.data,
-          host: domain(req.headers.host),
+          host: domain.getParentDomain(req.headers.host),
         });
 
         if (respuesta === true) {
@@ -126,7 +126,7 @@ module.exports = {
 
       const created = await service.createbyadmin({
         ...parseResult.data,
-        host: domain(req.headers.host),
+        host: domain.getParentDomain(req.headers.host),
       });
 
       if (typeof created === 'string') {
@@ -181,7 +181,7 @@ module.exports = {
       const respuesta = await service[aux](
         {
           ...parseResult.data,
-          host: domain(req.headers.host),
+          host: domain.getParentDomain(req.headers.host),
         },
         req.params.id
       );
@@ -214,7 +214,7 @@ module.exports = {
 
       const respuesta = await service.deletebyadmin({
         ...parseResult.data,
-        host: domain(req.headers.host),
+        host: domain.getParentDomain(req.headers.host),
       });
 
       if (respuesta === true) {

@@ -12,7 +12,7 @@ const domain = require('../domain');
 module.exports = {
   total: async function (req, res) {
     try {
-      const data = await service.total(domain(req.headers.host));
+      const data = await service.total(domain.getParentDomain(req.headers.host));
 
       res.send({ data: data });
     } catch (error) {
@@ -23,7 +23,7 @@ module.exports = {
 
   collection: async function (req, res) {
     try {
-      const data = await service.collection(domain(req.headers.host));
+      const data = await service.collection(domain.getParentDomain(req.headers.host));
 
       res.send({ data: data });
     } catch (error) {
@@ -48,7 +48,7 @@ module.exports = {
 
       await service.create({
         ...parseResult.data,
-        host: domain(req.headers.host),
+        host: domain.getParentDomain(req.headers.host),
       });
 
       response.APISuccess(res);
@@ -62,7 +62,7 @@ module.exports = {
     try {
       const respuesta = await service.read({
         id: req.params.id,
-        host: domain(req.headers.host),
+        host: domain.getParentDomain(req.headers.host),
       });
 
       res.send({ data: respuesta });
@@ -85,7 +85,7 @@ module.exports = {
       await service.update(
         {
           ...parseResult.data,
-          host: domain(req.headers.host),
+          host: domain.getParentDomain(req.headers.host),
         },
         req.params.id
       );
@@ -101,7 +101,7 @@ module.exports = {
     try {
       await service.delete({
         id: req.params.id,
-        host: domain(req.headers.host),
+        host: domain.getParentDomain(req.headers.host),
       });
 
       response.APISuccess(res);
