@@ -7,11 +7,14 @@ perfil.prototype.start = async function(parent){
 }
 
 perfil.prototype.hasRole = function(role){
-	return user_roles.indexOf(role) > -1;
+	if (Array.isArray(role)) {
+    return role.some(r => user_roles.indexOf(r) > -1);
+  }
+  return user_roles.indexOf(role) > -1;
 }
 
 perfil.prototype.isAdmin = function(){
-	return this.hasRole('root') || this.hasRole('admin');
+	return this.hasRole(['root','admin']);
 }
 
 app.modules.perfil = perfil;

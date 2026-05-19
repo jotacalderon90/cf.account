@@ -1,12 +1,12 @@
 <!--use:main-->
 
-<!--define:title-->Administración<!--/define:title-->
+<!--define:title-->Gestión de Usuarios | Administración<!--/define:title-->
 
 <!--define:script-->
   <script>
     const env = '{{data:process.env.NODE_ENV}}';
-    const user_roles = {{data:JSON.stringify(doc.user.roles)}};
-    const host_database = "{{data:process.env.HOST_DATABASE}}";
+    const user_roles = {{data:JSON.stringify(doc.roles)}};
+    const host = "{{data:process.env.HOST}}";
   </script>
 	<script type="text/javascript" src="/account/perfil.js"></script>
 	<script type="text/javascript" src="/account/menu.js"></script>
@@ -64,67 +64,61 @@
                   <th>Usuario</th>
                   <th>Roles</th>
                   <th class="text-center">Estado</th>
-                  <th class="text-center">Acciones</th>
-                  <!--if:process.env.HOST_DATABASE-->
-                  <th class="text-center" style="width: 60px;">DB</th>
-                  <!--/if-->
-                  <th class="text-center" style="width: 60px;">Eliminar</th>
+                  <th class="text-center" v-show="users.canAdmin">Acciones</th>
+                  <th class="text-center" style="width: 60px;" v-show="users.can_goto_database">DB</th>
+                  <th class="text-center" style="width: 60px;" v-show="users.canAdmin">Eliminar</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(row,index) in users.filteredColl" :key="row.id">
+                <tr v-for="(row,index) in users.getCollectionView()" :key="row.id">
                   <td class="text-muted small">{{index+1}}</td>
                   <td>
                     <div class="fw-bold">{{row.email}}</div>
                     <div class="text-muted x-small" style="font-size: 0.75rem;">ID: {{row.id}}</div>
                   </td>
-                  <td v-on:dblclick="users.changeRoles(row)" title="Doble click para gestionar roles" style="cursor: pointer;">
+                  <td title="Doble click para gestionar roles" style="cursor: pointer;">
                     <template v-if="row.roles && row.roles.length">
                       <span v-for="rol in row.roles" class="badge rounded-pill bg-soft-primary text-primary border border-primary border-opacity-25 me-1">
                         {{rol}}
                       </span>
                     </template>
                     <span v-else class="text-muted small italic">Sin roles</span>
-                    <button class="btn btn-link btn-sm p-0 ms-1 text-muted" v-on:click="users.changeRoles(row)">
+                    <button class="btn btn-link btn-sm p-0 ms-1 text-muted" v-on:click="users.changeRoles(row)" v-show="users.canAdmin">
                       <i class="fa fa-edit x-small"></i>
                     </button>
                   </td>
                   <td class="text-center">
-                    <div class="form-check form-switch d-inline-block">
+                    <div class="form-check form-switch d-inline-block" v-show="users.canAdmin">
                       <input class="form-check-input" type="checkbox" role="switch" :checked="row.activate" v-on:change="users.activate(row)" style="cursor: pointer;">
                     </div>
                     <span :class="row.activate ? 'text-success' : 'text-warning'" class="small ms-1">
                       {{row.activate ? 'Activo' : 'Inactivo'}}
                     </span>
                   </td>
-                  <td class="text-center">
+                  <td class="text-center" v-show="users.canAdmin">
                     <div class="btn-group btn-group-sm">
                       <button class="btn btn-outline-info" v-on:click="users.changePassword(row)" title="Cambiar contraseña">
                         <i class="fa fa-key me-1"></i> Pass
                       </button>
-                      <!--if:process.env.HOST_MAILING-->
                       <button class="btn btn-outline-secondary" v-on:click="users.enableRecovery(row)" title="Enviar correo de recuperación">
                         <i class="fa fa-envelope"></i>
                       </button>
-                      <!--/if-->
                     </div>
                   </td>
-                  <!--if:process.env.HOST_DATABASE-->
-                  <td class="text-center">
-                    <a target="_blank" class="btn btn-sm btn-outline-primary" :href="users.host_database() + row.id">
+                  <td class="text-center" v-show="users.can_goto_database">
+                    <a target="_blank" class="btn btn-sm btn-outline-primary" :href="users.getLinkDatabase(row.id)">
                       <i class="fa fa-database"></i>
                     </a>
                   </td>
-                  <!--/if-->
-                  <td class="text-center">
+                  <td class="text-center" v-show="users.canAdmin">
                     <button class="btn btn-sm btn-outline-danger" v-on:click="users.delete(row.id)">
                       <i class="fa fa-trash"></i>
                     </button>
                   </td>
                 </tr>
-                <tr v-if="users.filteredColl.length === 0">
-                  <td colspan="7" class="text-center py-5 text-muted">
-                    <i class="fa fa-search me-1"></i> No se encontraron usuarios.
+                <tr v-if="users.getCollectionView().length === 0">
+                  <td colspan="4" class="text-center py-5 text-muted">
+                    <i class="fa fa-info-circle me-1"></i> No se encontraron datos que coincidan con la búsqueda.
                   </td>
                 </tr>
               </tbody>

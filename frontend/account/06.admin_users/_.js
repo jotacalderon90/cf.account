@@ -40,21 +40,14 @@ const users = function () {
 		 });*/
 }
 
-// Propiedad computada simulada para filtrado local
-Object.defineProperty(users.prototype, 'filteredColl', {
-	get: function () {
-		if (!this.filterText) return this.coll;
-		const filter = this.filterText.toLowerCase();
-		return this.coll.filter(row =>
-			(row.email && row.email.toLowerCase().includes(filter)) ||
-			(row.roles && row.roles.some(r => r.toLowerCase().includes(filter)))
-		);
-	}
-});
-
 users.prototype.start = async function (parent) {
 	this.parent = parent;
 	try {
+    
+    this.canAdmin = this.parent.perfil.isAdmin();
+    this.host_database = this.parent.menu.getHost('database');
+    this.can_goto_database = this.canAdmin || this.parent.perfil.hasRole(this.host_database.defaultRoles);
+    
 		const tags = await this.services.tag();
 		if (tags.error) {
 			throw (tags.error);
@@ -317,8 +310,17 @@ users.prototype.create = async function (id) {
 	}
 }
 
-users.prototype.host_database = function () {
-	return host_database + '/objetos/user/';
+users.prototype.getLinkDatabase = function (id) {
+	return this.host_database.host + '/objetos/user/' + id;
 }
+
+users.prototype.getCollectionView = function (){
+  if (!this.filterText) return this.coll;
+  const filter = this.filterText.toLowerCase();
+  return this.coll.filter(row =>
+    (row.email && row.email.toLowerCase().includes(filter)) ||
+    (row.roles && row.roles.some(r => r.toLowerCase().includes(filter)))
+  );
+};
 
 app.modules.users = users;

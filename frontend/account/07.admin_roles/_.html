@@ -5,8 +5,8 @@
 <!--define:script-->
   <script>
     const env = '{{data:process.env.NODE_ENV}}';
-    const user_roles = {{data:JSON.stringify(doc.user.roles)}};
-    const host_database = "{{data:process.env.HOST_DATABASE}}";
+    const user_roles = {{data:JSON.stringify(doc.roles)}};
+    const host = "{{data:process.env.HOST}}";
   </script>
 	<script type="text/javascript" src="/account/perfil.js"></script>
 	<script type="text/javascript" src="/account/menu.js"></script>
@@ -22,7 +22,7 @@
   <div class="d-flex">
 		<!--include:account/aside-->
 		<div class="resizer"></div>
-		<main class="flex-grow-1 px-md-4 mb-4" style="min-width: 0;">
+		<main class="flex-grow-1 px-md-4 mb-4">
       
       <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
         <h4 class="m-0" v-on:dblclick="roles.refresh()" title="Doble click para refrescar">
@@ -48,10 +48,12 @@
             <table class="table table-hover align-middle mb-0">
               <thead class="table-light">
                 <tr>
-                  <th style="width: 50px;">#</th>
+                  <th>#</th>
                   <th>Nombre</th>
                   <th>Descripción</th>
-                  <th class="text-center" style="width: 150px;">Acciones</th>
+                  <th class="text-center" >Acciones</th>
+                  <th class="text-center" v-show="roles.can_goto_database">DB</th>
+                  <th class="text-center" v-show="roles.canAdmin">Eliminar</th>
                 </tr>
               </thead>
               <tbody>
@@ -64,24 +66,24 @@
                     <span class="text-secondary">{{row.descripcion || 'Sin descripción'}}</span>
                   </td>
                   <td class="text-center">
-                    <div class="btn-group btn-group-sm">
-                      <button class="btn btn-outline-secondary" v-on:click="roles.update(row)" title="Editar rol">
-                        <i class="fa fa-edit"></i>
-                      </button>
-                      <!--if:process.env.HOST_DATABASE-->
-                      <a target="_blank" class="btn btn-outline-primary" :href="roles.host_database() + row.id" title="Ver JSON en DB">
-                        <i class="fa fa-database"></i>
-                      </a>
-                      <!--/if-->
-                      <button class="btn btn-outline-danger" v-on:click="roles.delete(row.id)" title="Eliminar rol">
-                        <i class="fa fa-trash"></i>
-                      </button>
-                    </div>
+                    <button class="btn btn-outline-secondary" v-on:click="roles.update(row)" title="Editar rol">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </td>
+                  <td class="text-center" v-show="roles.can_goto_database">
+                    <a target="_blank" class="btn btn-sm btn-outline-primary" :href="roles.getLinkDatabase(row.id)" title="Ver JSON en DB">
+                      <i class="fa fa-database"></i>
+                    </a>
+                  </td>
+                  <td class="text-center" v-show="roles.canAdmin">
+                    <button class="btn btn-sm btn-outline-danger" v-on:click="roles.delete(row.id)" title="Eliminar rol">
+                      <i class="fa fa-trash"></i>
+                    </button>
                   </td>
                 </tr>
                 <tr v-if="roles.getCollectionView().length === 0">
                   <td colspan="4" class="text-center py-5 text-muted">
-                    <i class="fa fa-info-circle me-1"></i> No se encontraron roles que coincidan con la búsqueda.
+                    <i class="fa fa-info-circle me-1"></i> No se encontraron datos que coincidan con la búsqueda.
                   </td>
                 </tr>
               </tbody>

@@ -26,8 +26,14 @@ module.exports = {
   renderIndex: async function (req, res) {
     try {
       res.render(viewName('account/01.perfil/_', req.headers.host), {
-        user: req.user,
+        roles: req.user ? req.user.roles : [],
         __hostAccount: domain.getHostAccount(req),
+        user: req.user
+          ? {
+              nickname: req.user.nickname,
+              password: req.user.password,
+            }
+          : {},
       });
     } catch (error) {
       logger.error(error);
@@ -143,7 +149,7 @@ module.exports = {
   renderAdminUsers: async function (req, res) {
     try {
       res.render(viewName('account/06.admin_users/_', req.headers.host), {
-        user: req.user,
+        roles: req.user ? req.user.roles : [],
         __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
@@ -159,7 +165,7 @@ module.exports = {
   renderAdminRoles: async function (req, res) {
     try {
       res.render(viewName('account/07.admin_roles/_', req.headers.host), {
-        user: req.user,
+        roles: req.user ? req.user.roles : [],
         __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {

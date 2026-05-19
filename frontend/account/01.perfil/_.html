@@ -5,7 +5,8 @@
 <!--define:script-->
   <script>
     const env = '{{data:process.env.NODE_ENV}}';
-    const user_roles = {{data:JSON.stringify(doc.user.roles)}};
+    const user_roles = {{data:JSON.stringify(doc.roles)}};
+    const host = "{{data:process.env.HOST}}";
   </script>
 	<script type="text/javascript" src="/account/perfil.js"></script>
 	<script type="text/javascript" src="/account/menu.js"></script>

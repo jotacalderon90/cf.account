@@ -1,9 +1,9 @@
 const menu = function() {
   
   this.HOSTS  = [
-    {hostname: 'archivospublicos',  label: 'Archivos Públicos', defaultPort: 2201, defaultRoles: []},
-    {hostname: 'archivosprivados',  label: 'Archivos Privados', defaultPort: 2203, defaultRoles: ['archivosprivados']},
-    {hostname: 'database',          label: 'Base de Datos',     defaultPort: 2204, defaultRoles: ['database']}
+    {name: 'archivospublicos',  label: 'Archivos Públicos', defaultPort: 2201, defaultRoles: []},
+    {name: 'archivosprivados',  label: 'Archivos Privados', defaultPort: 2203, defaultRoles: ['archivosprivados']},
+    {name: 'database',          label: 'Base de Datos',     defaultPort: 2204, defaultRoles: ['database']}
   ];
   
   this.collection = [];
@@ -18,6 +18,10 @@ menu.prototype.start = function(parent){
     return acc;
   }, []);
 
+  this.toSearch = {};
+  for(let i=0;i<this.collection.length;i++) {
+    this.toSearch[this.collection[i].name] = i;
+  }
 }
 
 menu.prototype.getMenuHost = function(hostEntry) {
@@ -32,16 +36,20 @@ menu.prototype.getMenuHost = function(hostEntry) {
   const entry = { ...hostEntry };
   
   if (env === 'development') {
-    entry.hostname = `${location.protocol}//${location.host.replace('2202', entry.defaultPort)}`;
+    entry.host = `${location.protocol}//${location.host.replace('2202', entry.defaultPort)}`;
     return entry;
   }
   
   if (env === 'production') {
-    entry.hostname = `https://${location.host.replace('account', entry.hostname)}`;
+    entry.host = `https://${location.host.replace('account', entry.name)}`;
     return entry;
   }
 
   return null;
+}
+
+menu.prototype.getHost = function(name) {
+  return this.collection[this.toSearch[name]];
 }
 
 app.modules.menu = menu;
