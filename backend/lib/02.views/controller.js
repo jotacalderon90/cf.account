@@ -30,6 +30,7 @@ module.exports = {
         __hostAccount: domain.getHostAccount(req),
         user: req.user
           ? {
+              email: req.user.email,
               nickname: req.user.nickname,
               password: req.user.password,
             }
