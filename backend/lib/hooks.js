@@ -53,20 +53,19 @@ module.exports = {
     try {
       if (process.env.HOST_MAILING) {
         request.post(
-          process.env.HOST_MAILING + '/api/mailing/multidomainmicro',
+          'https://' + host.replace('account', 'mailing') + '/api/mailing/multidomainmicro',
           {
             headers: {
               'x-api-key': process.env.HOST_MAILING_X_API_KEY,
               'user-agent': 'cf.account',
+              origin: 'https://' + host,
             },
           },
           {
-            host: host,
             to: email,
             subject: 'Activación de cuenta',
-            template: 'accountActivate.html',
+            template: 'account.activate.html',
             hash: 'https://' + host + '/api/account/activate/' + hash,
-            message: 'Este dato no se usa pero se valida en mailing :S',
           }
         );
       }
@@ -79,20 +78,19 @@ module.exports = {
     try {
       if (process.env.HOST_MAILING) {
         request.post(
-          process.env.HOST_MAILING + '/api/mailing/multidomainmicro',
+          'https://' + host.replace('account', 'mailing') + '/api/mailing/multidomainmicro',
           {
             headers: {
               'x-api-key': process.env.HOST_MAILING_X_API_KEY,
               'user-agent': 'cf.account',
+              origin: 'https://' + host,
             },
           },
           {
-            host: host,
             to: email,
             subject: 'Reestablecer contraseña',
-            template: 'accountRecovery.html',
+            template: 'account.recovery.html',
             hash: 'https://' + host + '/recovery?hash=' + hash,
-            message: 'Este dato no se usa pero se valida en mailing :S',
           }
         );
       }
