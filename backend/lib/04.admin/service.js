@@ -188,10 +188,13 @@ module.exports = {
 
       const registro = await user.read(id);
 
+      const newhash = password.random();
+      await user.update({ hash: newhash }, id);
+
       hooks.mailingOnForget(
         registro.email,
         'account.' + input.host,
-        Buffer.from(registro.hash, 'utf8').toString('base64')
+        Buffer.from(newhash, 'utf8').toString('base64')
       );
 
       return true;
