@@ -323,4 +323,9 @@ users.prototype.getCollectionView = function (){
   );
 };
 
+users.prototype.copy = async function() {
+  await copyLarge(this.getCollectionView().map(row => row.email).join(','));
+  alert('Correos copiados :)');
+}
+
 app.modules.users = users;
