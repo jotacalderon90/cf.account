@@ -100,7 +100,7 @@ module.exports = {
         INSERT INTO ROLES ( 
           NOMBRE, 
           DESCRIPCION,
-          HOST
+          HOST_NAME
         ) VALUES (
           :nombre, 
           :descripcion,
@@ -137,7 +137,7 @@ module.exports = {
           ID,
           NOMBRE, 
           DESCRIPCION,
-          HOST
+          HOST_NAME
         FROM ROLES
         WHERE 
           ID = :id
