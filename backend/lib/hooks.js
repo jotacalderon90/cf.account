@@ -53,7 +53,7 @@ module.exports = {
     try {
       if (process.env.HOST_MAILING) {
         request.post(
-          'https://' + host.replace('account', 'mailing') + '/api/mailing/multidomainmicro',
+          'https://' + host.replace('account', 'mailing') + '/api/mailing',
           {
             headers: {
               'x-api-key': process.env.HOST_MAILING_X_API_KEY,
@@ -62,7 +62,7 @@ module.exports = {
             },
           },
           {
-            to: email,
+            email: email,
             subject: 'Activación de cuenta',
             template: 'account.activate.html',
             hash: 'https://' + host + '/api/account/activate/' + hash,
@@ -78,7 +78,7 @@ module.exports = {
     try {
       if (process.env.HOST_MAILING) {
         request.post(
-          'https://' + host.replace('account', 'mailing') + '/api/mailing/multidomainmicro',
+          'https://' + host.replace('account', 'mailing') + '/api/mailing',
           {
             headers: {
               'x-api-key': process.env.HOST_MAILING_X_API_KEY,
@@ -87,7 +87,7 @@ module.exports = {
             },
           },
           {
-            to: email,
+            email: email,
             subject: 'Reestablecer contraseña',
             template: 'account.recovery.html',
             hash: 'https://' + host + '/recovery?hash=' + hash,
