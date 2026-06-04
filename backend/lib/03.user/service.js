@@ -1,13 +1,14 @@
 'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-
-const constants = require('./constants');
+const redis = require('cl.jotacalderon.cf.framework/lib/redis');
 
 const password = require('../password');
 const hooks = require('../hooks');
 
 const { user } = require('../_repository/_');
+
+const constants = require('./constants');
 
 module.exports = {
   create: async function (input) {
@@ -46,11 +47,20 @@ module.exports = {
 
   read: async function (input) {
     try {
+      if (redis.client) {
+        const cached = await redis.get(input.id);
+        if (cached) return cached;
+      }
+
       const registro = await user.findByHash(input.id, input.host);
 
       if (!registro.activate) {
         logger.error(constants.error.rest.login_desactivate + ' - ' + registro.email);
         return null;
+      }
+
+      if (redis.client) {
+        redis.set(input.id, registro, 60); //20260604:1 minuto de cache por errores 522?
       }
 
       return registro;
