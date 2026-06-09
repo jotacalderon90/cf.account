@@ -46,7 +46,9 @@ users.prototype.start = async function (parent) {
     
     this.canAdmin = this.parent.perfil.isAdmin();
     this.host_database = this.parent.menu.getHost('database');
-    this.can_goto_database = this.canAdmin || this.parent.perfil.hasRole(this.host_database.defaultRoles);
+    if (this.host_database) {
+      this.can_goto_database = this.canAdmin || this.parent.perfil.hasRole(this.host_database.defaultRoles);
+    }
     
 		const tags = await this.services.tag();
 		if (tags.error) {
@@ -311,7 +313,7 @@ users.prototype.create = async function (id) {
 }
 
 users.prototype.getLinkDatabase = function (id) {
-	return this.host_database.host + '/objetos/user/' + id;
+	return this.host_database?.host ? `${this.host_database.host}/objetos/user/${id}` : '';
 }
 
 users.prototype.getCollectionView = function (){

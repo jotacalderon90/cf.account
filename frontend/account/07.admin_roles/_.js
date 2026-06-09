@@ -19,8 +19,9 @@ roles.prototype.start = async function(parent){
     
     this.canAdmin = this.parent.perfil.isAdmin();
     this.host_database = this.parent.menu.getHost('database');
-    this.can_goto_database = this.canAdmin || this.parent.perfil.hasRole(this.host_database.defaultRoles)
-    
+    if (this.host_database) {
+      this.can_goto_database = this.canAdmin || this.parent.perfil.hasRole(this.host_database.defaultRoles);
+    }
 		await this.refresh();
     
 	} catch (error) {
@@ -132,7 +133,7 @@ roles.prototype.delete = async function(id) {
 }
 
 roles.prototype.getLinkDatabase = function (id) {
-	return this.host_database.host + '/objetos/roles/' + id;
+	return this.host_database?.host ? `${this.host_database.host}/objetos/roles/${id}` : '';
 }
 
 

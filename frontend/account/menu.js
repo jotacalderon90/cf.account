@@ -49,7 +49,11 @@ menu.prototype.getMenuHost = function(hostEntry) {
 }
 
 menu.prototype.getHost = function(name) {
-  return this.collection[this.toSearch[name]];
+  const indice = this.toSearch[name];
+  if (indice) {
+    return this.collection[indice];
+  }
+  return null;
 }
 
 app.modules.menu = menu;
