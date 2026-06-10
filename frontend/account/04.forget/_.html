@@ -14,7 +14,7 @@
 			
 	<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
 		<div class="p-5 bg-white rounded shadow">
-			<form action="/api/account/forget" method="POST">
+			<form action="/api/account/forget" method="POST" onsubmit="return account_forget()">
 				
 				<h2 class="mb-4">Olvidaste tu password</h2>
 				
@@ -37,5 +37,28 @@
 			</form>
 		</div>
 	</div>
+	
+	<script>
+		
+		function account_forget(){
+      
+			if(document.forms[0].email.value.trim() === ''){
+				alert("Ingrese email");
+				return false;
+			}
+        
+      let recaptcha = '';
+      if(typeof grecaptcha === 'object'){
+        recaptcha = grecaptcha.getResponse();
+        if(recaptcha.trim() === '') {
+          alert('Valide recaptcha');
+          return;
+        }
+      }
+      
+			return true;
+		}
+		
+	</script>
 	
 <!--/define:main-->
