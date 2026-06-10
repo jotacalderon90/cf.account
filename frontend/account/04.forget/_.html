@@ -52,7 +52,7 @@
         recaptcha = grecaptcha.getResponse();
         if(recaptcha.trim() === '') {
           alert('Valide recaptcha');
-          return;
+          return false;
         }
       }
       
