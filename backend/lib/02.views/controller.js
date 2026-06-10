@@ -103,6 +103,7 @@ module.exports = {
       if (process.env.CANRECOVERY == '1') {
         const parseResult = validator.renderRecovery.safeParse(req.query);
         if (!parseResult.success) {
+          logger.error(parseResult);
           response.renderError(req, res, constants.error.validacion);
           return;
         }

@@ -22,6 +22,7 @@ module.exports = {
         //POST!
 
         if (process.env.CANCREATE != '1') {
+          logger.error(constants.error.rest.createNOCAN);
           response.renderError(req, res, constants.error.rest.createNOCAN);
           return;
         }
@@ -33,6 +34,7 @@ module.exports = {
         const parseResult = validator.create.safeParse(req.body);
 
         if (!parseResult.success) {
+          logger.error(parseResult);
           response.renderError(req, res, constants.error.validacion);
           return;
         }
@@ -54,6 +56,7 @@ module.exports = {
           );
           return;
         } else {
+          logger.error(respuesta);
           response.renderError(req, res, respuesta);
           return;
         }
@@ -65,6 +68,7 @@ module.exports = {
           const parseResult = validator.update.safeParse(req.body);
 
           if (!parseResult.success) {
+            logger.error(parseResult);
             response.renderError(req, res, constants.error.validacion);
             return;
           }
@@ -139,6 +143,7 @@ module.exports = {
       const parseResult = validator.update.safeParse(req.body);
 
       if (!parseResult.success) {
+        logger.error(parseResult);
         response.renderError(req, res, constants.error.validacion);
         return;
       }
@@ -185,6 +190,7 @@ module.exports = {
       const parseResult = validator.activate.safeParse(req.body);
 
       if (!parseResult.success) {
+        logger.error(parseResult);
         response.renderError(req, res, constants.error.validacion);
         return;
       }
@@ -205,6 +211,7 @@ module.exports = {
         );
         return;
       } else {
+        logger.error(respuesta);
         response.renderError(req, res, respuesta);
         return;
       }
@@ -226,6 +233,7 @@ module.exports = {
         const parseResult = validator.forget.safeParse(req.body);
 
         if (!parseResult.success) {
+          logger.error(parseResult);
           response.renderError(req, res, constants.error.validacion);
           return;
         }
@@ -246,6 +254,7 @@ module.exports = {
           );
           return;
         } else {
+          logger.error(respuesta);
           response.renderError(req, res, respuesta);
           return;
         }
@@ -271,6 +280,7 @@ module.exports = {
         const parseResult = validator.recovery.safeParse(req.body);
 
         if (!parseResult.success) {
+          logger.error(parseResult);
           response.renderError(req, res, constants.error.validacion);
           return;
         }
@@ -291,6 +301,7 @@ module.exports = {
           );
           return;
         } else {
+          logger.error(respuesta);
           response.renderError(req, res, respuesta);
           return;
         }
@@ -315,6 +326,7 @@ module.exports = {
       const parseResult = validator.login.safeParse(req.body);
 
       if (!parseResult.success) {
+        logger.error(parseResult);
         response.renderError(req, res, constants.error.validacion);
         return;
       }
@@ -330,6 +342,7 @@ module.exports = {
         if (parseResult.data.jwt === true) {
           res.send({ error: userLogged });
         } else {
+          logger.error(userLogged);
           response.renderError(req, res, userLogged);
         }
         return;
