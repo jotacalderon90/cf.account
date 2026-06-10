@@ -42,8 +42,11 @@
 		
 		function account_forget(){
       
-			if(document.forms[0].email.value.trim() === ''){
-				alert("Ingrese email");
+      const email = document.forms[0].email.value.trim();
+			if(
+        email === '' || 
+        !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+        alert("Ingrese email válido");
 				return false;
 			}
         
