@@ -84,19 +84,13 @@ mongodb_service:
   volumes:
     - ./_mongodb:/data/db
   ports:
-    - "172.27.16.1:27017:27017"
+    - "27017:27017"
   restart: always
 ```
-
-> Asegúrate de ajustar la IP según tu configuración de red local.
 
 ---
 
 ## Ejecución local
-
-> Si vienes desde `cf.archivospublicos`, ya deberías tener configurada la red local.
-
----
 
 ### Con Node.js
 
