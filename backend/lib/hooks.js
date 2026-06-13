@@ -52,8 +52,12 @@ module.exports = {
   mailingOnCreate: async function (email, host, hash) {
     try {
       if (process.env.HOST_MAILING) {
+        const url =
+          process.env.NODE_ENV === 'development'
+            ? process.env.HOST_MAILING
+            : 'https://' + host.replace('account', 'mailing') + '/api/mailing';
         request.post(
-          'https://' + host.replace('account', 'mailing') + '/api/mailing',
+          url,
           {
             headers: {
               'x-api-key': process.env.HOST_MAILING_X_API_KEY,
@@ -77,8 +81,14 @@ module.exports = {
   mailingOnForget: async function (email, host, hash) {
     try {
       if (process.env.HOST_MAILING) {
+        const url =
+          process.env.NODE_ENV === 'development'
+            ? process.env.HOST_MAILING
+            : 'https://' + host.replace('account', 'mailing');
+        const _hash = process.env.NODE_ENV === 'development' ? process.env.HOST : 'https://' + host;
+
         request.post(
-          'https://' + host.replace('account', 'mailing') + '/api/mailing',
+          url + '/api/mailing',
           {
             headers: {
               'x-api-key': process.env.HOST_MAILING_X_API_KEY,
@@ -90,7 +100,7 @@ module.exports = {
             email: email,
             subject: 'Reestablecer contraseña',
             template: 'account.recovery.html',
-            hash: 'https://' + host + '/recovery?hash=' + hash,
+            hash: _hash + '/recovery?hash=' + hash,
           }
         );
       }
