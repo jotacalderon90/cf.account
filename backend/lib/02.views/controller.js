@@ -14,7 +14,7 @@ module.exports = {
   renderIndex: async function (req, res) {
     try {
       res.render(await view('account/01.perfil/_', req.headers.host), {
-        roles: req.user ? req.user.roles : [],
+        roles: JSON.stringify(req.user.roles),
         __hostAccount: domain.getHostAccount(req),
         user: req.user
           ? {
@@ -139,7 +139,7 @@ module.exports = {
   renderAdminUsers: async function (req, res) {
     try {
       res.render(await view('account/06.admin_users/_', req.headers.host), {
-        roles: req.user ? req.user.roles : [],
+        roles: JSON.stringify(req.user.roles),
         __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
@@ -155,7 +155,7 @@ module.exports = {
   renderAdminRoles: async function (req, res) {
     try {
       res.render(await view('account/07.admin_roles/_', req.headers.host), {
-        roles: req.user ? req.user.roles : [],
+        roles: JSON.stringify(req.user.roles),
         __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
