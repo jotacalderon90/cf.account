@@ -19,7 +19,7 @@
 		<!--include:account/aside-->
 		<div class="resizer"></div>
 		<main class="flex-grow-1 px-md-4 mb-4" style="min-width: 0;">
-      <form action="/api/account" method="POST" class="mt-4">
+      <form action="/api/account" method="POST" class="mt-4" onsubmit="return account_update()">
 					<h4>Perfil de <small>{{data:doc.user.email}}</small></h4>
 					<hr>
 					<label>Contraseña</label>
@@ -38,4 +38,21 @@
     </main>
   </div>
   
+	<script>
+		
+		function account_update(){
+      
+      const password = document.forms[0].password.value.trim();
+			if(
+        password === '' || 
+        !/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/.test(password)){
+        alert("Debe ingresar una contraseña segura:\nMínimo 8 caracteres.\nUna letra mayúscula.\nUn número.\nUn carácter especial.");
+				return false;
+			}
+      
+			return true;
+		}
+		
+	</script>
+	
 <!--/define:main-->

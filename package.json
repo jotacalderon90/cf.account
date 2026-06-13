@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node app",
-    "dev": "npx nodemon --legacy-watch app  --ignore frontend",
+    "dev": "npx nodemon --legacy-watch app",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "jest",

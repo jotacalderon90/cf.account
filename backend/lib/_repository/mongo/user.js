@@ -94,7 +94,7 @@ module.exports = {
     try {
       const updated = await mongodb.updateOne('user', id, { $set: input });
 
-      if (!updated.acknowledged || updated.modifiedCount != 1) {
+      if (!updated.acknowledged) {
         throw new Error(updated);
       }
 
