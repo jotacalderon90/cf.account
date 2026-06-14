@@ -17,10 +17,7 @@ const getCookie = function (domain) {
     maxAge: 1000 * 60 * 60, // SIEMPRE 1 hora
     secure: process.env.COOKIE_SECURE === '1', // POR PARAMETRO
     sameSite: process.env.COOKIE_SAMESITE || 'Strict', // SIEMPRE
-    domain:
-      process.env.NODE_ENV === 'production' && process.env.FRONT_MULTIDOMAIN === '1'
-        ? domain
-        : undefined,
+    domain: process.env.NODE_ENV === 'production' ? domain : undefined,
   };
 };
 
