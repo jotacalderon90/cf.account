@@ -53,11 +53,12 @@ module.exports = {
     try {
       if (process.env.HOST_MAILING) {
         const url =
-          process.env.NODE_ENV === 'development'
-            ? process.env.HOST_MAILING
-            : 'https://' + host.replace('account', 'mailing') + '/api/mailing';
+          process.env.NODE_ENV === 'production' && process.env.FRONT_MULTIDOMAIN === '1'
+            ? 'https://' + host.replace('account', 'mailing')
+            : process.env.HOST_MAILING;
+
         request.post(
-          url,
+          url + '/api/mailing',
           {
             headers: {
               'x-api-key': process.env.HOST_MAILING_X_API_KEY,
@@ -82,10 +83,14 @@ module.exports = {
     try {
       if (process.env.HOST_MAILING) {
         const url =
-          process.env.NODE_ENV === 'development'
-            ? process.env.HOST_MAILING
-            : 'https://' + host.replace('account', 'mailing');
-        const _hash = process.env.NODE_ENV === 'development' ? process.env.HOST : 'https://' + host;
+          process.env.NODE_ENV === 'production' && process.env.FRONT_MULTIDOMAIN === '1'
+            ? 'https://' + host.replace('account', 'mailing')
+            : process.env.HOST_MAILING;
+
+        const _hash =
+          process.env.NODE_ENV === 'production' && process.env.FRONT_MULTIDOMAIN === '1'
+            ? 'https://' + host
+            : process.env.HOST;
 
         request.post(
           url + '/api/mailing',

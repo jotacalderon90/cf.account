@@ -7,14 +7,13 @@ const constants = require('./constants');
 module.exports = {
   favicon: async function (req, res) {
     try {
-      if (process.env.NODE_ENV === 'development') {
-        res.redirect(process.env.HOST_ARCHIVOSPUBLICOS + '/favicon.ico');
-        return;
-      } else {
+      if (process.env.NODE_ENV === 'production' && process.env.FRONT_MULTIDOMAIN === '1') {
         const host_archivospublicos = req.headers.host.replace(/^([^.:]+)/, 'archivospublicos');
         res.redirect('https://' + host_archivospublicos + '/favicon.ico');
         return;
       }
+
+      res.redirect(process.env.HOST_ARCHIVOSPUBLICOS + '/favicon.ico');
     } catch (error) {
       logger.error(error);
       response.APIError(req, res, constants.error.rest.favicon + ' ' + constants.error.controlador);
