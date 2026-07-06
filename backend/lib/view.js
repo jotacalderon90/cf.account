@@ -31,5 +31,5 @@ module.exports = async function (view_path, host) {
   }
 
   fileCache.set(id, response);
-  return view_path;
+  return response;
 };

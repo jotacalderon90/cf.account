@@ -17,4 +17,15 @@ module.exports = {
     }
     return hostAccount;
   },
+
+  //recibe request y retorna host de archivospublicos (archivospublicos.jotace.cl, archivospublicos.comercialastogra.cl)
+  getHostArchivosPublicos: function (req) {
+    let host = '';
+    if (process.env.NODE_ENV === 'production' && process.env.FRONT_MULTIDOMAIN === '1') {
+      host = req.protocol + '://' + req.headers.host.replace(/^([^.:]+)/, 'archivospublicos');
+    } else {
+      host = process.env.HOST_ARCHIVOSPUBLICOS;
+    }
+    return host;
+  },
 };

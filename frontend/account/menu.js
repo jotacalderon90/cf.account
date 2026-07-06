@@ -3,7 +3,8 @@ const menu = function() {
   this.HOSTS  = [
     {name: 'archivospublicos',  label: 'Archivos Públicos', defaultPort: 2201, defaultRoles: []},
     {name: 'archivosprivados',  label: 'Archivos Privados', defaultPort: 2203, defaultRoles: ['archivosprivados']},
-    {name: 'database',          label: 'Base de Datos',     defaultPort: 2204, defaultRoles: ['database']}
+    {name: 'database',          label: 'Base de Datos',     defaultPort: 2204, defaultRoles: ['database']},
+    {name: 'mailing',           label: 'Mailing',           defaultPort: 2205, defaultRoles: ['mailing']}
   ];
   
   this.collection = [];
