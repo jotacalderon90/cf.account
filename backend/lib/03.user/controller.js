@@ -187,7 +187,7 @@ module.exports = {
 
   activate: async function (req, res) {
     try {
-      const parseResult = validator.activate.safeParse(req.body);
+      const parseResult = validator.activate.safeParse(req.params);
 
       if (!parseResult.success) {
         logger.error(parseResult);
