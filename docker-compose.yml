@@ -10,7 +10,7 @@ services:
     env_file:
       - .env.production
     volumes:
-      - ./frontend/assets/domains/:/srv/cf.account/frontend/assets/domains
+      - /var/log/trascender/account:/srv/cf.account/logs
     environment:
       NODE_ENV: "production"
       PORT: ${PORT:-2202}
