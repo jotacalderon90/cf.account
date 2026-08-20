@@ -5,151 +5,56 @@
 <!--define:head-->
 
   <style>
-		.password-field-wrapper {
+		.pwd-input-group {
 			position: relative;
 		}
-
-		.password-toggle {
+		.pwd-toggle {
 			position: absolute;
 			right: 12px;
-			top: 50%;
-			transform: translateY(-50%);
+			top: 12px;
+			background: none;
+			border: none;
 			cursor: pointer;
 			color: #6c757d;
-			border: none;
-			background: none;
-			padding: 0;
-			font-size: 1rem;
-			z-index: 10;
-			transition: color 0.2s;
 		}
-
-		.password-toggle:hover {
+		.pwd-toggle:hover {
 			color: #495057;
 		}
-
 		.form-control {
-			padding-right: 38px;
+			padding-right: 40px;
 		}
-
-		.requirements-list {
-			font-size: 0.875rem;
-			margin-top: 12px;
-			padding: 12px;
-			background-color: #f8f9fa;
-			border-radius: 4px;
-		}
-
-		.requirement {
-			display: flex;
-			align-items: center;
-			margin-bottom: 8px;
-			transition: color 0.2s;
-		}
-
-		.requirement:last-child {
-			margin-bottom: 0;
-		}
-
-		.requirement-icon {
-			width: 20px;
-			height: 20px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			margin-right: 8px;
-			font-size: 0.75rem;
-			border-radius: 50%;
-			flex-shrink: 0;
-		}
-
-		.requirement.met .requirement-icon {
-			background-color: #d4edda;
-			color: #155724;
-		}
-
-		.requirement.unmet .requirement-icon {
-			background-color: #e2e3e5;
-			color: #6c757d;
-		}
-
-		.requirement.met {
-			color: #155724;
-		}
-
-		.requirement.unmet {
-			color: #6c757d;
-		}
-
-		.strength-indicator {
-			height: 4px;
-			background-color: #e9ecef;
-			border-radius: 2px;
-			margin-top: 8px;
-			overflow: hidden;
-		}
-
 		.strength-bar {
-			height: 100%;
-			width: 0%;
-			background-color: #dc3545;
-			transition: width 0.3s, background-color 0.3s;
-		}
-
-		.strength-bar.weak {
-			width: 33%;
-			background-color: #dc3545;
-		}
-
-		.strength-bar.fair {
-			width: 66%;
-			background-color: #ffc107;
-		}
-
-		.strength-bar.strong {
-			width: 100%;
-			background-color: #28a745;
-		}
-
-		.error-message {
-			display: none;
-			font-size: 0.875rem;
-			color: #dc3545;
+			height: 6px;
 			margin-top: 8px;
-			align-items: center;
-			gap: 6px;
+			border-radius: 3px;
+			background-color: #e9ecef;
 		}
-
-		.error-message.show {
-			display: flex;
-		}
-
-		.success-message {
-			display: none;
+		.strength-bar.w-0 { width: 0%; background-color: #e9ecef; }
+		.strength-bar.w-33 { width: 33%; background-color: #dc3545; }
+		.strength-bar.w-66 { width: 66%; background-color: #ffc107; }
+		.strength-bar.w-100 { width: 100%; background-color: #28a745; }
+		.requirements {
 			font-size: 0.875rem;
+			margin-top: 10px;
+			line-height: 1.6;
+		}
+		.req {
+			color: #6c757d;
+		}
+		.req.ok {
 			color: #28a745;
-			margin-top: 8px;
-			align-items: center;
-			gap: 6px;
 		}
-
-		.success-message.show {
-			display: flex;
+		.match-error {
+			display: none;
+			color: #dc3545;
+			font-size: 0.875rem;
+			margin-top: 5px;
 		}
-
-		.btn-block {
-			width: 100%;
-		}
-
-		@media (prefers-reduced-motion: reduce) {
-			.password-toggle,
-			.requirement,
-			.strength-bar {
-				transition: none;
-			}
+		.match-error.show {
+			display: block;
 		}
 	</style>
-
+  
 	<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<!--/if-->
@@ -159,277 +64,139 @@
 <!--define:main-->
 	
   <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="p-5 bg-white rounded shadow" style="max-width: 400px; width: 100%;">
-      <form id="recoveryForm" action="/api/account/recovery" method="POST" onsubmit="return account_recovery(event)">
-        
+    <div class="p-5 bg-white rounded shadow" style="max-width: 420px; width: 100%;">
+      <form action="/api/account/recovery" method="POST" onsubmit="return validateForm()">
+			
         <h2 class="mb-4">Reestablecer Contraseña</h2>
         
-        <!-- Primera contraseña -->
-        <div class="mb-3">
-          <label for="password" class="form-label">Nueva contraseña</label>
-          <div class="password-field-wrapper">
-            <input 
-              class="form-control" 
-              id="password"
-              placeholder="Ingrese su nueva contraseña" 
-              name="password" 
-              type="password" 
-              value=""
-              autocomplete="new-password"
-              aria-describedby="passwordRequirements"
-            />
-            <button 
-              type="button" 
-              class="password-toggle" 
-              id="togglePassword"
-              aria-label="Mostrar contraseña"
-              tabindex="0"
-            >
+        <div class="mb-4">
+          <label class="form-label">Nueva contraseña</label>
+          <div class="pwd-input-group">
+            <input type="password" class="form-control" id="pwd1" name="password" placeholder="Ingrese contraseña">
+            <button type="button" class="pwd-toggle" onclick="togglePwd('pwd1')">
               <i class="far fa-eye"></i>
             </button>
           </div>
-
-          <!-- Requisitos de contraseña -->
-          <div id="passwordRequirements" class="requirements-list">
-            <div class="requirement unmet" id="req-length">
-              <div class="requirement-icon"><i class="fas fa-check"></i></div>
-              <span>Mínimo 8 caracteres</span>
-            </div>
-            <div class="requirement unmet" id="req-letter">
-              <div class="requirement-icon"><i class="fas fa-check"></i></div>
-              <span>Al menos una letra (a-z, A-Z)</span>
-            </div>
-            <div class="requirement unmet" id="req-number">
-              <div class="requirement-icon"><i class="fas fa-check"></i></div>
-              <span>Al menos un número (0-9)</span>
-            </div>
-            <div class="requirement unmet" id="req-special">
-              <div class="requirement-icon"><i class="fas fa-check"></i></div>
-              <span>Al menos un carácter especial (!@#$%^&*)</span>
-            </div>
-          </div>
-
-          <!-- Indicador de fortaleza -->
-          <div class="strength-indicator">
-            <div class="strength-bar" id="strengthBar"></div>
+          <div class="strength-bar" id="strength"></div>
+          <div class="requirements">
+            <div class="req" id="r1"><i class="far fa-circle"></i> Mínimo 8 caracteres</div>
+            <div class="req" id="r2"><i class="far fa-circle"></i> Una letra (a-z, A-Z)</div>
+            <div class="req" id="r3"><i class="far fa-circle"></i> Un número (0-9)</div>
+            <div class="req" id="r4"><i class="far fa-circle"></i> Un carácter especial (!@#$%^&*)</div>
           </div>
         </div>
-
-        <!-- Segunda contraseña -->
+   
         <div class="mb-3">
-          <label for="password2" class="form-label">Confirmar contraseña</label>
-          <div class="password-field-wrapper">
-            <input 
-              class="form-control" 
-              id="password2"
-              placeholder="Repita su contraseña" 
-              name="password2" 
-              type="password" 
-              value=""
-              autocomplete="new-password"
-              aria-describedby="matchMessage"
-            />
-            <button 
-              type="button" 
-              class="password-toggle" 
-              id="togglePassword2"
-              aria-label="Mostrar contraseña"
-              tabindex="0"
-            >
+          <label class="form-label">Confirmar contraseña</label>
+          <div class="pwd-input-group">
+            <input type="password" class="form-control" id="pwd2" name="password2" placeholder="Repita contraseña">
+            <button type="button" class="pwd-toggle" onclick="togglePwd('pwd2')">
               <i class="far fa-eye"></i>
             </button>
           </div>
-          <div id="matchMessage" class="error-message">
-            <i class="fas fa-times-circle"></i>
-            <span>Las contraseñas no coinciden</span>
-          </div>
-          <div id="matchSuccess" class="success-message">
-            <i class="fas fa-check-circle"></i>
-            <span>Las contraseñas coinciden</span>
+          <div class="match-error" id="matchError">
+            <i class="fas fa-exclamation-circle"></i> Las contraseñas no coinciden
           </div>
         </div>
-
-        <input name="hash" type="hidden" value="{{data:doc.hash}}" />
+   
+        <input name="hash" type="hidden" value="{{data:doc.hash}}">
         
-        <!-- reCAPTCHA -->
         <!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
         <div class="g-recaptcha mb-3" data-sitekey="{{data:process.env.RECAPTCHA_PUBLIC}}"></div>
         <!--/if-->
         
-        <button type="submit" class="btn btn-lg btn-success btn-block">Reestablecer</button>
+        <button type="submit" class="btn btn-success w-100">Reestablecer</button>
       </form>
     </div>
   </div>
 	
 	<script>
-		const passwordInput = document.getElementById('password');
-		const password2Input = document.getElementById('password2');
-		const togglePasswordBtn = document.getElementById('togglePassword');
-		const togglePassword2Btn = document.getElementById('togglePassword2');
-		const strengthBar = document.getElementById('strengthBar');
-		const matchMessage = document.getElementById('matchMessage');
-		const matchSuccess = document.getElementById('matchSuccess');
-		const form = document.getElementById('recoveryForm');
-
-		// Requisitos
-		const requirements = {
-			length: document.getElementById('req-length'),
-			letter: document.getElementById('req-letter'),
-			number: document.getElementById('req-number'),
-			special: document.getElementById('req-special')
-		};
-
-		// Toggle visibilidad contraseña
-		togglePasswordBtn.addEventListener('click', (e) => {
-			e.preventDefault();
-			togglePasswordVisibility(passwordInput, togglePasswordBtn);
-		});
-
-		togglePassword2Btn.addEventListener('click', (e) => {
-			e.preventDefault();
-			togglePasswordVisibility(password2Input, togglePassword2Btn);
-		});
-
-		// Permitir Enter en los botones toggle
-		togglePasswordBtn.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter') {
-				e.preventDefault();
-				togglePasswordBtn.click();
-			}
-		});
-
-		togglePassword2Btn.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter') {
-				e.preventDefault();
-				togglePassword2Btn.click();
-			}
-		});
-
-		function togglePasswordVisibility(input, button) {
-			const isPassword = input.type === 'password';
-			input.type = isPassword ? 'text' : 'password';
-			
-			const icon = button.querySelector('i');
-			if (isPassword) {
+		function togglePwd(id) {
+			const input = document.getElementById(id);
+			const icon = event.target.closest('button').querySelector('i');
+			if (input.type === 'password') {
+				input.type = 'text';
 				icon.classList.remove('fa-eye');
 				icon.classList.add('fa-eye-slash');
-				button.setAttribute('aria-label', 'Ocultar contraseña');
 			} else {
+				input.type = 'password';
 				icon.classList.remove('fa-eye-slash');
 				icon.classList.add('fa-eye');
-				button.setAttribute('aria-label', 'Mostrar contraseña');
 			}
 		}
-
-		// Validar en tiempo real
-		passwordInput.addEventListener('input', validatePassword);
-		password2Input.addEventListener('input', validateMatch);
-
-		function validatePassword() {
-			const password = passwordInput.value;
-
-			// Validar requisitos
-			updateRequirement('length', password.length >= 8);
-			updateRequirement('letter', /[a-zA-Z]/.test(password));
-			updateRequirement('number', /\d/.test(password));
-			updateRequirement('special', /[^\w\s]/.test(password));
-
-			// Actualizar indicador de fortaleza
-			updateStrengthIndicator(password);
-
-			// Validar coincidencia si hay contenido en ambos campos
-			if (password2Input.value) {
-				validateMatch();
-			}
-		}
-
-		function updateRequirement(key, isMet) {
-			const element = requirements[key];
-			if (isMet) {
-				element.classList.remove('unmet');
-				element.classList.add('met');
+ 
+		const pwd1 = document.getElementById('pwd1');
+		const pwd2 = document.getElementById('pwd2');
+		const strength = document.getElementById('strength');
+ 
+		pwd1.addEventListener('input', function() {
+			const p = this.value;
+			let count = 0;
+ 
+			// Requisitos
+			const r1 = p.length >= 8;
+			const r2 = /[a-zA-Z]/.test(p);
+			const r3 = /\d/.test(p);
+			const r4 = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(p);
+ 
+			// Actualizar UI de requisitos
+			updateReq('r1', r1);
+			updateReq('r2', r2);
+			updateReq('r3', r3);
+			updateReq('r4', r4);
+ 
+			// Calcular fortaleza
+			if (r1) count++;
+			if (r2) count++;
+			if (r3) count++;
+			if (r4) count++;
+ 
+			strength.className = 'strength-bar';
+			if (count === 0) strength.classList.add('w-0');
+			else if (count === 1) strength.classList.add('w-33');
+			else if (count === 2) strength.classList.add('w-66');
+			else strength.classList.add('w-100');
+ 
+			// Validar coincidencia
+			if (pwd2.value) checkMatch();
+		});
+ 
+		pwd2.addEventListener('input', checkMatch);
+ 
+		function updateReq(id, ok) {
+			const el = document.getElementById(id);
+			el.classList.toggle('ok', ok);
+			const icon = el.querySelector('i');
+			if (ok) {
+				icon.classList.remove('fa-circle');
+				icon.classList.add('fa-check-circle', 'fas');
+				icon.classList.remove('far');
 			} else {
-				element.classList.remove('met');
-				element.classList.add('unmet');
+				icon.classList.add('fa-circle', 'far');
+				icon.classList.remove('fa-check-circle', 'fas');
 			}
 		}
-
-		function updateStrengthIndicator(password) {
-			let strength = 0;
-			const maxStrength = 4;
-
-			if (password.length >= 8) strength++;
-			if (/[a-zA-Z]/.test(password)) strength++;
-			if (/\d/.test(password)) strength++;
-			if (/[^\w\s]/.test(password)) strength++;
-
-			strengthBar.className = 'strength-bar';
-			
-			if (strength <= 1) {
-				strengthBar.classList.remove('weak', 'fair', 'strong');
-			} else if (strength <= 2) {
-				strengthBar.classList.add('weak');
-			} else if (strength <= 3) {
-				strengthBar.classList.add('fair');
+ 
+		function checkMatch() {
+			const match = document.getElementById('matchError');
+			if (pwd1.value && pwd2.value && pwd1.value !== pwd2.value) {
+				match.classList.add('show');
 			} else {
-				strengthBar.classList.add('strong');
+				match.classList.remove('show');
 			}
 		}
-
-		function validateMatch() {
-			const password = passwordInput.value;
-			const password2 = password2Input.value;
-
-			if (!password2) {
-				matchMessage.classList.remove('show');
-				matchSuccess.classList.remove('show');
-				password2Input.classList.remove('is-invalid', 'is-valid');
-				return;
-			}
-
-			if (password === password2) {
-				matchMessage.classList.remove('show');
-				matchSuccess.classList.add('show');
-				password2Input.classList.remove('is-invalid');
-				password2Input.classList.add('is-valid');
-			} else {
-				matchSuccess.classList.remove('show');
-				matchMessage.classList.add('show');
-				password2Input.classList.remove('is-valid');
-				password2Input.classList.add('is-invalid');
-			}
-		}
-
-		// Validación al enviar
-		function account_recovery(event) {
-			const password = passwordInput.value;
-			const password2 = password2Input.value;
-
-			// Verificar que todos los requisitos se cumplan
-			if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/.test(password)) {
-				passwordInput.classList.add('is-invalid');
-				event.preventDefault();
+ 
+		function validateForm() {
+			const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+			if (!regex.test(pwd1.value)) {
+				alert('La contraseña no cumple los requisitos');
 				return false;
 			}
-
-			// Verificar que las contraseñas coincidan
-			if (password !== password2) {
-				password2Input.classList.add('is-invalid');
-				event.preventDefault();
+			if (pwd1.value !== pwd2.value) {
+				alert('Las contraseñas no coinciden');
 				return false;
 			}
-
-			// Si todo es válido, permitir el envío
 			return true;
 		}
-
-		// Remover estilos de error al escribir
-		passwordInput.addEventListener('input', () => {
-			passwordInput.classList.remove('is-invalid');
-		});
-
-		password2Input.addEventListener('input', () => {
-			password2Input.classList.remove('is-invalid');
-		});
 	</script>
 <!--/define:main-->
