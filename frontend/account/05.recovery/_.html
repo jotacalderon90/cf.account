@@ -4,57 +4,6 @@
 
 <!--define:head-->
 
-  <style>
-		.pwd-input-group {
-			position: relative;
-		}
-		.pwd-toggle {
-			position: absolute;
-			right: 12px;
-			top: 12px;
-			background: none;
-			border: none;
-			cursor: pointer;
-			color: #6c757d;
-		}
-		.pwd-toggle:hover {
-			color: #495057;
-		}
-		.form-control {
-			padding-right: 40px;
-		}
-		.strength-bar {
-			height: 6px;
-			margin-top: 8px;
-			border-radius: 3px;
-			background-color: #e9ecef;
-		}
-		.strength-bar.w-0 { width: 0%; background-color: #e9ecef; }
-		.strength-bar.w-33 { width: 33%; background-color: #dc3545; }
-		.strength-bar.w-66 { width: 66%; background-color: #ffc107; }
-		.strength-bar.w-100 { width: 100%; background-color: #28a745; }
-		.requirements {
-			font-size: 0.875rem;
-			margin-top: 10px;
-			line-height: 1.6;
-		}
-		.req {
-			color: #6c757d;
-		}
-		.req.ok {
-			color: #28a745;
-		}
-		.match-error {
-			display: none;
-			color: #dc3545;
-			font-size: 0.875rem;
-			margin-top: 5px;
-		}
-		.match-error.show {
-			display: block;
-		}
-	</style>
-  
 	<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<!--/if-->
@@ -63,140 +12,46 @@
 
 <!--define:main-->
 	
-  <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="p-5 bg-white rounded shadow" style="max-width: 420px; width: 100%;">
-      <form action="/api/account/recovery" method="POST" onsubmit="return validateForm()">
-			
-        <h2 class="mb-4">Reestablecer Contraseña</h2>
-        
-        <div class="mb-4">
-          <label class="form-label">Nueva contraseña</label>
-          <div class="pwd-input-group">
-            <input type="password" class="form-control" id="pwd1" name="password" placeholder="Ingrese contraseña">
-            <button type="button" class="pwd-toggle" onclick="togglePwd('pwd1')">
-              <i class="far fa-eye"></i>
-            </button>
-          </div>
-          <div class="strength-bar" id="strength"></div>
-          <div class="requirements">
-            <div class="req" id="r1"><i class="far fa-circle"></i> Mínimo 8 caracteres</div>
-            <div class="req" id="r2"><i class="far fa-circle"></i> Una letra (a-z, A-Z)</div>
-            <div class="req" id="r3"><i class="far fa-circle"></i> Un número (0-9)</div>
-            <div class="req" id="r4"><i class="far fa-circle"></i> Un carácter especial (!@#$%^&*)</div>
-          </div>
-        </div>
-   
-        <div class="mb-3">
-          <label class="form-label">Confirmar contraseña</label>
-          <div class="pwd-input-group">
-            <input type="password" class="form-control" id="pwd2" name="password2" placeholder="Repita contraseña">
-            <button type="button" class="pwd-toggle" onclick="togglePwd('pwd2')">
-              <i class="far fa-eye"></i>
-            </button>
-          </div>
-          <div class="match-error" id="matchError">
-            <i class="fas fa-exclamation-circle"></i> Las contraseñas no coinciden
-          </div>
-        </div>
-   
-        <input name="hash" type="hidden" value="{{data:doc.hash}}">
-        
-        <!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
-        <div class="g-recaptcha mb-3" data-sitekey="{{data:process.env.RECAPTCHA_PUBLIC}}"></div>
-        <!--/if-->
-        
-        <button type="submit" class="btn btn-success w-100">Reestablecer</button>
-      </form>
-    </div>
-  </div>
+	<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+		<div class="p-5 bg-white rounded shadow">
+			<form action="/api/account/recovery" method="POST" onsubmit="return account_recovery()">
+				
+				<h2 class="mb-4">Reestablecer Contraseña</h2>
+				
+				<input class="form-control" placeholder="Nueva password" name="password" type="password" value="" />
+				<br>
+				
+				<input class="form-control" placeholder="Repita password" name="password2" type="password" value="" />
+				<br>
+				
+				<input name="hash" type="hidden" value="{{data:doc.hash}}" />
+				
+				<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
+				<div class="g-recaptcha" data-sitekey="{{data:process.env.RECAPTCHA_PUBLIC}}"></div>
+				<br>
+				<!--/if-->
+				
+				<button type="submit" class="btn btn-lg btn-success btn-block" >Reestablecer</button>
+			</form>
+		</div>
+	</div>
 	
 	<script>
-		function togglePwd(id) {
-			const input = document.getElementById(id);
-			const icon = event.target.closest('button').querySelector('i');
-			if (input.type === 'password') {
-				input.type = 'text';
-				icon.classList.remove('fa-eye');
-				icon.classList.add('fa-eye-slash');
-			} else {
-				input.type = 'password';
-				icon.classList.remove('fa-eye-slash');
-				icon.classList.add('fa-eye');
-			}
-		}
- 
-		const pwd1 = document.getElementById('pwd1');
-		const pwd2 = document.getElementById('pwd2');
-		const strength = document.getElementById('strength');
- 
-		pwd1.addEventListener('input', function() {
-			const p = this.value;
-			let count = 0;
- 
-			// Requisitos
-			const r1 = p.length >= 8;
-			const r2 = /[a-zA-Z]/.test(p);
-			const r3 = /\d/.test(p);
-			const r4 = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(p);
- 
-			// Actualizar UI de requisitos
-			updateReq('r1', r1);
-			updateReq('r2', r2);
-			updateReq('r3', r3);
-			updateReq('r4', r4);
- 
-			// Calcular fortaleza
-			if (r1) count++;
-			if (r2) count++;
-			if (r3) count++;
-			if (r4) count++;
- 
-			strength.className = 'strength-bar';
-			if (count === 0) strength.classList.add('w-0');
-			else if (count === 1) strength.classList.add('w-33');
-			else if (count === 2) strength.classList.add('w-66');
-			else strength.classList.add('w-100');
- 
-			// Validar coincidencia
-			if (pwd2.value) checkMatch();
-		});
- 
-		pwd2.addEventListener('input', checkMatch);
- 
-		function updateReq(id, ok) {
-			const el = document.getElementById(id);
-			el.classList.toggle('ok', ok);
-			const icon = el.querySelector('i');
-			if (ok) {
-				icon.classList.remove('fa-circle');
-				icon.classList.add('fa-check-circle', 'fas');
-				icon.classList.remove('far');
-			} else {
-				icon.classList.add('fa-circle', 'far');
-				icon.classList.remove('fa-check-circle', 'fas');
-			}
-		}
- 
-		function checkMatch() {
-			const match = document.getElementById('matchError');
-			if (pwd1.value && pwd2.value && pwd1.value !== pwd2.value) {
-				match.classList.add('show');
-			} else {
-				match.classList.remove('show');
-			}
-		}
- 
-		function validateForm() {
-			const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-			if (!regex.test(pwd1.value)) {
-				alert('La contraseña no cumple los requisitos');
+		
+		function account_recovery(){
+      
+      if(!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/.test(document.forms[0].password.value)) {
+        alert("La contraseña no cumple con los requisitos de seguridad");
+				return false;
+      }
+      
+			if(document.forms[0].password.value!=document.forms[0].password2.value){
+				alert("Contraseñas no coindiden");
 				return false;
 			}
-			if (pwd1.value !== pwd2.value) {
-				alert('Las contraseñas no coinciden');
-				return false;
-			}
+      
 			return true;
 		}
+		
 	</script>
 <!--/define:main-->
