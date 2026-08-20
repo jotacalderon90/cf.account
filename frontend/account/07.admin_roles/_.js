@@ -116,9 +116,12 @@ roles.prototype.update = async function(row) {
 
 roles.prototype.delete = async function(id) {
 	try {
-		if (!confirm("¿Estás seguro de que deseas eliminar este rol? Esta acción no se puede deshacer.")) {
-			return;
-		}
+    
+    const confirmar = await this.parent.modal.confirm('¿Estás seguro de que deseas eliminar este rol? Esta acción no se puede deshacer.', 'Cancelar', 'Aceptar');
+    if(!confirmar) {
+      return;
+    }
+    
 		this.parent.loader.active = true;
 		const del = await this.services.delete({ id: id });
 		if(del.error){

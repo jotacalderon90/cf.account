@@ -180,9 +180,12 @@ users.prototype.saveRoles = async function () {
 users.prototype.activate = async function (row) {
 	try {
 		const q = (row.activate) ? "Deshabilitar" : "Habilitar";
-		if (!confirm('Confirma ' + q)) {
-			return;
-		}
+		
+    const confirmar = await this.parent.modal.confirm('Confirme ' + q, 'Cancelar', 'Aceptar');
+    if(!confirmar) {
+      return;
+    }
+    
 		this.parent.loader.active = true;
 		const update = await this.services.update({
 			id: row.id
@@ -204,9 +207,12 @@ users.prototype.activate = async function (row) {
 
 users.prototype.changePassword = async function (row) {
 	try {
-		if (!confirm('Confirma querer cambiar contraseña')) {
-			return;
-		}
+    
+    const confirmar = await this.parent.modal.confirm('Confirma querer cambiar contraseña', 'Cancelar', 'Aceptar');
+    if(!confirmar) {
+      return;
+    }
+    
 		const newpassword = await this.parent.prompt.execute('Cambiar contraseña', 'password', 'Ingrese nueva contraseña...', '');
 		if (newpassword.trim() == '') {
 			return;
@@ -232,9 +238,12 @@ users.prototype.changePassword = async function (row) {
 
 users.prototype.enableRecovery = async function (row) {
 	try {
-		if (!confirm('Confirma enviar correo de recuperación')) {
-			return;
-		}
+    
+    const confirmar = await this.parent.modal.confirm('Confirma enviar correo de recuperación', 'Cancelar', 'Aceptar');
+    if(!confirmar) {
+      return;
+    }
+    
 		this.parent.loader.active = true;
 		const update = await this.services.update({
 			id: row.id
@@ -254,9 +263,12 @@ users.prototype.enableRecovery = async function (row) {
 
 users.prototype.delete = async function (id) {
 	try {
-		if (!confirm("Confirme eliminación del documento")) {
-			return;
-		}
+    
+    const confirmar = await this.parent.modal.confirm('Confirme eliminación del documento', 'Cancelar', 'Aceptar');
+    if(!confirmar) {
+      return;
+    }
+    
 		this.parent.loader.active = true;
 		const del = await this.services.delete({
 			id: id || this.doc.id
@@ -288,10 +300,11 @@ users.prototype.create = async function (id) {
 			return;
 		}
 
-		if (!confirm("Confirme creación del documento")) {
-			return;
-		}
-
+    const confirmar = await this.parent.modal.confirm('Confirme creación del documento', 'Cancelar', 'Aceptar');
+    if(!confirmar) {
+      return;
+    }
+    
 		this.parent.loader.active = true;
 		const service = await this.services.create({}, {
 			email: email,
