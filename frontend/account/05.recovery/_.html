@@ -158,107 +158,108 @@
 
 <!--define:main-->
 	
-	<div class="p-5 bg-white rounded shadow" style="max-width: 400px; width: 100%;">
-		<form id="recoveryForm" action="/api/account/recovery" method="POST" onsubmit="return account_recovery(event)">
-			
-			<h2 class="mb-4">Reestablecer Contraseña</h2>
-			
-			<!-- Primera contraseña -->
-			<div class="mb-3">
-				<label for="password" class="form-label">Nueva contraseña</label>
-				<div class="password-field-wrapper">
-					<input 
-						class="form-control" 
-						id="password"
-						placeholder="Ingrese su nueva contraseña" 
-						name="password" 
-						type="password" 
-						value=""
-						autocomplete="new-password"
-						aria-describedby="passwordRequirements"
-					/>
-					<button 
-						type="button" 
-						class="password-toggle" 
-						id="togglePassword"
-						aria-label="Mostrar contraseña"
-						tabindex="0"
-					>
-						<i class="far fa-eye"></i>
-					</button>
-				</div>
+  <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="p-5 bg-white rounded shadow" style="max-width: 400px; width: 100%;">
+      <form id="recoveryForm" action="/api/account/recovery" method="POST" onsubmit="return account_recovery(event)">
+        
+        <h2 class="mb-4">Reestablecer Contraseña</h2>
+        
+        <!-- Primera contraseña -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Nueva contraseña</label>
+          <div class="password-field-wrapper">
+            <input 
+              class="form-control" 
+              id="password"
+              placeholder="Ingrese su nueva contraseña" 
+              name="password" 
+              type="password" 
+              value=""
+              autocomplete="new-password"
+              aria-describedby="passwordRequirements"
+            />
+            <button 
+              type="button" 
+              class="password-toggle" 
+              id="togglePassword"
+              aria-label="Mostrar contraseña"
+              tabindex="0"
+            >
+              <i class="far fa-eye"></i>
+            </button>
+          </div>
 
-				<!-- Requisitos de contraseña -->
-				<div id="passwordRequirements" class="requirements-list">
-					<div class="requirement unmet" id="req-length">
-						<div class="requirement-icon"><i class="fas fa-check"></i></div>
-						<span>Mínimo 8 caracteres</span>
-					</div>
-					<div class="requirement unmet" id="req-letter">
-						<div class="requirement-icon"><i class="fas fa-check"></i></div>
-						<span>Al menos una letra (a-z, A-Z)</span>
-					</div>
-					<div class="requirement unmet" id="req-number">
-						<div class="requirement-icon"><i class="fas fa-check"></i></div>
-						<span>Al menos un número (0-9)</span>
-					</div>
-					<div class="requirement unmet" id="req-special">
-						<div class="requirement-icon"><i class="fas fa-check"></i></div>
-						<span>Al menos un carácter especial (!@#$%^&*)</span>
-					</div>
-				</div>
+          <!-- Requisitos de contraseña -->
+          <div id="passwordRequirements" class="requirements-list">
+            <div class="requirement unmet" id="req-length">
+              <div class="requirement-icon"><i class="fas fa-check"></i></div>
+              <span>Mínimo 8 caracteres</span>
+            </div>
+            <div class="requirement unmet" id="req-letter">
+              <div class="requirement-icon"><i class="fas fa-check"></i></div>
+              <span>Al menos una letra (a-z, A-Z)</span>
+            </div>
+            <div class="requirement unmet" id="req-number">
+              <div class="requirement-icon"><i class="fas fa-check"></i></div>
+              <span>Al menos un número (0-9)</span>
+            </div>
+            <div class="requirement unmet" id="req-special">
+              <div class="requirement-icon"><i class="fas fa-check"></i></div>
+              <span>Al menos un carácter especial (!@#$%^&*)</span>
+            </div>
+          </div>
 
-				<!-- Indicador de fortaleza -->
-				<div class="strength-indicator">
-					<div class="strength-bar" id="strengthBar"></div>
-				</div>
-			</div>
+          <!-- Indicador de fortaleza -->
+          <div class="strength-indicator">
+            <div class="strength-bar" id="strengthBar"></div>
+          </div>
+        </div>
 
-			<!-- Segunda contraseña -->
-			<div class="mb-3">
-				<label for="password2" class="form-label">Confirmar contraseña</label>
-				<div class="password-field-wrapper">
-					<input 
-						class="form-control" 
-						id="password2"
-						placeholder="Repita su contraseña" 
-						name="password2" 
-						type="password" 
-						value=""
-						autocomplete="new-password"
-						aria-describedby="matchMessage"
-					/>
-					<button 
-						type="button" 
-						class="password-toggle" 
-						id="togglePassword2"
-						aria-label="Mostrar contraseña"
-						tabindex="0"
-					>
-						<i class="far fa-eye"></i>
-					</button>
-				</div>
-				<div id="matchMessage" class="error-message">
-					<i class="fas fa-times-circle"></i>
-					<span>Las contraseñas no coinciden</span>
-				</div>
-				<div id="matchSuccess" class="success-message">
-					<i class="fas fa-check-circle"></i>
-					<span>Las contraseñas coinciden</span>
-				</div>
-			</div>
+        <!-- Segunda contraseña -->
+        <div class="mb-3">
+          <label for="password2" class="form-label">Confirmar contraseña</label>
+          <div class="password-field-wrapper">
+            <input 
+              class="form-control" 
+              id="password2"
+              placeholder="Repita su contraseña" 
+              name="password2" 
+              type="password" 
+              value=""
+              autocomplete="new-password"
+              aria-describedby="matchMessage"
+            />
+            <button 
+              type="button" 
+              class="password-toggle" 
+              id="togglePassword2"
+              aria-label="Mostrar contraseña"
+              tabindex="0"
+            >
+              <i class="far fa-eye"></i>
+            </button>
+          </div>
+          <div id="matchMessage" class="error-message">
+            <i class="fas fa-times-circle"></i>
+            <span>Las contraseñas no coinciden</span>
+          </div>
+          <div id="matchSuccess" class="success-message">
+            <i class="fas fa-check-circle"></i>
+            <span>Las contraseñas coinciden</span>
+          </div>
+        </div>
 
-			<input name="hash" type="hidden" value="{{data:doc.hash}}" />
-			
-			<!-- reCAPTCHA -->
-			<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
-			<div class="g-recaptcha mb-3" data-sitekey="{{data:process.env.RECAPTCHA_PUBLIC}}"></div>
-			<!--/if-->
-			
-			<button type="submit" class="btn btn-lg btn-success btn-block">Reestablecer</button>
-		</form>
-	</div>
-	
+        <input name="hash" type="hidden" value="{{data:doc.hash}}" />
+        
+        <!-- reCAPTCHA -->
+        <!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
+        <div class="g-recaptcha mb-3" data-sitekey="{{data:process.env.RECAPTCHA_PUBLIC}}"></div>
+        <!--/if-->
+        
+        <button type="submit" class="btn btn-lg btn-success btn-block">Reestablecer</button>
+      </form>
+    </div>
+  </div>
 	
 	<script>
 		const passwordInput = document.getElementById('password');
