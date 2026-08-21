@@ -37,6 +37,10 @@ modal.prototype.confirm = function (message, cancelText, okText) {
       this.close('mdConfirm');
       resolve(true);
     });
+    document.getElementById('btnMdConfirmCancel').addEventListener( 'click' , (event) => {
+      this.close('mdConfirm');
+      resolve(false);
+    });
   });
 };
 
