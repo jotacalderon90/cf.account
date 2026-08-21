@@ -31,7 +31,7 @@ module.exports = {
     nickname: z
       .string()
       .min(3, 'El nickname debe tener al menos 3 caracteres')
-      .max(20, 'El nickname no puede exceder 20 caracteres')
+      .max(50, 'El nickname no puede exceder 50 caracteres')
       .regex(
         /^[a-zA-Z0-9_@.-]+$/,
         'El nickname solo puede contener letras, números, guiones y guiones bajos'
