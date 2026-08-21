@@ -81,6 +81,10 @@ module.exports = {
 
       await user.update(input, registro.id);
 
+      if (redis.client) {
+        await redis.del(registro.hash);
+      }
+
       return redirect;
     } catch (error) {
       logger.error(error);
