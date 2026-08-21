@@ -64,10 +64,10 @@ roles.prototype.getCollectionView = function() {
 
 roles.prototype.create = async function() {
 	try {
-    const nombre = await this.parent.prompt.execute('Nuevo Rol', 'text', 'Ingrese el nombre del rol (identificador)', "");
+    const nombre = await this.parent.modal.prompt('Nuevo Rol', 'text', 'Ingrese el nombre del rol (identificador)', "");
     if (!nombre || nombre.trim() === '') return;
 
-    const descripcion = await this.parent.prompt.execute('Descripción', 'text', 'Ingrese una breve descripción', "");
+    const descripcion = await this.parent.modal.prompt('Descripción', 'text', 'Ingrese una breve descripción', "");
 		
 		this.parent.loader.active = true;
 		const result = await this.services.create({}, {
@@ -90,11 +90,11 @@ roles.prototype.create = async function() {
 roles.prototype.update = async function(row) {
 	try {
     
-    const nombre = await this.parent.prompt.execute('Editar Nombre', 'text', 'Actualice el nombre del rol', row.nombre);
+    const nombre = await this.parent.modal.prompt('Editar Nombre', 'text', 'Actualice el nombre del rol', row.nombre);
     if (!nombre || nombre.trim() === '') return;
 
-    const descripcion = await this.parent.prompt.execute('Editar Descripción', 'text', 'Actualice la descripción', row.descripcion);
-		
+    const descripcion = await this.parent.modal.prompt('Editar Descripción', 'text', 'Actualice la descripción', row.descripcion);
+
 		this.parent.loader.active = true;
     
 		const result = await this.services.update({ id: row.id }, {

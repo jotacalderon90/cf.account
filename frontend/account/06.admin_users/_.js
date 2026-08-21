@@ -217,7 +217,7 @@ users.prototype.changePassword = async function (row) {
       return;
     }
     
-		const newpassword = await this.parent.prompt.execute('Cambiar contraseña', 'password', 'Ingrese nueva contraseña...', '');
+		const newpassword = await this.parent.modal.prompt('Cambiar contraseña', 'password', 'Ingrese nueva contraseña...', '');
 		if (newpassword.trim() == '') {
 			return;
 		}
@@ -295,14 +295,14 @@ users.prototype.delete = async function (id) {
 users.prototype.create = async function (id) {
 	try {
 
-		const email = await this.parent.prompt.execute('Nuevo usuario', 'text', 'Ingrese email', '');
+		const email = await this.parent.modal.prompt('Nuevo usuario', 'text', 'Ingrese email', '');
 		if (email.trim() == '') {
 			return;
 		}
 
 		await wait(500);
 
-		const password = await this.parent.prompt.execute('Ingrese password', 'text', 'Ingrese password', email);
+		const password = await this.parent.modal.prompt('Ingrese password', 'text', 'Ingrese password', email);
 		if (password.trim() == '') {
 			return;
 		}
