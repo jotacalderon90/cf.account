@@ -15,7 +15,6 @@
 <!--define:main-->
 	
 	<!--include:header-->
-	<!--include:modal/_-->
   
 	<div class="d-flex">
 		<!--include:account/aside-->
@@ -48,7 +47,7 @@
 			if(
         password === '' || 
         !/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/.test(password)){
-        await this.parent.modal.notify('Debe ingresar una contraseña segura:\nMínimo 8 caracteres.\nUna letra mayúscula.\nUn número.\nUn carácter especial.', 'error');
+        alert('Debe ingresar una contraseña segura:\nMínimo 8 caracteres.\nUna letra mayúscula.\nUn número.\nUn carácter especial.', 'error');
 				return false;
 			}
       

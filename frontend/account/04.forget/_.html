@@ -12,8 +12,6 @@
 
 <!--define:main-->		
 			
-	<!--include:modal/_-->
-  
 	<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
 		<div class="p-5 bg-white rounded shadow">
 			<form action="/api/account/forget" method="POST" onsubmit="return account_forget()">
@@ -48,7 +46,7 @@
 			if(
         email === '' || 
         !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
-        await this.parent.modal.notify("Ingrese email válido",'error');
+        alert("Ingrese email válido",'error');
 				return false;
 			}
         
@@ -56,7 +54,7 @@
       if(typeof grecaptcha === 'object'){
         recaptcha = grecaptcha.getResponse();
         if(recaptcha.trim() === '') {
-          await this.parent.modal.notify('Valide recaptcha', 'error');
+          alert('Valide recaptcha', 'error');
           return false;
         }
       }

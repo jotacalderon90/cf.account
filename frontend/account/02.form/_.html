@@ -21,7 +21,24 @@
 				<input class="form-control" placeholder="Email" name="email" type="text" />
 				<br>
 				
-				<input class="form-control" placeholder="Password" name="password" type="password" value=""/>
+				<div class="input-group">
+					<input 
+						class="form-control" 
+						id="password"
+						placeholder="Ingrese su contraseña"
+						name="password" 
+						type="password" 
+						autocomplete="new-password"
+					/>
+					<button 
+						class="btn btn-outline-secondary" 
+						type="button" 
+						onclick="togglePassword('password', this)"
+						aria-label="Mostrar contraseña"
+					>
+						<i class="fa-solid fa-eye"></i>
+					</button>
+				</div>
 				<br>
 				
 				<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
@@ -39,4 +56,23 @@
 		</div>
 	</div>
 	
+	<script>
+		
+		function togglePassword(inputId, button) {
+			const input = document.getElementById(inputId);
+			const icon = button.querySelector('i');
+
+			if (input.type === 'password') {
+				input.type = 'text';
+				icon.classList.replace('fa-eye', 'fa-eye-slash');
+				button.setAttribute('aria-label', 'Ocultar contraseña');
+			} else {
+				input.type = 'password';
+				icon.classList.replace('fa-eye-slash', 'fa-eye');
+				button.setAttribute('aria-label', 'Mostrar contraseña');
+			}
+		}
+    
+  </script>
+  
 <!--/define:main-->
