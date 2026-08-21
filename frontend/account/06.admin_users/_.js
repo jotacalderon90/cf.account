@@ -57,9 +57,9 @@ users.prototype.start = async function (parent) {
 		this.tags = tags.data;
 		await this.getRoles();
 		await this.refresh();
-	} catch (e) {
-		alert(e);
-		console.log(e);
+	} catch (error) {
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
 }
 
@@ -69,7 +69,7 @@ users.prototype.getRoles = async function () {
 		if (res.error) throw res.error;
 		this.allRoles = res.data;
 	} catch (e) {
-		console.error("Error fetching roles:", e);
+		console.error('Error fetching roles:', e);
 	}
 }
 
@@ -93,9 +93,9 @@ users.prototype.getTotal = async function () {
 		}
 		this.cant = cant.data;
 		this.getCollection();
-	} catch (e) {
-		alert(e);
-		console.log(e);
+	} catch (error) {
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
 }
 
@@ -109,22 +109,24 @@ users.prototype.paramsToGetTotal = function () {
 }
 
 users.prototype.getCollection = async function () {
-	this.parent.loader.active = true;
+	
 	try {
 		this.obtaining = true;
-
+    
+    this.parent.loader.active = true;
 		const coll = await this.services.collection(this.paramsToGetCollection());
+    this.parent.loader.active = false;
 		if (coll.error) {
 			throw (coll.error);
 		}
 		this.coll = this.coll.concat(coll.data);
 		this.obtained = this.coll.length;
 		this.obtaining = false;
-	} catch (e) {
-		alert(e);
-		console.log(e);
+	} catch (error) {
+    this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
-	this.parent.loader.active = false;
 }
 
 users.prototype.paramsToGetCollection = function () {
@@ -163,23 +165,24 @@ users.prototype.saveRoles = async function () {
 			type: 'roles',
 			roles: this.userRoles
 		});
+    this.parent.loader.active = false;
 		if (update.error) {
 			throw (update.error);
 		}
 
 		bootstrap.Modal.getInstance(document.getElementById('rolesModal')).hide();
-		alert("Roles actualizados correctamente");
+		await this.parent.modal.notify('Roles actualizados correctamente');
 		this.refresh();
-	} catch (e) {
-		alert(e.error || e);
-		console.log(e);
+	} catch (error) {
+    this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
-	this.parent.loader.active = false;
 }
 
 users.prototype.activate = async function (row) {
 	try {
-		const q = (row.activate) ? "Deshabilitar" : "Habilitar";
+		const q = (row.activate) ? 'Deshabilitar' : 'Habilitar';
 		
     const confirmar = await this.parent.modal.confirm('Confirme ' + q, 'Cancelar', 'Aceptar');
     if(!confirmar) {
@@ -193,16 +196,17 @@ users.prototype.activate = async function (row) {
 			type: 'activate',
 			activate: !row.activate
 		});
+    this.parent.loader.active = false;
 		if (update.error) {
 			throw (update.error);
 		}
-		alert("Documento actualizado correctamente");
+		await this.parent.modal.notify('Documento actualizado correctamente');
 		this.refresh();
-	} catch (e) {
-		alert(e.error || e);
-		console.log(e);
+	} catch (error) {
+    this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
-	this.parent.loader.active = false;
 }
 
 users.prototype.changePassword = async function (row) {
@@ -224,16 +228,17 @@ users.prototype.changePassword = async function (row) {
 			type: 'password',
 			password: newpassword
 		});
+    this.parent.loader.active = false;
 		if (update.error) {
 			throw (update.error);
 		}
-		alert("Documento actualizado correctamente");
+		await this.parent.modal.notify('Documento actualizado correctamente');
 		this.refresh();
-	} catch (e) {
-		alert(e.error || e);
-		console.log(e);
+	} catch (error) {
+    this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
-	this.parent.loader.active = false;
 }
 
 users.prototype.enableRecovery = async function (row) {
@@ -250,15 +255,16 @@ users.prototype.enableRecovery = async function (row) {
 		}, {
 			type: 'notify'
 		});
+    this.parent.loader.active = false;
 		if (update.error) {
 			throw (update.error);
 		}
-		alert("Notificacion enviada correctamente");
-	} catch (e) {
-		alert(e.error || e);
-		console.log(e);
+		await this.parent.modal.notify('Notificacion enviada correctamente');
+	} catch (error) {
+    this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
-	this.parent.loader.active = false;
 }
 
 users.prototype.delete = async function (id) {
@@ -273,22 +279,23 @@ users.prototype.delete = async function (id) {
 		const del = await this.services.delete({
 			id: id || this.doc.id
 		});
+    this.parent.loader.active = false;
 		if (del.error) {
 			throw (del.error);
 		}
-		alert("Documento eliminado correctamente");
+		await this.parent.modal.notify('Documento eliminado correctamente');
 		this.refresh();
-	} catch (e) {
-		alert(e.error || e);
-		console.log(e);
+	} catch (error) {
+    this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
-	this.parent.loader.active = false;
 }
 
 users.prototype.create = async function (id) {
 	try {
 
-		const email = await this.parent.prompt.execute('Nuevo usuario', 'text', 'Ingrese email', "");
+		const email = await this.parent.prompt.execute('Nuevo usuario', 'text', 'Ingrese email', '');
 		if (email.trim() == '') {
 			return;
 		}
@@ -310,18 +317,19 @@ users.prototype.create = async function (id) {
 			email: email,
 			password: password
 		});
+    this.parent.loader.active = false;
 
 		if (service.error) {
 			throw (service.error);
 		}
 
-		alert("Documento creado correctamente");
+		await this.parent.modal.notify('Documento creado correctamente');
 		this.refresh();
 
-	} catch (e) {
-		alert(e.error || e);
-		console.log(e);
+	} catch (error) {
 		this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
 }
 
@@ -340,7 +348,7 @@ users.prototype.getCollectionView = function (){
 
 users.prototype.copy = async function() {
   await copyLarge(this.getCollectionView().map(row => row.email).join(','));
-  alert('Correos copiados :)');
+  await this.parent.modal.notify('Correos copiados :)');
 }
 
 app.modules.users = users;

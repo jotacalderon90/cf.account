@@ -101,12 +101,12 @@
 			const password2 = document.forms[0].password2.value;
 
 			if(!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/.test(password)) {
-				alert("La contraseña no cumple con los requisitos de seguridad");
+				await this.parent.modal.notify("La contraseña no cumple con los requisitos de seguridad" ,'error');
 				return false;
 			}
       
 			if(password !== password2){
-				alert("Las contraseñas no coinciden");
+				await this.parent.modal.notify("Las contraseñas no coinciden",'error');
 				return false;
 			}
       

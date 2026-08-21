@@ -25,8 +25,8 @@ roles.prototype.start = async function(parent){
 		await this.refresh();
     
 	} catch (error) {
-		alert(error);
-		console.log(error);
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
 }
 
@@ -37,19 +37,20 @@ roles.prototype.refresh = async function() {
 }
 
 roles.prototype.getCollection = async function() {
-	this.parent.loader.active = true;
 	try {
+    this.parent.loader.active = true;
 		const coll = await this.services.collection();
+    this.parent.loader.active = false;
 		if(coll.error){
 			throw new Error(coll.error);
 		}
 		this.coll = this.coll.concat(coll.data);
 		this.cant = this.coll.length;
 	} catch (error) {
-		alert(error);
-		console.log(error);
+    this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
-	this.parent.loader.active = false;
 }
 
 roles.prototype.getCollectionView = function() {
@@ -73,17 +74,17 @@ roles.prototype.create = async function() {
 			nombre: nombre.trim(),
 			descripcion: (descripcion || "").trim()
 		});
-		
+		this.parent.loader.active = false;
 		if(result.error){
 			throw new Error(result.error);
 		}
 		
 		this.refresh();
 	} catch (error) {
-		alert(error);
-		console.log(error);
+    this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
-  this.parent.loader.active = false;
 }
 
 roles.prototype.update = async function(row) {
@@ -100,7 +101,7 @@ roles.prototype.update = async function(row) {
 			nombre: nombre.trim(),
 			descripcion: (descripcion || "").trim()
 		});
-		
+		this.parent.loader.active = false;
 		if(result.error){
 			throw new Error(result.error);
 		}
@@ -108,10 +109,10 @@ roles.prototype.update = async function(row) {
 		this.refresh();
     
 	} catch (error) {
-		alert(error);
-		console.log(error);
+    this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
-  this.parent.loader.active = false;
 }
 
 roles.prototype.delete = async function(id) {
@@ -124,15 +125,16 @@ roles.prototype.delete = async function(id) {
     
 		this.parent.loader.active = true;
 		const del = await this.services.delete({ id: id });
-		if(del.error){
+		this.parent.loader.active = false;
+    if(del.error){
 			throw new Error(del.error);
 		}
 		this.refresh();
 	} catch (error) {
-		alert(error);
-		console.log(error);
+    this.parent.loader.active = false;
+		await this.parent.modal.notify(error,'error');
+		console.error(error);
 	}
-	this.parent.loader.active = false;
 }
 
 roles.prototype.getLinkDatabase = function (id) {
