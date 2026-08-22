@@ -65,6 +65,9 @@ roles.prototype.getCollectionView = function() {
 roles.prototype.create = async function() {
 	try {
     const nombre = await this.parent.modal.prompt('Nuevo Rol', 'text', 'Ingrese el nombre del rol (identificador)', "");
+    console.log(nombre);
+    console.log(typeof nombre);
+    
     if (!nombre || nombre.trim() === '') return;
 
 		await wait(500);
