@@ -130,8 +130,8 @@ modal.prototype.prompt = function(msg, type, placeholder, value) {
 			modal.removeEventListener('shown.bs.modal', handler);
 		});
 
-		modalB.show();
-	});*/
+		modalB.show();*/
+	});
 }
 
 modal.prototype.displayHtml = function (msg, html) {
