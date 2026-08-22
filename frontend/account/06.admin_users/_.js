@@ -152,8 +152,9 @@ users.prototype.getOptions = function () {
 users.prototype.changeRoles = async function (row) {
 	this.selectedUser = row;
 	this.userRoles = [...(row.roles || [])];
-	const modal = new bootstrap.Modal(document.getElementById('rolesModal'));
-	modal.show();
+  this.parent.modal.open('rolesModal');
+	//const modal = new bootstrap.Modal(document.getElementById('rolesModal'));
+	//modal.show();
 }
 
 users.prototype.saveRoles = async function () {
@@ -169,8 +170,8 @@ users.prototype.saveRoles = async function () {
 		if (update.error) {
 			throw (update.error);
 		}
-
-		bootstrap.Modal.getInstance(document.getElementById('rolesModal')).hide();
+    this.parent.modal.close('rolesModal');
+		//bootstrap.Modal.getInstance(document.getElementById('rolesModal')).hide();
 		await this.parent.modal.notify('Roles actualizados correctamente');
 		this.refresh();
 	} catch (error) {
