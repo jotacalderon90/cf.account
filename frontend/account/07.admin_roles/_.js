@@ -67,6 +67,8 @@ roles.prototype.create = async function() {
     const nombre = await this.parent.modal.prompt('Nuevo Rol', 'text', 'Ingrese el nombre del rol (identificador)', "");
     if (!nombre || nombre.trim() === '') return;
 
+		await wait(500);
+
     const descripcion = await this.parent.modal.prompt('Descripción', 'text', 'Ingrese una breve descripción', "");
 		
 		this.parent.loader.active = true;
@@ -92,6 +94,8 @@ roles.prototype.update = async function(row) {
     
     const nombre = await this.parent.modal.prompt('Editar Nombre', 'text', 'Actualice el nombre del rol', row.nombre);
     if (!nombre || nombre.trim() === '') return;
+  
+		await wait(500);
 
     const descripcion = await this.parent.modal.prompt('Editar Descripción', 'text', 'Actualice la descripción', row.descripcion);
 

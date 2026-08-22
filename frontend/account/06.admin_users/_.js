@@ -153,8 +153,6 @@ users.prototype.changeRoles = async function (row) {
 	this.selectedUser = row;
 	this.userRoles = [...(row.roles || [])];
   this.parent.modal.open('rolesModal');
-	//const modal = new bootstrap.Modal(document.getElementById('rolesModal'));
-	//modal.show();
 }
 
 users.prototype.saveRoles = async function () {
@@ -171,7 +169,6 @@ users.prototype.saveRoles = async function () {
 			throw (update.error);
 		}
     this.parent.modal.close('rolesModal');
-		//bootstrap.Modal.getInstance(document.getElementById('rolesModal')).hide();
 		await this.parent.modal.notify('Roles actualizados correctamente');
 		this.refresh();
 	} catch (error) {
@@ -218,6 +215,8 @@ users.prototype.changePassword = async function (row) {
       return;
     }
     
+		await wait(500);
+
 		const newpassword = await this.parent.modal.prompt('Cambiar contraseña', 'password', 'Ingrese nueva contraseña...', '');
 		if (newpassword.trim() == '') {
 			return;
