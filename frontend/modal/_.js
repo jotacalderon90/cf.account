@@ -89,7 +89,7 @@ modal.prototype.prompt = function(msg, type, placeholder, value) {
     this.data.prompt.msg = msg;
     this.data.prompt.type = type;
     this.data.prompt.placeholder = placeholder;
-    this.data.prompt.value = value;
+    this.data.prompt.value = value || '';
     this.data.mdCurrent = 'mdPrompt';
     this.open(this.data.mdCurrent);
     /*
