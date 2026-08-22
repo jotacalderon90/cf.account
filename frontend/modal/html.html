@@ -1,16 +1,17 @@
 
   <!-- Modal para Desplegar HTML -->
   <div class="modal fade"
-     id="mdHtml"
-     tabindex="-1"
-     aria-hidden="true">
+    id="mdHtml"
+    tabindex="-1"
+    aria-hidden="true">
+
 
     <div class="modal-dialog modal-dialog-centered modal-xl">
       <div class="modal-content border-0 shadow">
         <div class="modal-header border-0 pb-0">
           <h5 class="modal-title d-flex align-items-center">
             <i class="fa fa-circle-question text-warning me-2"></i>
-            {{modal.title}}
+            {{ modal.data.html.msg }}
           </h5>
 					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>

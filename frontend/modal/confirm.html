@@ -1,12 +1,11 @@
 
   <!-- Modal para solicitar confirmación -->
   <div class="modal fade"
-     id="mdConfirm"
-     tabindex="-1"
-     aria-hidden="true"
-     data-bs-backdrop="static"
-     data-bs-keyboard="false">
-
+    id="mdConfirm"
+    tabindex="-1"
+    aria-hidden="true"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-sm">
       <div class="modal-content border-0 shadow">
         <div class="modal-header border-0 pb-0">
@@ -17,15 +16,15 @@
         </div>
         <div class="modal-body pt-2">
           <p class="mb-0 text-muted">
-            {{ modal.message }}
+            {{ modal.data.confirm.msg }}
           </p>
         </div>
         <div class="modal-footer border-0 pt-0">
-          <button type="button" class="btn btn-light" id="btnMdConfirmCancel">
-            {{ modal.cancelText || 'Cancelar' }}
+          <button type="button" class="btn btn-sm btn-light" v-on:click="modal.cancelar()">
+            {{ modal.data.confirm.cancelText || 'Cancelar' }}
           </button>
-          <button type="button" class="btn btn-primary" id="btnMdConfirmOk">
-            {{ modal.okText || 'Aceptar' }}
+          <button type="button" class="btn btn-sm btn-primary" v-on:click="modal.aceptar()">
+            {{ modal.data.confirm.okText || 'Aceptar' }}
           </button>
         </div>
       </div>

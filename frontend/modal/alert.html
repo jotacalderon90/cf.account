@@ -7,18 +7,22 @@
     data-bs-backdrop="static"
     data-bs-keyboard="false">
 		<div class="modal-dialog modal-dialog-centered modal-sm">
-			<div class="modal-content">
-				<div class="modal-header" :class="modal.notifyType === 'error' ? 'bg-danger text-white' : 'bg-success text-white'">
-					<h6 class="modal-title">
-						<i :class="modal.notifyType === 'error' ? 'fa fa-exclamation-circle' : 'fa fa-check-circle'" class="me-2"></i>
-						{{ modal.notifyType === 'error' ? 'Error' : 'Listo' }}
-					</h6>
+      <div class="modal-content border-0 shadow">
+				<div class="modal-header border-0 pb-0" :class="modal.data.notify.type === 'error' ? 'bg-danger text-white' : 'bg-success text-white'">
+					<h5 class="modal-title d-flex align-items-center">
+						<i :class="modal.data.notify.type === 'error' ? 'fa fa-exclamation-circle' : 'fa fa-check-circle'" class="me-2"></i>
+						{{ modal.data.notify.type === 'error' ? 'Error' : 'Aviso' }}
+					</h5>
 				</div>
-				<div class="modal-body">
-					<p class="mb-0">{{ modal.notifyMsg }}</p>
+				<div class="modal-body pt-2">
+          <p class="mb-0 text-muted">
+            {{ modal.data.notify.msg }}
+          </p>
 				</div>
-				<div class="modal-footer py-2">
-					<button type="button" class="btn btn-sm btn-light" id="btnMdAceptar">Aceptar</button>
+        <div class="modal-footer border-0 pt-0">
+					<button type="button" class="btn btn-sm btn-light" v-on:click="modal.aceptar()">
+            Aceptar
+          </button>
 				</div>
 			</div>
 		</div>
