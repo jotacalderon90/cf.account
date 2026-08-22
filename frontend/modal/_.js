@@ -42,6 +42,12 @@ modal.prototype.aceptar = function (data) {
   this.resolve(data || true);
 }
 
+//usado por prompt
+modal.prototype.continuar = function (data) {
+  this.close(this.data.mdCurrent);
+  this.resolve(data);
+}
+
 modal.prototype.cancelar = function (data) {
   this.close(this.data.mdCurrent);
   this.resolve(data || false);
