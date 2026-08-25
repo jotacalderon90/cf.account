@@ -2,7 +2,7 @@
 
 const constants = require('../constants');
 
-const _constants = { ...constants };
+const _constants = structuredClone(constants);
 
 _constants.error.rest.tracking = 'Error al generar tracking';
 _constants.error.rest.total = 'Error al obtener total de usuarios';

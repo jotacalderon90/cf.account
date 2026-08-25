@@ -2,7 +2,7 @@
 
 const constants = require('../constants');
 
-const _constants = { ...constants };
+const _constants = structuredClone(constants);
 
 _constants.error.rest.collection = 'Error al buscar usuarios';
 

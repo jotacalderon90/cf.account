@@ -2,7 +2,7 @@
 
 const constants = require('../constants');
 
-const _constants = { ...constants };
+const _constants = structuredClone(constants);
 
 _constants.error.rest.renderIndex = 'Error al renderizar inicio';
 _constants.error.rest.renderForm = 'Error al renderizar formulario';

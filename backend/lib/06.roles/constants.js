@@ -2,7 +2,7 @@
 
 const constants = require('../constants');
 
-const _constants = { ...constants };
+const _constants = structuredClone(constants);
 
 _constants.error.rest.total = 'Error al obtener total de roles';
 _constants.error.rest.collection = 'Error al obtener lista de roles';
