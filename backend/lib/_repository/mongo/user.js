@@ -195,4 +195,24 @@ module.exports = {
       );
     }
   },
+
+  mailingSubscritos: async function (host) {
+    try {
+      const query = {
+        host: host,
+        notification: true,
+      };
+
+      const options = {
+        projection: {
+          email: 1,
+        },
+      };
+
+      return await this.collection(query, options);
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.collection + ' ' + constants.error.repositorio);
+    }
+  },
 };

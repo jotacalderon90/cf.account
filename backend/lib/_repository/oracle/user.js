@@ -372,4 +372,28 @@ module.exports = {
       );
     }
   },
+
+  mailingSubscritos: async function (host) {
+    try {
+      const sql = `
+        SELECT
+          EMAIL
+        FROM USUARIOS
+        WHERE
+          HOST = :host
+          AND NOTIFICATION = 1
+      `;
+
+      const collection = await oracle.select(sql, { host: host });
+
+      if (!Array.isArray(collection)) {
+        throw new Error(collection);
+      }
+
+      return collection.map(mapRow);
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.collection + ' ' + constants.error.repositorio);
+    }
+  },
 };

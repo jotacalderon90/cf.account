@@ -40,6 +40,14 @@
       {
         "name": "Google",
         "description": "Servicios de Google"
+      },
+      {
+        "name": "Roles",
+        "description": "Servicio para gestiión de roles"
+      },
+      {
+        "name": "External",
+        "description": "Servicios para otros sistemas"
       }
     ]
   },
