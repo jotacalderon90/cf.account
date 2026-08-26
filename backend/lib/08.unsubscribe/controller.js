@@ -12,7 +12,7 @@ const domain = require('../domain');
 module.exports = {
   unsubscribe: async function (req, res) {
     try {
-      const parseResult = validator.unsubscribe.safeParse();
+      const parseResult = validator.unsubscribe.safeParse(req.params);
 
       if (!parseResult.success) {
         logger.error(parseResult);
