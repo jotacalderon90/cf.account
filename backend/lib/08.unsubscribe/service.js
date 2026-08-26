@@ -19,6 +19,8 @@ module.exports = {
         return constants.error.rest.unsubscribe_notFound;
       }
 
+      console.log(userByEmail);
+
       const set = {
         notification: false,
       };
