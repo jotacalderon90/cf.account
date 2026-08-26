@@ -13,7 +13,7 @@ module.exports = {
     try {
       const email = unsubscribe.decrypt(input.hash);
 
-      const userByEmail = user.findByEmail(email, input.host);
+      const userByEmail = await user.findByEmail(email, input.host);
 
       if (userByEmail == null) {
         return constants.error.rest.unsubscribe_notFound;
