@@ -23,7 +23,7 @@ module.exports = {
         notification: false,
       };
 
-      return user.update(set, userByEmail.id);
+      return await user.update(set, userByEmail.id);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.unsubscribe + ' ' + constants.error.servicio);
