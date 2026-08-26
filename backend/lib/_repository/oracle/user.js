@@ -271,6 +271,14 @@ module.exports = {
         };
       }
 
+      if (input.notification != undefined) {
+        set.push(`notification = :notification`);
+
+        params = {
+          notification: input.notification,
+        };
+      }
+
       sql += set.join(',') + ' WHERE ID = :id';
 
       const updated = await oracle.execute(sql, { ...params, id });
