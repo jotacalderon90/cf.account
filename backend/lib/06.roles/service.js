@@ -51,7 +51,7 @@ module.exports = {
     try {
       const doc = await role.read(id);
       if (doc && doc.host === input.host) {
-        return await role.update(input, id);
+        return await role.update(id, input);
       }
       throw new Error(constants.error.rest.read_inhost);
     } catch (error) {

@@ -1,17 +1,20 @@
 'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-
 const oracle = require('cl.jotacalderon.cf.framework/lib/oracle');
 const oracledb = require('oracledb');
+//const AppError = require('../../error');
 
 const constants = require('../constants');
 
-const toLowerKeys = (obj) =>
-  Object.entries(obj).reduce((acc, [key, value]) => {
+const mapRow = function (row) {
+  return Object.entries(row).reduce((acc, [key, value]) => {
     acc[key.toLowerCase()] = value;
     return acc;
   }, {});
+};
+
+const name_collection = 'ROLES';
 
 module.exports = {
   total: async function (query) {
@@ -19,7 +22,7 @@ module.exports = {
       let sql = `
         SELECT 
           COUNT(*) AS TOTAL
-        FROM ROLES
+        FROM ${name_collection}
         WHERE
           1 = 1
       `;
@@ -57,7 +60,7 @@ module.exports = {
           ID,
           NOMBRE, 
           DESCRIPCION
-        FROM ROLES
+        FROM ${name_collection}
         WHERE
           1 = 1
       `;
@@ -85,19 +88,26 @@ module.exports = {
         throw new Error(collection);
       }
 
-      return collection.map((row) => {
-        return toLowerKeys(row);
-      });
+      return collection.map(mapRow);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.collection + ' ' + constants.error.repositorio);
     }
   },
 
+  tags: async function () {
+    try {
+      throw new Error('No implementado');
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.tags + ' ' + constants.error.repositorio);
+    }
+  },
+
   create: async function (input) {
     try {
       const sql = `
-        INSERT INTO ROLES ( 
+        INSERT INTO ${name_collection} ( 
           NOMBRE, 
           DESCRIPCION,
           HOST
@@ -138,7 +148,7 @@ module.exports = {
           NOMBRE, 
           DESCRIPCION,
           HOST
-        FROM ROLES
+        FROM ${name_collection}
         WHERE 
           ID = :id
       `;
@@ -151,17 +161,17 @@ module.exports = {
         throw new Error(doc);
       }
 
-      return toLowerKeys(doc[0]);
+      return mapRow(doc[0]);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
     }
   },
 
-  update: async function (input, id) {
+  update: async function (id, input) {
     try {
       const sql = `
-        UPDATE ROLES SET 
+        UPDATE ${name_collection} SET 
           NOMBRE = :nombre, 
           DESCRIPCION = :descripcion
         WHERE 
@@ -188,7 +198,7 @@ module.exports = {
   delete: async function (id) {
     try {
       const sql = `
-        DELETE FROM ROLES
+        DELETE FROM ${name_collection}
         WHERE 
           ID = :id
       `;

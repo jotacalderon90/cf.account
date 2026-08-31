@@ -50,7 +50,7 @@ module.exports = {
         const usuarioActualizar = {};
         ((usuarioActualizar.thumb = registro.image.url), (usuarioActualizar.google = registro));
 
-        respuesta = await user.update(usuarioActualizar, userByEmail.id);
+        respuesta = await user.update(userByEmail.id, usuarioActualizar);
 
         id = userByEmail.id;
       }

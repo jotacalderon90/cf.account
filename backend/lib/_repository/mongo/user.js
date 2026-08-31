@@ -1,21 +1,26 @@
 'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-
 const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
+
+const AppError = require('../../error');
 
 const constants = require('../constants');
 
-//20260505:formateo registro mongo para normalizacion
 const mapRow = function (row) {
   row.id = row._id.toString();
+  delete row._id;
   return row;
 };
 
+const validId = /^[a-f0-9]{24}$/;
+
+const name_collection = 'user';
+
 module.exports = {
-  total: async function (query) {
+  total: async function (query, options) {
     try {
-      const total = await mongodb.count('user', query);
+      const total = await mongodb.count(name_collection, query, options);
 
       if (isNaN(total)) {
         throw new Error(total);
@@ -28,9 +33,13 @@ module.exports = {
     }
   },
 
-  collection: async function (query, options) {
+  collection: async function (query, options, asCursor) {
     try {
-      const collection = await mongodb.find('user', query, options);
+      const collection = await mongodb.find(name_collection, query, options, asCursor);
+
+      if (asCursor) {
+        return collection;
+      }
 
       if (!Array.isArray(collection)) {
         throw new Error(collection);
@@ -43,26 +52,45 @@ module.exports = {
     }
   },
 
-  create: async function (input) {
+  tags: async function (field, query) {
     try {
-      if ((await this.total({ email: input.email, host: input.host })) != 0) {
-        return constants.error.rest.createEmailExiste;
+      const tags = await mongodb.distinct(name_collection, field, query);
+
+      if (!Array.isArray(tags)) {
+        throw new Error(tags);
       }
 
-      const nuevoUsuario = {};
+      return tags;
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.tags + ' ' + constants.error.repositorio);
+    }
+  },
 
-      nuevoUsuario.host = input.host;
-      nuevoUsuario.email = input.email;
-      nuevoUsuario.hash = input.hash;
-      nuevoUsuario.password = input.password;
-      nuevoUsuario.nickname = input.nickname;
-      nuevoUsuario.thumb = input.thumb;
-      nuevoUsuario.activate = input.activate;
-      nuevoUsuario.roles = input.roles;
-      nuevoUsuario.notification = input.notification;
-      nuevoUsuario.created = new Date();
+  create: async function (input) {
+    try {
+      if (input._id) {
+        input._id = mongodb.toId(input._id);
+      }
 
-      const created = await mongodb.insertOne('user', nuevoUsuario);
+      if (!input.host) {
+        throw new Error('no host :|');
+      }
+
+      const newdoc = {
+        host: input.host,
+        email: input.email,
+        hash: input.hash,
+        password: input.password,
+        nickname: input.nickname,
+        thumb: input.thumb,
+        activate: input.activate,
+        roles: input.roles,
+        notification: input.notification,
+        created: new Date(),
+      };
+
+      const created = await mongodb.insertOne(name_collection, newdoc);
 
       if (!created.acknowledged) {
         throw new Error(created);
@@ -70,6 +98,9 @@ module.exports = {
 
       return created.insertedId.toString();
     } catch (error) {
+      if (error.code && error.code === 11000) {
+        throw new AppError(constants.error.duplicate, 409);
+      }
       logger.error(error);
       throw new Error(constants.error.rest.create + ' ' + constants.error.repositorio);
     }
@@ -77,7 +108,11 @@ module.exports = {
 
   read: async function (id) {
     try {
-      const doc = await mongodb.findOne('user', id);
+      if (!validId.test(id)) {
+        throw new Error('Id inválido');
+      }
+
+      const doc = await mongodb.findOne(name_collection, id);
 
       if (!doc._id) {
         throw new Error(doc);
@@ -90,16 +125,27 @@ module.exports = {
     }
   },
 
-  update: async function (input, id) {
+  update: async function (id, input) {
     try {
-      const updated = await mongodb.updateOne('user', id, { $set: input });
+      if (!validId.test(id)) {
+        throw new Error('Id inválido');
+      }
+
+      delete input._id;
+      delete input._name;
+
+      const updated = await mongodb.updateOne(name_collection, id, { $set: input });
 
       if (!updated.acknowledged) {
+        logger.error(updated);
         throw new Error(updated);
       }
 
       return true;
     } catch (error) {
+      if (error.code && error.code === 11000) {
+        throw new AppError(constants.error.duplicate, 409);
+      }
       logger.error(error);
       throw new Error(constants.error.rest.update + ' ' + constants.error.repositorio);
     }
@@ -107,7 +153,11 @@ module.exports = {
 
   delete: async function (id) {
     try {
-      const deleted = await mongodb.deleteOne('user', id);
+      if (!validId.test(id)) {
+        throw new Error('Id inválido');
+      }
+
+      const deleted = await mongodb.deleteOne(name_collection, id);
 
       if (!deleted.acknowledged) {
         throw new Error(deleted);
@@ -120,49 +170,9 @@ module.exports = {
     }
   },
 
-  inHost: async function (id, host) {
-    try {
-      const docById = await this.read(id);
-
-      if (docById.host === host) {
-        return true;
-      }
-      return false;
-    } catch (error) {
-      logger.error(error);
-      throw new Error(constants.error.rest.inHost + ' ' + constants.error.repositorio);
-    }
-  },
-
-  findByEmail: async function (email, host) {
-    try {
-      const collection = await this.collection({ email: email, host: host });
-
-      if (collection.length == 0) {
-        return null;
-      }
-
-      return collection[0];
-    } catch (error) {
-      logger.error(error);
-      throw new Error(constants.error.rest.findByEmail + ' ' + constants.error.repositorio);
-    }
-  },
-
-  findByHash: async function (hash, host) {
-    try {
-      const collection = await this.collection({ hash: hash, host: host });
-
-      if (collection.length == 0) {
-        return null;
-      }
-
-      return collection[0];
-    } catch (error) {
-      logger.error(error);
-      throw new Error(constants.error.rest.findByEmail + ' ' + constants.error.repositorio);
-    }
-  },
+  /*******************/
+  /*Metodos para USER*/
+  /*******************/
 
   findToTablePaginator: async function (input) {
     try {
@@ -190,9 +200,51 @@ module.exports = {
       return await this.collection(query, options);
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        constants.error.rest.findToTablePaginator + ' ' + constants.error.repositorio
-      );
+      throw new Error(constants.error.rest.collection + ' ' + constants.error.repositorio);
+    }
+  },
+
+  inHost: async function (id, host) {
+    try {
+      const docById = await this.read(id);
+
+      if (docById.host === host) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
+    }
+  },
+
+  findByEmail: async function (email, host) {
+    try {
+      const collection = await this.collection({ email: email, host: host });
+
+      if (collection.length == 0) {
+        return null;
+      }
+
+      return collection[0];
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
+    }
+  },
+
+  findByHash: async function (hash, host) {
+    try {
+      const collection = await this.collection({ hash: hash, host: host });
+
+      if (collection.length == 0) {
+        return null;
+      }
+
+      return collection[0];
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
     }
   },
 

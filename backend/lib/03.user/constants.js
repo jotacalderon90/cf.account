@@ -7,7 +7,6 @@ const _constants = structuredClone(constants);
 _constants.error.rest.collection = 'Error al buscar usuarios';
 
 _constants.error.rest.create = 'Error al crear usuario';
-_constants.error.rest.createEmailExiste = 'El email ingresado ya existe';
 _constants.error.rest.createNOCAN = 'Esta instancia no permite creación de usuarios';
 
 _constants.error.rest.read = 'Error al obtener usuario';

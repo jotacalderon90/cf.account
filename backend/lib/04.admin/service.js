@@ -127,7 +127,7 @@ module.exports = {
         throw new Error(constants.error.rest.updatebyadmin_userinhost);
       }
 
-      const respuesta = await user.update(input, id);
+      const respuesta = await user.update(id, input);
       logger.info(respuesta);
 
       return true;
@@ -139,7 +139,6 @@ module.exports = {
 
   updatebyadmin_activate: async function (input, id) {
     try {
-      console.log(input, id);
       //validar usuario a modificar por dominio y revalidar id obtenido
       //sin esto, un root de un dominio podria modificar usuarios de otro dominio
       const userInHost = await user.inHost(id, input.host);
@@ -148,7 +147,7 @@ module.exports = {
         throw new Error(constants.error.rest.updatebyadmin_userinhost);
       }
 
-      const respuesta = await user.update(input, id);
+      const respuesta = await user.update(id, input);
       logger.info(respuesta);
 
       return true;
@@ -167,7 +166,7 @@ module.exports = {
         throw new Error(constants.error.rest.updatebyadmin_userinhost);
       }
 
-      const respuesta = await user.update({ password: await password.hash(input.password) }, id);
+      const respuesta = await user.update(id, { password: await password.hash(input.password) });
       logger.info(respuesta);
 
       return true;
@@ -189,7 +188,7 @@ module.exports = {
       const registro = await user.read(id);
 
       const newhash = password.random();
-      await user.update({ hash: newhash }, id);
+      await user.update(id, { hash: newhash });
 
       hooks.mailingOnForget(
         registro.email,

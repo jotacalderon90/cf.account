@@ -82,13 +82,10 @@ module.exports = {
         return;
       }
 
-      await service.update(
-        {
-          ...parseResult.data,
-          host: domain.getParentDomain(req.headers.host),
-        },
-        req.params.id
-      );
+      await service.update(req.params.id, {
+        ...parseResult.data,
+        host: domain.getParentDomain(req.headers.host),
+      });
 
       response.APISuccess(res);
     } catch (error) {

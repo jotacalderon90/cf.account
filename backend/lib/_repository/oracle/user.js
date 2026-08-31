@@ -1,25 +1,21 @@
 'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-
 const oracle = require('cl.jotacalderon.cf.framework/lib/oracle');
 const oracledb = require('oracledb');
+//const AppError = require('../../error');
 
 const constants = require('../constants');
 
-//20260505:convierto atributos a minuscula
-const toLowerKeys = (obj) =>
-  Object.entries(obj).reduce((acc, [key, value]) => {
-    acc[key.toLowerCase()] = value;
-    return acc;
-  }, {});
-
-//20260505:formateo registro oracle para normalizacion
 const mapRow = function (row) {
   row.ROLES = row.ROLES.split(',');
   row.ACTIVATE = row.ACTIVATE == 1 ? true : false;
-  return toLowerKeys(row);
+  return Object.entries(row).reduce((acc, [key, value]) => {
+    acc[key.toLowerCase()] = value;
+    return acc;
+  }, {});
 };
+const name_collection = 'USUARIOS';
 
 module.exports = {
   total: async function (query) {
@@ -27,7 +23,7 @@ module.exports = {
       let sql = `
         SELECT 
           COUNT(*) AS TOTAL
-        FROM USUARIOS
+        FROM ${name_collection}
         WHERE
           1 = 1
       `;
@@ -78,7 +74,7 @@ module.exports = {
           
           CREATED
           
-        FROM USUARIOS
+        FROM ${name_collection}
         WHERE
           1 = 1
       `;
@@ -113,25 +109,19 @@ module.exports = {
     }
   },
 
+  tags: async function () {
+    try {
+      throw new Error('No implementado');
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.tags + ' ' + constants.error.repositorio);
+    }
+  },
+
   create: async function (input) {
     try {
-      // Verificar si el email ya existe
-      const sqlCheck = `
-        SELECT 
-          COUNT(*) AS TOTAL
-        FROM USUARIOS
-        WHERE 
-          EMAIL = :email
-          AND HOST = :host
-      `;
-      const check = await oracle.select(sqlCheck, { email: input.email, host: input.host });
-
-      if (check[0].TOTAL != 0) {
-        return constants.error.rest.createEmailExiste;
-      }
-
       const sql = `
-        INSERT INTO USUARIOS (
+        INSERT INTO ${name_collection} (
           
           EMAIL,
           PASSWORD,
@@ -214,7 +204,7 @@ module.exports = {
           
           CREATED
           
-        FROM USUARIOS
+        FROM ${name_collection}
         WHERE ID = :id
       `;
 
@@ -231,13 +221,13 @@ module.exports = {
     }
   },
 
-  update: async function (input, id) {
+  update: async function (id, input) {
     try {
       let sql;
       let params;
       let set = [];
 
-      sql = `UPDATE USUARIOS SET `;
+      sql = `UPDATE ${name_collection} SET `;
 
       if (input.roles != undefined) {
         set.push(`ROLES = :roles`);
@@ -297,7 +287,7 @@ module.exports = {
   delete: async function (id) {
     try {
       const sql = `
-        DELETE FROM USUARIOS
+        DELETE FROM ${name_collection}
         WHERE ID = :id
       `;
 
@@ -314,48 +304,9 @@ module.exports = {
     }
   },
 
-  inHost: async function (id, host) {
-    try {
-      const docById = await this.read(id);
-      if (docById.host === host) {
-        return true;
-      }
-      return false;
-    } catch (error) {
-      logger.error(error);
-      throw new Error(constants.error.rest.inHost + ' ' + constants.error.repositorio);
-    }
-  },
-
-  findByEmail: async function (email, host) {
-    try {
-      const collection = await this.collection({ email: email, host: host });
-
-      if (collection.length == 0) {
-        return null;
-      }
-
-      return collection[0];
-    } catch (error) {
-      logger.error(error);
-      throw new Error(constants.error.rest.findByEmail + ' ' + constants.error.repositorio);
-    }
-  },
-
-  findByHash: async function (hash, host) {
-    try {
-      const collection = await this.collection({ hash: hash, host: host });
-
-      if (collection.length == 0) {
-        return null;
-      }
-
-      return collection[0];
-    } catch (error) {
-      logger.error(error);
-      throw new Error(constants.error.rest.findByEmail + ' ' + constants.error.repositorio);
-    }
-  },
+  /*******************/
+  /*Metodos para USER*/
+  /*******************/
 
   findToTablePaginator: async function (input) {
     try {
@@ -375,9 +326,50 @@ module.exports = {
       return collection;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        constants.error.rest.findToTablePaginator + ' ' + constants.error.repositorio
-      );
+      throw new Error(constants.error.rest.collection + ' ' + constants.error.repositorio);
+    }
+  },
+
+  inHost: async function (id, host) {
+    try {
+      const docById = await this.read(id);
+      if (docById.host === host) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
+    }
+  },
+
+  findByEmail: async function (email, host) {
+    try {
+      const collection = await this.collection({ email: email, host: host });
+
+      if (collection.length == 0) {
+        return null;
+      }
+
+      return collection[0];
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
+    }
+  },
+
+  findByHash: async function (hash, host) {
+    try {
+      const collection = await this.collection({ hash: hash, host: host });
+
+      if (collection.length == 0) {
+        return null;
+      }
+
+      return collection[0];
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
     }
   },
 
@@ -386,7 +378,7 @@ module.exports = {
       const sql = `
         SELECT
           EMAIL
-        FROM USUARIOS
+        FROM ${name_collection}
         WHERE
           HOST = :host
           AND NOTIFICATION = 1

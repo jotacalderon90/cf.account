@@ -24,11 +24,7 @@ module.exports = {
       nuevoUsuario.nickname = input.email;
       nuevoUsuario.thumb = process.env.HOST_ARCHIVOSPUBLICOS + '/assets/img/user.png';
 
-      const created = await user.create(nuevoUsuario);
-
-      if (created === constants.error.rest.createEmailExiste) {
-        return constants.error.rest.createEmailExiste;
-      }
+      await user.create(nuevoUsuario);
 
       hooks.pushOnCreate(nuevoUsuario.email);
 
@@ -79,7 +75,7 @@ module.exports = {
         redirect = '/api/account/logout';
       }
 
-      await user.update(input, registro.id);
+      await user.update(registro.id, input);
 
       if (redis.client) {
         await redis.del(registro.hash);
@@ -114,7 +110,7 @@ module.exports = {
         return 'No se encontró usuario';
       }
 
-      await user.update({ activate: true }, users[0].id);
+      await user.update(users[0].id, { activate: true });
 
       return true;
     } catch (error) {
@@ -132,7 +128,7 @@ module.exports = {
       }
 
       const newhash = password.random();
-      await user.update({ hash: newhash }, userByEmail.id);
+      await user.update(userByEmail.id, { hash: newhash });
 
       hooks.mailingOnForget(
         userByEmail.email,
@@ -165,7 +161,7 @@ module.exports = {
         password: await password.hash(input.password),
       };
 
-      await user.update(nuevosDatos, registro.id);
+      await user.update(registro.id, nuevosDatos);
 
       return true;
     } catch (error) {
@@ -196,7 +192,7 @@ module.exports = {
         hash: await password.random(),
       };
 
-      await user.update(nuevosDatos, userByEmail.id);
+      await user.update(userByEmail.id, nuevosDatos);
       userByEmail.hash = nuevosDatos.hash;
 
       hooks.pushOnLogin(input.email);
@@ -214,7 +210,7 @@ module.exports = {
         hash: '',
       };
 
-      await user.update(nuevosDatos, id);
+      await user.update(id, nuevosDatos);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.login + ' ' + constants.error.servicio);
