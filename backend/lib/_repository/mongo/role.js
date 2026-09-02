@@ -52,9 +52,9 @@ module.exports = {
     }
   },
 
-  tags: async function (name, field, query) {
+  tags: async function (field, query) {
     try {
-      const tags = await mongodb.distinct(name, field, query);
+      const tags = await mongodb.distinct(name_collection, field, query);
 
       if (!Array.isArray(tags)) {
         throw new Error(tags);

@@ -70,7 +70,7 @@ module.exports = {
             email: email,
             subject: 'Activación de cuenta',
             template: 'account.activate.html',
-            hash: 'https://' + host + '/api/account/activate/' + hash,
+            link_to_recovery: 'https://' + host + '/api/account/activate/' + hash,
           }
         );
       }
@@ -105,7 +105,7 @@ module.exports = {
             email: email,
             subject: 'Reestablecer contraseña',
             template: 'account.recovery.html',
-            hash: _hash + '/recovery?hash=' + hash,
+            link_to_recovery: _hash + '/recovery?hash=' + hash,
           }
         );
       }
