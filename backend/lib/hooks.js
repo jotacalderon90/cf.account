@@ -87,11 +87,6 @@ module.exports = {
             ? 'https://' + host.replace('account', 'mailing')
             : process.env.HOST_MAILING;
 
-        const _hash =
-          process.env.NODE_ENV === 'production' && process.env.FRONT_MULTIDOMAIN === '1'
-            ? 'https://' + host
-            : process.env.HOST;
-
         request.post(
           url + '/api/mailing',
           {
@@ -105,7 +100,7 @@ module.exports = {
             email: email,
             subject: 'Reestablecer contraseña',
             template: 'account.recovery.html',
-            link_to_recovery: _hash + '/recovery?hash=' + hash,
+            link_to_recovery: 'https://' + host + '/recovery?hash=' + hash,
           }
         );
       }
