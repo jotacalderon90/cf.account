@@ -4,7 +4,7 @@ const menu = function() {
     {name: 'archivosprivados',  label: 'Archivos Privados', defaultPort: 2203, defaultRoles: ['archivosprivados']},
     {name: 'database',          label: 'Base de Datos',     defaultPort: 2204, defaultRoles: ['database']},
     {name: 'mailing',           label: 'Mailing',           defaultPort: 2205, defaultRoles: ['mailing']},
-    {name: 'avera',             label: 'Avera',             defaultPort: 2210, defaultRoles: ['avera']}
+    {name: 'avera',             label: 'Avera',             defaultPort: 2209, defaultRoles: ['avera']}
   ];
   
   this.collection = [];
