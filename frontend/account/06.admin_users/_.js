@@ -169,7 +169,6 @@ users.prototype.saveRoles = async function () {
 			throw (update.error);
 		}
     this.parent.modal.close('rolesModal');
-		await this.parent.modal.notify('Roles actualizados correctamente');
 		this.refresh();
 	} catch (error) {
     this.parent.loader.active = false;
@@ -198,7 +197,6 @@ users.prototype.activate = async function (row) {
 		if (update.error) {
 			throw (update.error);
 		}
-		await this.parent.modal.notify('Documento actualizado correctamente');
 		this.refresh();
 	} catch (error) {
     this.parent.loader.active = false;
@@ -232,7 +230,6 @@ users.prototype.changePassword = async function (row) {
 		if (update.error) {
 			throw (update.error);
 		}
-		await this.parent.modal.notify('Documento actualizado correctamente');
 		this.refresh();
 	} catch (error) {
     this.parent.loader.active = false;
@@ -283,7 +280,6 @@ users.prototype.delete = async function (id) {
 		if (del.error) {
 			throw (del.error);
 		}
-		await this.parent.modal.notify('Documento eliminado correctamente');
 		this.refresh();
 	} catch (error) {
     this.parent.loader.active = false;
@@ -323,7 +319,6 @@ users.prototype.create = async function (id) {
 			throw (service.error);
 		}
 
-		await this.parent.modal.notify('Documento creado correctamente');
 		this.refresh();
 
 	} catch (error) {
