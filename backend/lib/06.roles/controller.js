@@ -16,7 +16,7 @@ module.exports = {
 
       res.send({ data: data });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.APIError(req, res, constants.error.rest.total + ' ' + constants.error.controlador);
     }
   },
@@ -27,7 +27,7 @@ module.exports = {
 
       res.send({ data: data });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.APIError(
         req,
         res,
@@ -53,7 +53,7 @@ module.exports = {
 
       response.APISuccess(res);
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.APIError(req, res, constants.error.rest.create + ' ' + constants.error.controlador);
     }
   },
@@ -67,7 +67,7 @@ module.exports = {
 
       res.send({ data: respuesta });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.APIError(req, res, constants.error.rest.read + ' ' + constants.error.controlador);
     }
   },
@@ -89,7 +89,7 @@ module.exports = {
 
       response.APISuccess(res);
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.APIError(req, res, constants.error.rest.update + ' ' + constants.error.controlador);
     }
   },
@@ -103,7 +103,7 @@ module.exports = {
 
       response.APISuccess(res);
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.APIError(req, res, constants.error.rest.delete + ' ' + constants.error.controlador);
     }
   },

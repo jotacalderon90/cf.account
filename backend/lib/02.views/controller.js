@@ -25,7 +25,7 @@ module.exports = {
           : {},
       });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -44,7 +44,7 @@ module.exports = {
         res.redirect('/');
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -60,7 +60,7 @@ module.exports = {
         google_auth: googleapis.getURL(),
       });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -77,7 +77,7 @@ module.exports = {
         res.redirect('/');
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -101,7 +101,7 @@ module.exports = {
         res.redirect('/');
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -114,7 +114,7 @@ module.exports = {
     try {
       res.render(await view('account/politicas', req.headers.host));
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -127,7 +127,7 @@ module.exports = {
     try {
       res.render(await view('account/condiciones', req.headers.host));
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -143,7 +143,7 @@ module.exports = {
         __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -159,7 +159,7 @@ module.exports = {
         __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -178,7 +178,7 @@ module.exports = {
         res.redirect('/');
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,

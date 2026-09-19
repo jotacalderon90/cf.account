@@ -77,7 +77,7 @@ module.exports = {
 
           res.redirect(respuesta);
         } catch (error) {
-          logger.error(error);
+          logger.error(error, req.headers.host);
           response.renderError(
             req,
             res,
@@ -100,7 +100,7 @@ module.exports = {
             'success'
           );
         } catch (error) {
-          logger.error(error);
+          logger.error(error, req.headers.host);
           response.renderError(
             req,
             res,
@@ -109,7 +109,7 @@ module.exports = {
         }
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -133,7 +133,7 @@ module.exports = {
         res.send({ data: null });
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(req, res, constants.error.rest.read + ' ' + constants.error.controlador);
     }
   },
@@ -152,7 +152,7 @@ module.exports = {
 
       res.redirect(respuesta);
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -176,7 +176,7 @@ module.exports = {
         'success'
       );
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -216,7 +216,7 @@ module.exports = {
         return;
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -263,7 +263,7 @@ module.exports = {
         return;
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -310,7 +310,7 @@ module.exports = {
         return;
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -369,7 +369,7 @@ module.exports = {
         }
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -390,7 +390,7 @@ module.exports = {
         res.redirect('/login');
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,

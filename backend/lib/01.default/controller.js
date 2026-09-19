@@ -15,7 +15,7 @@ module.exports = {
 
       res.redirect(process.env.HOST_ARCHIVOSPUBLICOS + '/favicon.ico');
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.APIError(req, res, constants.error.rest.favicon + ' ' + constants.error.controlador);
     }
   },
@@ -25,7 +25,7 @@ module.exports = {
       res.setHeader('content-type', 'text/plain');
       res.send('User-agent: *\n\nDisallow: /');
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.APIError(req, res, constants.error.rest.robots + ' ' + constants.error.controlador);
     }
   },

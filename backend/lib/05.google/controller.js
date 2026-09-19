@@ -17,7 +17,7 @@ module.exports = {
 
       res.send({ data: respuesta });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -44,7 +44,7 @@ module.exports = {
 
       res.redirect('/');
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,
@@ -70,7 +70,7 @@ module.exports = {
 
       res.send({ data: respuesta });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.APIError(req, res, constants.error.rest.send + ' ' + constants.error.controlador);
     }
   },

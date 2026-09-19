@@ -38,7 +38,7 @@ module.exports = {
         'success'
       );
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.renderError(
         req,
         res,

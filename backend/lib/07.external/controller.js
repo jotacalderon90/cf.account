@@ -27,7 +27,7 @@ module.exports = {
 
       res.send({ data: respuesta });
     } catch (error) {
-      logger.error(error);
+      logger.error(error, req.headers.host);
       response.APIError(
         req,
         res,
