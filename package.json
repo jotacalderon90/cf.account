@@ -21,12 +21,12 @@
     ]
   },
   "dependencies": {
-    "cl.jotacalderon.cf.framework": "1.14.0",
+    "cl.jotacalderon.cf.framework": "1.15.0",
     "oracledb": "6.10.0",
-    "zod": "4.1.12",
+    "zod": "4.6.7",
     "jsonwebtoken": "9.0.2",
     "argon2": "0.44.0",
-    "express-recaptcha": "2.1.0",
+    "express-recaptcha": "5.1.0",
     "googleapis": "171.4.0"
   },
   "devDependencies": {
