@@ -21,8 +21,8 @@
     ]
   },
   "dependencies": {
-    "cl.jotacalderon.cf.framework": "1.15.0",
-    "oracledb": "6.10.0",
+    "cl.jotacalderon.cf.framework": "1.16.0",
+    "oracledb": "26.0.0",
     "zod": "4.6.7",
     "jsonwebtoken": "9.0.3",
     "argon2": "0.45.1",
