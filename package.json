@@ -25,7 +25,7 @@
     "oracledb": "6.10.0",
     "zod": "4.6.7",
     "jsonwebtoken": "9.0.3",
-    "argon2": "0.44.0",
+    "argon2": "0.45.1",
     "express-recaptcha": "5.1.0",
     "googleapis": "171.4.0"
   },
