@@ -6,7 +6,6 @@ COPY package*.json ./
 FROM base AS dev
 ENV NODE_ENV=development
 RUN npm ci
-USER node
 CMD ["npm", "run", "dev"]
 
 # ---- Producción ----
