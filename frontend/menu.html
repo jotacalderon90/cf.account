@@ -1,0 +1,15 @@
+<div class="ms-auto dropdown">
+	<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+		<i class="fa fa-user"></i> 
+	</button>
+	<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+		<li><a class="dropdown-item" href="{{data:doc.__hostAccount}}">Perfil</a></li>
+    <li v-for="row in menu.collection">
+      <a class="dropdown-item" :href="row.host">
+        {{row.label}}
+      </a>
+    </li>
+		<li><hr class="dropdown-divider"></li>
+		<li><a class="dropdown-item" href="{{data:doc.__hostAccount}}/api/account/logout">Cerrar sesión</a></li>
+	</ul>
+</div>

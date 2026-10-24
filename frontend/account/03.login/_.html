@@ -1,0 +1,92 @@
+<!--use:main-->
+
+<!--define:title-->Ingreso de Sesión<!--/define:title-->
+
+<!--define:head-->
+
+	<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+	<!--/if-->
+		
+<!--/define:head-->
+
+<!--define:main-->
+	
+	<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+		<div class="p-5 bg-white rounded shadow">
+			<form action="/api/account/login?redirectTo={{data:doc.redirectTo}}" method="POST">
+				
+				<h2 class="mb-4">Iniciar sesión</h2>
+				
+				<input class="form-control" placeholder="Email" name="email" type="text" autofocus=""/>
+				<br>
+				
+        <div class="input-group">
+					<input 
+						class="form-control" 
+						id="password"
+						placeholder="Ingrese su contraseña"
+						name="password" 
+						type="password" 
+						autocomplete="new-password"
+					/>
+					<button 
+						class="btn btn-outline-secondary" 
+						type="button" 
+						onclick="togglePassword('password', this)"
+						aria-label="Mostrar contraseña"
+					>
+						<i class="fa-solid fa-eye"></i>
+					</button>
+				</div>
+				<br>
+				
+				<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
+				<div class="form-group">
+					<div class="g-recaptcha" data-sitekey="{{data:process.env.RECAPTCHA_PUBLIC}}"></div>
+				</div>
+				<!--/if-->
+				
+				<button type="submit" class="btn btn-lg btn-success btn-block" >Ingresar</button>
+				
+				<!--if:doc.google_auth && doc.google_auth!=''-->
+				<a href="{{data:doc.google_auth}}" class="btn btn-lg btn-primary btn-block">
+					<img src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png" height="20" alt="login con google" title="login con google"/>
+					Ingresar con Google
+				</a>
+				<!--/if-->
+				
+				<!--if:process.env.CANCREATE && process.env.CANCREATE=='1'-->
+				<br>
+				<a href="/form" class="pull-left">Crear cuenta</a>
+				<!--/if-->
+				
+				<!--if:process.env.CANRECOVERY && process.env.CANRECOVERY=='1'-->
+				<br>
+				<a href="/forget" class="pull-right">¿Olvidaste tu password?</a>
+				<!--/if-->
+				
+			</form>
+		</div>
+	</div>
+	
+	<script>
+		
+		function togglePassword(inputId, button) {
+			const input = document.getElementById(inputId);
+			const icon = button.querySelector('i');
+
+			if (input.type === 'password') {
+				input.type = 'text';
+				icon.classList.replace('fa-eye', 'fa-eye-slash');
+				button.setAttribute('aria-label', 'Ocultar contraseña');
+			} else {
+				input.type = 'password';
+				icon.classList.replace('fa-eye-slash', 'fa-eye');
+				button.setAttribute('aria-label', 'Mostrar contraseña');
+			}
+		}
+    
+  </script>
+  
+<!--/define:main-->

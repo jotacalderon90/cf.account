@@ -1,0 +1,29 @@
+
+  <!-- Modal para solicitar información -->
+  <div class="modal fade" 
+    id="mdPrompt" 
+    tabindex="-1" 
+    aria-hidden="true"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title d-flex align-items-center">
+            <i class="fa fa-circle-question text-warning me-2"></i>
+            {{ modal.data.prompt.msg }}
+          </h5>
+          <button type="button" class="btn-close" v-on:click="modal.cancelar('')" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pt-2">
+          <input class="form-control" :type="modal.data.prompt.type" :placeholder="modal.data.prompt.placeholder" v-model="modal.data.prompt.value"/>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-sm btn-primary" v-on:click="modal.continuar(modal.data.prompt.value)">
+            Continuar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

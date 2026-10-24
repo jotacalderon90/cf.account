@@ -1,0 +1,21 @@
+
+services:
+       
+  account:
+    build:
+      context: .
+      target: prod
+    image: account:0.0.1
+    container_name: account
+    restart: unless-stopped
+    mem_limit: 512M
+    mem_reservation: 256M
+    env_file:
+      - .env.production
+    volumes:
+      - /var/log/trascender/account:/srv/cf.account/logs
+    environment:
+      NODE_ENV: "production"
+      PORT: 2202
+    ports:
+      - "127.0.0.1:2202:2202"

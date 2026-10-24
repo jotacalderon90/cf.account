@@ -1,0 +1,67 @@
+<!--use:main-->
+
+<!--define:title-->Olvidaste tu password<!--/define:title-->
+
+<!--define:head-->
+
+	<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+	<!--/if-->
+		
+<!--/define:head-->
+
+<!--define:main-->		
+			
+	<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+		<div class="p-5 bg-white rounded shadow">
+			<form action="/api/account/forget" method="POST" onsubmit="return account_forget()">
+				
+				<h2 class="mb-4">Olvidaste tu password</h2>
+				
+				<input class="form-control" placeholder="Email" name="email" type="text" />
+				<br>
+				
+				<!--if:process.env.RECAPTCHA_PUBLIC && process.env.RECAPTCHA_PUBLIC!=''-->
+				<div class="form-group">
+					<div class="g-recaptcha" data-sitekey="{{data:process.env.RECAPTCHA_PUBLIC}}"></div>
+				</div>
+				<!--/if-->
+				
+				<br>
+				<button type="submit" class="btn btn-lg btn-success btn-block" >Recupera tu password</button>
+				
+				<hr>
+				<div class="text-right">
+					<a href="/login">Ingresar con tu cuenta</a>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script>
+		
+		function account_forget(){
+      
+      const email = document.forms[0].email.value.trim();
+			if(
+        email === '' || 
+        !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)){
+        alert("Ingrese email válido",'error');
+				return false;
+			}
+        
+      let recaptcha = '';
+      if(typeof grecaptcha === 'object'){
+        recaptcha = grecaptcha.getResponse();
+        if(recaptcha.trim() === '') {
+          alert('Valide recaptcha', 'error');
+          return false;
+        }
+      }
+      
+			return true;
+		}
+		
+	</script>
+	
+<!--/define:main-->

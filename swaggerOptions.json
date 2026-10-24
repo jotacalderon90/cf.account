@@ -1,0 +1,55 @@
+{
+  "definition": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "cf.account",
+      "version": "1.0.0",
+      "description": "Documentación del backend",
+      "contact": {
+        "name": "Jhonatan Calderón Leiva",
+        "email": "info@jotace.cl"
+      },
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "servers": [
+      {
+        "url": "http://172.27.16.1:2202",
+        "description": "Servidor local"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Default",
+        "description": "Servicios genericos"
+      },
+      {
+        "name": "Vistas",
+        "description": "Vistas del sistema"
+      },
+      {
+        "name": "Usuarios",
+        "description": "Workflow para usuarios"
+      },
+      {
+        "name": "Administrador",
+        "description": "Acciones para administrador"
+      },
+      {
+        "name": "Google",
+        "description": "Servicios de Google"
+      },
+      {
+        "name": "Roles",
+        "description": "Servicio para gestiión de roles"
+      },
+      {
+        "name": "External",
+        "description": "Servicios para otros sistemas"
+      }
+    ]
+  },
+  "apis": ["./backend/*.js"]
+}
