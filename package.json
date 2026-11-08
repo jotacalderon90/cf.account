@@ -25,9 +25,9 @@
     "oracledb": "26.0.0",
     "zod": "4.6.7",
     "jsonwebtoken": "9.0.3",
-    "argon2": "0.45.1",
+    "argon2": "0.45.2",
     "express-recaptcha": "5.1.0",
-    "googleapis": "171.4.0"
+    "googleapis": "189.0.0"
   },
   "devDependencies": {
     "eslint": "^10.2.1",

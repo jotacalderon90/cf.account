@@ -26,17 +26,13 @@ const self = function () {
       access_type: 'offline',
       prompt: 'consent', // access type and approval prompt will force a new refresh token to be made each time signs in
       scope: [
-        'https://www.googleapis.com/auth/plus.me',
+        'openid',
         'https://www.googleapis.com/auth/userinfo.email',
-        //'https://www.googleapis.com/auth/gmail.compose'
+        'https://www.googleapis.com/auth/userinfo.profile'
       ],
     });
   };
 
-  //Helper function to get the library with access to the google plus api.
-  this.getGooglePlusApi = function (auth) {
-    return google.plus({ version: 'v1', auth });
-  };
 };
 
 self.prototype.getURL = function () {
@@ -52,21 +48,17 @@ self.prototype.getURL = function () {
 self.prototype.getUserInfo = async function (code) {
   try {
     // get the auth 'tokens' from the request
-    const auth1 = this.createConnection();
-    const data = await auth1.getToken(code);
-    const tokens = data.tokens;
-
-    // add the tokens to the google api so we have access to the account
     const auth = this.createConnection();
+    const { tokens } = await auth.getToken(code);
+    
     auth.setCredentials(tokens);
-
-    // connect to google plus - need this to get the user's email
-    const plus = this.getGooglePlusApi(auth);
-    const me = await plus.people.get({ userId: 'me' });
-
-    me.data.tokens = tokens;
-
-    return me.data;
+    
+    const ticket = await auth.verifyIdToken({
+      idToken: tokens.id_token,
+      audience: process.env.GOOGLE_CLIENTID,
+    });
+    
+    return ticket.getPayload();
   } catch (error) {
     logger.error(error);
     throw error;

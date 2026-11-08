@@ -24,7 +24,7 @@ module.exports = {
     try {
       const registro = await googleapis.getUserInfo(input.code);
 
-      const email = registro.emails[0].value;
+      const email = registro.email;
 
       const userByEmail = await user.findByEmail(email);
 
@@ -40,15 +40,15 @@ module.exports = {
         nuevoUsuario.hash = password.random(24);
         nuevoUsuario.activate = true;
         nuevoUsuario.notification = true;
-        nuevoUsuario.nickname = email;
-        nuevoUsuario.thumb = registro.image.url;
+        nuevoUsuario.nickname = registro.name;
+        nuevoUsuario.thumb = registro.picture;
 
         respuesta = await user.create(nuevoUsuario);
 
         id = respuesta;
       } else {
         const usuarioActualizar = {};
-        ((usuarioActualizar.thumb = registro.image.url), (usuarioActualizar.google = registro));
+        ((usuarioActualizar.thumb = registro.picture), (usuarioActualizar.google = registro));
 
         respuesta = await user.update(userByEmail.id, usuarioActualizar);
 
