@@ -3,7 +3,7 @@
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 
-const googleapis = require('../googleapis');
+const googleOauth2 = require('../google.oauth2');
 const domain = require('../domain');
 const view = require('../view');
 
@@ -55,10 +55,20 @@ module.exports = {
 
   renderLogin: async function (req, res) {
     try {
+      
+      const currentDomain = domain.getParentDomain(req.headers.host);
+      const config = await googleOauth2.getConfig(currentDomain);
+      let google_auth = '';
+      
+      if(config != null){
+        google_auth = googleOauth2.getURL(googleOauth2.getConnection(config));
+      }
+      
       res.render(await view('account/03.login/_', req.headers.host), {
         redirectTo: req.query.redirectoTo,
-        google_auth: googleapis.getURL(),
+        google_auth: google_auth
       });
+      
     } catch (error) {
       logger.error(error, req.headers.host);
       response.renderError(
