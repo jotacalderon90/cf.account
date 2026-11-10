@@ -78,6 +78,9 @@ module.exports = {
   
   getUserInfo: async function (domain, code) {
     const config = await this.getConfig(domain);
+    if(config === null) {
+      return null;
+    }
     const auth = this.getConnection(config);
     const { tokens } = await auth.getToken(code);
       

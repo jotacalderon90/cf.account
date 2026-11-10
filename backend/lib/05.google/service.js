@@ -16,6 +16,10 @@ module.exports = {
       
       const registro = await googleOauth2.getUserInfo(input.code, input.domain);
 
+      if(registro === null) {
+        throw new Error(constants.error.rest.googleoauthcallbackNotFound + ' para domain ' + input.domain);
+      }
+
       const email = registro.email;
 
       const userByEmail = await user.findByEmail(email, input.domain);
