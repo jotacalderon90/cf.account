@@ -22,8 +22,6 @@ module.exports = {
         return;
       }
 
-      console.log(req.headers);
-
       const userLogged = await service.googleoauthcallback({
         ...parseResult.data,
         domain: domain.getParentDomain(req.headers.host)

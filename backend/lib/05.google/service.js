@@ -14,7 +14,7 @@ module.exports = {
   googleoauthcallback: async function (input) {
     try {
       
-      const registro = await googleOauth2.getUserInfo(input.code, input.domain);
+      const registro = await googleOauth2.getUserInfo(input.domain, input.code);
 
       if(registro === null) {
         throw new Error(constants.error.rest.googleoauthcallbackNotFound + ' para domain ' + input.domain);
