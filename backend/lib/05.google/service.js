@@ -23,38 +23,37 @@ module.exports = {
       const email = registro.email;
 
       const userByEmail = await user.findByEmail(email, input.domain);
-
-      let respuesta;
-
-      let id;
-
+      
+      const newHash = password.random();
+      
       if (userByEmail === null) {
         const nuevoUsuario = {};
         nuevoUsuario.email = email;
         nuevoUsuario.password = '';
         nuevoUsuario.roles = ['user'];
-        nuevoUsuario.hash = password.random(24);
+        nuevoUsuario.hash = newHash;
         nuevoUsuario.activate = true;
         nuevoUsuario.notification = true;
         nuevoUsuario.nickname = registro.name;
         nuevoUsuario.thumb = registro.picture;
         nuevoUsuario.host = input.host;
 
-        respuesta = await user.create(nuevoUsuario);
+        const created = await user.create(nuevoUsuario);
+        logger.info(created);
 
-        id = respuesta;
       } else {
         const usuarioActualizar = {};
         ((usuarioActualizar.thumb = registro.picture), (usuarioActualizar.google = registro));
+        usuarioActualizar.hash = newHash;
+        
+        const updated = await user.update(userByEmail.id, usuarioActualizar);
+        logger.info(updated);
 
-        respuesta = await user.update(userByEmail.id, usuarioActualizar);
-
-        id = userByEmail.id;
       }
 
       hooks.pushOnLogin(email);
 
-      return { id, email };
+      return { newHash, email };
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.googleoauthcallback + ' ' + constants.error.servicio);

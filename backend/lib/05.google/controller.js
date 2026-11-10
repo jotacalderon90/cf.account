@@ -27,9 +27,9 @@ module.exports = {
         domain: domain.getParentDomain(req.headers.host)
       });
 
-      const token = jwt.encode(userLogged.id);
-
-      session.create(req, res, token, userLogged.email);
+      const token = jwt.encode(userLogged.hash);
+      
+      session.create(req, res, token, userLogged.email, domain.getParentDomain(req.headers.host));
 
       res.redirect('/');
     } catch (error) {
