@@ -24,14 +24,14 @@ module.exports = {
 
       const userByEmail = await user.findByEmail(email, input.domain);
       
-      const newHash = password.random();
+      const hash = password.random();
       
       if (userByEmail === null) {
         const nuevoUsuario = {};
         nuevoUsuario.email = email;
         nuevoUsuario.password = '';
         nuevoUsuario.roles = ['user'];
-        nuevoUsuario.hash = newHash;
+        nuevoUsuario.hash = hash;
         nuevoUsuario.activate = true;
         nuevoUsuario.notification = true;
         nuevoUsuario.nickname = registro.name;
@@ -44,7 +44,7 @@ module.exports = {
       } else {
         const usuarioActualizar = {};
         ((usuarioActualizar.thumb = registro.picture), (usuarioActualizar.google = registro));
-        usuarioActualizar.hash = newHash;
+        usuarioActualizar.hash = hash;
         
         const updated = await user.update(userByEmail.id, usuarioActualizar);
         logger.info(updated);
@@ -53,7 +53,7 @@ module.exports = {
 
       hooks.pushOnLogin(email);
 
-      return { newHash, email };
+      return { hash, email };
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.googleoauthcallback + ' ' + constants.error.servicio);
