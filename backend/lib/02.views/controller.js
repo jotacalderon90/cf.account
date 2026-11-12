@@ -56,18 +56,16 @@ module.exports = {
   renderLogin: async function (req, res) {
     try {
       
-      const currentDomain = domain.getParentDomain(req.headers.host);
-      const config = await googleOauth2.getConfig(currentDomain);
-      let google_auth = '';
+      const viewName = await view('account/03.login/_', req.headers.host);
       
-      if(config != null){
-        google_auth = googleOauth2.getURL(googleOauth2.getConnection(config));
-      }
+      const googleOauth2Link = await googleOauth2.getURL(domain.getParentDomain(req.headers.host));
       
-      res.render(await view('account/03.login/_', req.headers.host), {
+      const params = {
         redirectTo: req.query.redirectoTo,
-        google_auth: google_auth
-      });
+        google_auth: googleOauth2Link
+      };
+      
+      res.render(viewName, params);
       
     } catch (error) {
       logger.error(error, req.headers.host);

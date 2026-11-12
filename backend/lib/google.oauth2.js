@@ -61,19 +61,41 @@ module.exports = {
   },
   
   getConnection: function (config) {
-    return new google.auth.OAuth2(config.web.client_id, config.web.client_secret, config.web.redirect_uris[0]);
+    try {
+      return new google.auth.OAuth2(config.web.client_id, config.web.client_secret, config.web.redirect_uris[0]);
+    } catch (error) {
+      logger.error(config);
+      logger.error(error);
+      throw new Error(error);
+    }
   },
   
-  getURL: function(auth) {
-    return auth.generateAuthUrl({
-      access_type: 'offline',
-      prompt: 'consent', // access type and approval prompt will force a new refresh token to be made each time signs in
-      scope: [
-        'openid',
-        'https://www.googleapis.com/auth/userinfo.email',
-        'https://www.googleapis.com/auth/userinfo.profile'
-      ],
-    });
+  getURL: function(domain) {
+    try {
+      
+      const config = await this.getConfig(domain);
+      if(config === null) {
+        return null;
+      }
+      
+      const auth = this.getConnection(config);
+      
+      return auth.generateAuthUrl({
+        access_type: 'offline',
+        prompt: 'consent', // access type and approval prompt will force a new refresh token to be made each time signs in
+        scope: [
+          'openid',
+          'https://www.googleapis.com/auth/userinfo.email',
+          'https://www.googleapis.com/auth/userinfo.profile'
+        ],
+      });
+      
+    } catch (error) {
+      logger.error(error);
+      logger.error(domain);
+    }
+    
+    return '';
   },
   
   getUserInfo: async function (domain, code) {
