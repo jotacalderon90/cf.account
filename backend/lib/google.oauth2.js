@@ -70,7 +70,7 @@ module.exports = {
     }
   },
   
-  getURL: function(domain) {
+  getURL: async function(domain) {
     try {
       
       const config = await this.getConfig(domain);
