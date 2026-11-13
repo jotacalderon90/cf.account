@@ -37,13 +37,15 @@ module.exports = {
         nuevoUsuario.nickname = registro.name;
         nuevoUsuario.thumb = registro.picture;
         nuevoUsuario.host = input.domain;
+        
+        nuevoUsuario.microsoft = registro;
 
         const created = await user.create(nuevoUsuario);
         logger.info(created);
 
       } else {
         const usuarioActualizar = {};
-        ((usuarioActualizar.thumb = registro.picture), (usuarioActualizar.google = registro));
+        ((usuarioActualizar.thumb = registro.picture), (usuarioActualizar.microsoft = registro));
         usuarioActualizar.hash = hash;
         
         const updated = await user.update(userByEmail.id, usuarioActualizar);
