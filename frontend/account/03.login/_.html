@@ -49,10 +49,15 @@
 				
 				<button type="submit" class="btn btn-lg btn-success btn-block" >Ingresar</button>
 				
-				<!--if:doc.google_auth && doc.google_auth!=''-->
-				<a href="{{data:doc.google_auth}}" class="btn btn-lg btn-primary btn-block">
-					<img src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png" height="20" alt="login con google" title="login con google"/>
-					Ingresar con Google
+				<!--if:doc.googleOauth2Link && doc.googleOauth2Link!=''-->
+				<a href="{{data:doc.googleOauth2Link}}" class="btn btn-lg btn-primary btn-block">
+					<img src="/assets/img/google.svg" height="20" alt="login con google" title="login con google"/>
+				</a>
+				<!--/if-->
+				
+				<!--if:doc.microsoftOauth2Link && doc.microsoftOauth2Link!=''-->
+				<a href="{{data:doc.microsoftOauth2Link}}" class="btn btn-lg btn-default btn-block">
+					<img src="/assets/img/microsoft.webp" height="20" alt="login con microsoft" title="login con microsoft"/>
 				</a>
 				<!--/if-->
 				

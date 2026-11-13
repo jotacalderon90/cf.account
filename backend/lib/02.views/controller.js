@@ -4,6 +4,8 @@ const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 
 const googleOauth2 = require('../google.oauth2');
+const microsoftOauth2 = require('../microsoft.oauth2');
+
 const domain = require('../domain');
 const view = require('../view');
 
@@ -60,9 +62,12 @@ module.exports = {
       
       const googleOauth2Link = await googleOauth2.getURL(domain.getParentDomain(req.headers.host));
       
+      const microsoftOauth2Link = await microsoftOauth2.getURL(domain.getParentDomain(req.headers.host));
+      
       const params = {
         redirectTo: req.query.redirectoTo,
-        google_auth: googleOauth2Link
+        googleOauth2Link: googleOauth2Link,
+        microsoftOauth2Link: microsoftOauth2Link
       };
       
       res.render(viewName, params);
