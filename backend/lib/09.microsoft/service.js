@@ -36,7 +36,7 @@ module.exports = {
         nuevoUsuario.notification = true;
         nuevoUsuario.nickname = registro.name;
         nuevoUsuario.thumb = registro.picture;
-        nuevoUsuario.host = input.host;
+        nuevoUsuario.host = input.domain;
 
         const created = await user.create(nuevoUsuario);
         logger.info(created);
