@@ -89,6 +89,14 @@ module.exports = {
         notification: input.notification,
         created: new Date(),
       };
+      
+      if(input.google) {
+        newdoc.google = input.google;
+      }
+
+      if(input.microsoft) {
+        newdoc.microsoft = input.microsoft;
+      }
 
       const created = await mongodb.insertOne(name_collection, newdoc);
 
