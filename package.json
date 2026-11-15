@@ -27,7 +27,7 @@
     "jsonwebtoken": "9.0.3",
     "argon2": "0.45.2",
     "express-recaptcha": "5.1.0",
-    "googleapis": "189.0.0",
+    "googleapis": "190.0.0",
     "@azure/msal-node": "7.2.2"
   },
   "devDependencies": {
