@@ -64,6 +64,7 @@ module.exports = {
     try {
       return new google.auth.OAuth2(config.web.client_id, config.web.client_secret, config.web.redirect_uris[0]);
     } catch (error) {
+      logger.info(typeof config);
       logger.error(config);
       logger.error(error);
       throw new Error(error);
