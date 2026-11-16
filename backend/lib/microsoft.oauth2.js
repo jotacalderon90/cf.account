@@ -67,26 +67,28 @@ module.exports = {
   
   getConnection: function (config) {
     try {
-      const web = config.web;
-      const tenant = web.tenant_id || 'common';
+      
+      const tenant = config.web.tenant_id || 'common';
 
       const key = crypto.createHash('md5')
-        .update([web.client_id, tenant, web.client_secret].join('|'))
+        .update([config.web.client_id, tenant, config.web.client_secret].join('|'))
         .digest('hex');
 
       if (clients.has(key)) return clients.get(key);
 
       const cca = new msal.ConfidentialClientApplication({
         auth: {
-          clientId: web.client_id,
+          clientId: config.web.client_id,
           authority: `https://login.microsoftonline.com/${tenant}`,
-          clientSecret: web.client_secret,
+          clientSecret: config.web.client_secret,
         },
       });
 
       clients.set(key, cca);
       return cca;
     } catch (error) {
+      logger.error(typeof config);
+      logger.error(config);
       logger.error(error);
       throw new Error(error);
     }
