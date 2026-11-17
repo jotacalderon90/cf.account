@@ -47,11 +47,13 @@ module.exports = {
       
       if(serviceContent.data.statusCode === 200) {
         
+        const json = JSON.parse(serviceContent.data.body);
+        
         if (redis.client) {
-          redis.set(cacheKey, serviceContent.data.body, ((60*60)*24));//ttl=1seg - 24h
+          redis.set(cacheKey, json, ((60*60)*24));//ttl=1seg - 24h
         }
 
-        return serviceContent.data.body;
+        return json;
       }
       
       return null;      
