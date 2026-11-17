@@ -48,6 +48,8 @@ module.exports = {
 
       const serviceContent = await request.get(getBaseURL(domain) + `${apiBase}/get/${pathEncoded}`, getOptions(domain));
       
+      logger.info(serviceContent);
+      
       if(serviceContent.data.statusCode === 200) {
         
         if (redis.client) {
