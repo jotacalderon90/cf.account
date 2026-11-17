@@ -60,9 +60,9 @@ module.exports = {
       
       const viewName = await view('account/03.login/_', req.headers.host);
       
-      const googleOauth2Link = await googleOauth2.getURL(domain.getParentDomain(req.headers.host));
+      const googleOauth2Link = '';//await googleOauth2.getURL(domain.getParentDomain(req.headers.host));
       
-      const microsoftOauth2Link = await microsoftOauth2.getURL(domain.getParentDomain(req.headers.host));
+      const microsoftOauth2Link = '';//await microsoftOauth2.getURL(domain.getParentDomain(req.headers.host));
       
       const params = {
         redirectTo: req.query.redirectoTo,
