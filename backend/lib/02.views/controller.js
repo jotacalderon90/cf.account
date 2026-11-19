@@ -18,6 +18,7 @@ module.exports = {
       res.render(await view('account/01.perfil/_', req.headers.host), {
         roles: JSON.stringify(req.user.roles),
         __hostAccount: domain.getHostAccount(req),
+        __hostArchivosPublicos: domain.getHostArchivosPublicos(req),
         user: req.user
           ? {
               email: req.user.email,
@@ -40,6 +41,7 @@ module.exports = {
     try {
       if (process.env.CANCREATE == '1') {
         res.render(await view('account/02.form/_', req.headers.host), {
+          __hostArchivosPublicos: domain.getHostArchivosPublicos(req),
           action: '/api/account',
         });
       } else {
@@ -65,6 +67,7 @@ module.exports = {
       const microsoftOauth2Link = await microsoftOauth2.getURL(domain.getParentDomain(req.headers.host));
       
       const params = {
+        __hostArchivosPublicos: domain.getHostArchivosPublicos(req),
         redirectTo: req.query.redirectoTo,
         googleOauth2Link: googleOauth2Link,
         microsoftOauth2Link: microsoftOauth2Link
@@ -85,7 +88,9 @@ module.exports = {
   renderForget: async function (req, res) {
     try {
       if (process.env.CANRECOVERY == '1') {
-        res.render(await view('account/04.forget/_', req.headers.host));
+        res.render(await view('account/04.forget/_', req.headers.host), {
+          __hostArchivosPublicos: domain.getHostArchivosPublicos(req)
+        });
       } else {
         res.redirect('/');
       }
@@ -109,7 +114,10 @@ module.exports = {
           return;
         }
 
-        res.render(await view('account/05.recovery/_', req.headers.host), parseResult.data);
+        res.render(await view('account/05.recovery/_', req.headers.host), {
+          __hostArchivosPublicos: domain.getHostArchivosPublicos(req),
+          ...parseResult.data
+        });
       } else {
         res.redirect('/');
       }
@@ -125,7 +133,9 @@ module.exports = {
 
   renderPoliticasPrivacidad: async function (req, res) {
     try {
-      res.render(await view('account/politicas', req.headers.host));
+      res.render(await view('account/politicas', req.headers.host), {
+        __hostArchivosPublicos: domain.getHostArchivosPublicos(req),
+      });
     } catch (error) {
       logger.error(error, req.headers.host);
       response.renderError(
@@ -138,7 +148,9 @@ module.exports = {
 
   renderCondicionesServicio: async function (req, res) {
     try {
-      res.render(await view('account/condiciones', req.headers.host));
+      res.render(await view('account/condiciones', req.headers.host), {
+        __hostArchivosPublicos: domain.getHostArchivosPublicos(req),
+      });
     } catch (error) {
       logger.error(error, req.headers.host);
       response.renderError(
@@ -154,6 +166,7 @@ module.exports = {
       res.render(await view('account/06.admin_users/_', req.headers.host), {
         roles: JSON.stringify(req.user.roles),
         __hostAccount: domain.getHostAccount(req),
+        __hostArchivosPublicos: domain.getHostArchivosPublicos(req),
       });
     } catch (error) {
       logger.error(error, req.headers.host);
@@ -170,6 +183,7 @@ module.exports = {
       res.render(await view('account/07.admin_roles/_', req.headers.host), {
         roles: JSON.stringify(req.user.roles),
         __hostAccount: domain.getHostAccount(req),
+        __hostArchivosPublicos: domain.getHostArchivosPublicos(req),
       });
     } catch (error) {
       logger.error(error, req.headers.host);
@@ -185,6 +199,7 @@ module.exports = {
     try {
       if (process.env.CANCREATEADMIN == '1') {
         res.render(await view('account/02.form/_', req.headers.host), {
+          __hostArchivosPublicos: domain.getHostArchivosPublicos(req),
           action: '/api/admin/account/createadmin',
         });
       } else {
